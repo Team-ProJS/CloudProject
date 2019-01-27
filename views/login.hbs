@@ -1,35 +1,35 @@
-<div style="color: #ddd;background-color:#282E34;text-align:center;padding:50px 80px;text-align: justify;">
-<div class = "col-md-8 col-md-offset-2">
-    <br><br><br><br><br><br><br><br><br>
-    <h2>Login</h2>
-    <form class="form-horizontal" role="form" id="log-form">
-        <div class ="form-group mt">
-            <div class="col-sm-10 col-sm-offset-2">
-                <div class = "col-sm-3">
-                <label for="inputUsername" class="control-label">Username</label>
-                </div>
-                    <div class ="col-sm-9">
-                        <input type="text" class ="form-control input-lg required" id="inputUsername" placeholder="@username">
-                        
-                    </div>
-            </div>
+<div class="container-fluid formRegister">
+    <form>
+        <div class="form-group headingLabel text-center">
+            <header>Sign In</header><br>
         </div>
-        <div class="form-group">
-            <div class="col-sm-10 col-sm-offset-2">
-            <div class="col-sm-3">
-            <label for="inputPassword" class="control-label">Password</label>    
-            </div>
-                <div class="col-sm-9">
-                <input  type="password" class="form-control input-lg required" id="inputPassword" placeholder="password">
+        <div class="greySec justify-content-center p-5">
+            <!-- username -->
+            <div class="form-group grp1 row justify-content-center">
+                <div class="col-lg-6 column">
+                    <label for="username"> Username</label>
+                    <input type="username" class="form-control" id="usernameInput" placeholder="@Username">
                 </div>
             </div>
+            <!-- password --->
+            <div class="form-group grp3 row justify-content-center">
+                <div class="col-lg-6">
+                    <label for="password"> Password</label>
+                    <input type="password" class="form-control" id="passwordInput" aria-describedby="passwordInput" placeholder="Shh.. Keep this a secret">
+                </div>
             </div>
-            <div class="form-group">
-            <div class="row col-sm-offset-2 col-sm-10 mt">
-                <button type="submit" class="btn btn-warning btn-lg">Login</button>
+            <!-- button submit -->
+            <div class="form-grou grp4 row justify-content-center">
+                <div class="col-lg-6"><button type="submit" class="btn btn-lg btn-outline-dark">Let's Go</button></div>
             </div>
-            </div>
-        <br><br><br><br><br><br><br><br><br><br><br>
+            <!-- button submit end --->
+        </div>
     </form>
-
 </div>
+<!--- end of login section -->
+
+<div class="container pt-5 mt-5 mb-5">
+    <header class="text-center" data-aos="fade-in" data-aos-anchor-placement="center-bottom"> We're Waiting for You</header>
+</div>
+<!--- link to the login Stylesheet -->
+<link rel='stylesheet' href='/stylesheets/loginStylesheet.css'>

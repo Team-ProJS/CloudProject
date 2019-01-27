@@ -1,0 +1,15 @@
+/* Style sheet for register/login page */
+
+.formRegister {
+    margin-top: 100px;
+    padding: 0;
+
+}
+
+header {
+    font-size: 500%;
+}
+
+input {
+    border-radius: 10px !important;
+}

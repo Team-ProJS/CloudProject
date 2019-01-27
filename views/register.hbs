@@ -1,36 +1,54 @@
-
-<div style="color: #ddd;background-color:#282E34;text-align:center;padding:50px 80px;text-align: justify;">
-<div class = "col-md-8 col-md-offset-2 ">
-    <br><br><br><br><br><br><br><br><br>
-    <h2>Create Account</h2>
-    <form class="form-horizontal " role="form" id="reg-form">
-        <div class ="form-group mt">
-            <div class="col-sm-10 col-sm-offset-2">
-                <div class = "col-sm-3">
-                <label for="inputUsername" class="control-label">Username</label>
-                </div>
-                    <div class ="col-sm-9">
-                        <input type="text" class ="form-control input-lg required" id="inputUsername" placeholder="@username">
-                        
-                    </div>
-            </div>
+<!-- Register Section --->
+<div class="container-fluid formRegister ">
+    <form>
+        <div class="form-group headingLabel text-center">
+            <header> Register </header><br>
         </div>
-        <div class="form-group">
-            <div class="col-sm-10 col-sm-offset-2">
-            <div class="col-sm-3">
-            <label for="inputPassword" class="control-label">Password</label>    
-            </div>
-                <div class="col-sm-9">
-                <input  type="password" class="form-control input-lg required" id="inputPassword" placeholder="password">
+        <div class="greySec">
+            <!-- username -->
+            <div class="form-group grp1 row justify-content-center">
+                <div class="col-lg-6 column">
+                    <label for="username"> Username</label>
+                    <input type="username" class="form-control" id="usernameInput" aria-describedby="usernameHelp" placeholder="@Username">
+                    <small id="usernameHelp" class="form-text text-muted"> Let's be creative with the name.</small>
                 </div>
             </div>
+            <!--- email -->
+            <div class="form-group grp2 row justify-content-center">
+                <div class="col-lg-6">
+                    <label for="email"> Email</label>
+                    <input type="email" class="form-control" id="emailInput" aria-describedby="emailHelp" placeholder="me@email.com">
+                    <small id="emailHelp" class="form-text text-muted">We won't share your personal information</small>
+                </div>
             </div>
-            <div class="form-group">
-            <div class="row col-sm-offset-2 col-sm-10 mt">
-                <button type="submit" class="btn btn-warning btn-lg">Create Account</button>
+            <!-- password --->
+            <div class="form-group grp3 row justify-content-center">
+                <div class="col-lg-6">
+                    <label for="password"> Password</label>
+                    <input type="password" class="form-control" id="passwordInput" aria-describedby="passwordInput" placeholder="Shh.. Keep this a secret">
+                </div>
             </div>
+            <!-- confirm password -->
+            <div class="form-group grp4 row justify-content-center">
+                <div class="col-lg-6">
+                    <label for="password"> Re-enter Password</label>
+                    <input type="passwordConfirm" class="form-control" id="passwordConfirmInput" aria-describedby="passwordInput" placeholder="Confirm the password">
+                </div>
             </div>
-        <br><br><br><br><br><br><br><br><br><br><br>
+            <!-- button submit -->
+            <div class="form-grou grp4 row justify-content-center">
+                <div class="col-lg-6"><button type="submit" class="btn btn-lg btn-outline-dark">Ready?... Go</button></div>
+            </div>
+            <!-- button submit end --->
+        </div>
     </form>
-
 </div>
+<!--- End of Register section --->
+<!--- Information about secturity Section --->
+<div class="container text-center mt-5 mb-5">
+    <header>
+        Your Data... <br></header>
+    <h3>Safe with us</h3>
+</div>
+<!-- stylesheet for the register -->
+<link rel='stylesheet' href='/stylesheets/loginStylesheet.css'>
