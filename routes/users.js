@@ -13,5 +13,8 @@ router.get('/register', function(req, res, next){
 router.get('/login', function(req, res, next){
 	res.render('login');
 	});
-
+/*Renders privacy policy page*/
+router.get('/policy', function(req, res, next){
+	res.render('policy');
+	});
 module.exports = router;
