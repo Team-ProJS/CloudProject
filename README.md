@@ -5,3 +5,9 @@ This is a second year group project. The aim of the web application is to allow 
 This branch will be more up to date than the master.
 Once finalised code, the code will be merged with master. 
 Master will be the final verison. 
+# Roles
+- Html & Css: Sofia
+- Client-side Js: Jara
+- Server-side Js: Johnathen
+- Backend Db: Mohammed
+
