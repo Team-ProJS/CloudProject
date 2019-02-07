@@ -10,7 +10,7 @@ const functions = require('firebase-functions');
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-    response.set('Cache-Control', 'public, max-age=300, s-maxage=600');
+    res.set('Cache-Control', 'public, max-age=300, s-maxage=600');
     res.render('index', {
         title: 'Cloud | Home'
     });
