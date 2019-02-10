@@ -1,0 +1,92 @@
+<script type="text/javascript">
+    var GOOGLE_OATH_SCOPES = 'tempbtempa16@gmail.com, https://www.googleapis.com/auth/drive';
+var FIREBASE_URL = "https://cloudjs-projs.firebaseapp.com/";
+    // called when the Google Client API is done loading
+    function handleClientLoad() {
+      // load the drive api
+      gapi.client.load('drive', 'v2', handleDriveLoad);
+    }
+    // called when the Google Drive API
+    function handleDriveLoad() {
+      var ref = new Firebase(FIREBASE_URL);
+      ref.onAuth(function(authData) {
+        // If the user is already signed in, skip the Popup and go straight to downloading the file list.
+        if (authData && authData.google) {
+          // NOTE: There currently is no way to view which scopes have been granted via the Firebase API,
+          // so you probably need to request all the scopes you need up front.
+          // If you want to ask for permissions "incrementally", you will need to use the Google Sign-In API,
+          // or do a clever hack (i.e. store the currently granted scopes in Firebase, etc).
+          return handleFirebaseAuthData(null, authData);
+        }
+        ref.authWithOAuthPopup(
+          "google",
+          handleFirebaseAuthData,
+          {scope: GOOGLE_OATH_SCOPES}
+        );
+      });
+    }
+    /**
+     * @param error: contains any error encountered while authenticating. `null` if authentication was successful
+     * @param authData: contains the authentication data returned by Firebase
+     */
+    function handleFirebaseAuthData(error, authData) {
+      if (error) {
+        return console.log("Login Failed!", error);
+      }
+      console.log("Authenticated successfully with payload:", authData);
+      // reformat the token object for the Google Drive API
+      var tokenObject = {
+        access_token: authData.google.accessToken
+      };
+      // set the authentication token
+      gapi.auth.setToken(tokenObject);
+      // get all the files
+      retrieveAllFiles();
+    }
+    /**
+     * `gapi.client.drive.files.list()` returns paginated results, this will fetch every
+     * page and call `handleFileResults` with every batch.
+     *
+     */
+    function retrieveAllFiles() {
+      var retrievePageOfFiles = function(request) {
+        request.execute(function(resp) {
+          handleFileResults(resp.items);
+          var nextPageToken = resp.nextPageToken;
+          if (nextPageToken) {
+            request = gapi.client.drive.files.list({
+              'maxResults': 50,
+              'pageToken': nextPageToken
+            });
+            retrievePageOfFiles(request);
+          }
+        });
+      };
+      var initialRequest = gapi.client.drive.files.list({maxResults: 50});
+      retrievePageOfFiles(initialRequest, []);
+    }
+    /**
+     * Takes the list of files from the Google Drive API and adds them to the DOM as clickable links.
+     *
+     * @param result - complete list of the users file, as returned by the Google Drive API
+     */
+    function handleFileResults(result) {
+      console.log('Got Some Files!', result);
+      // copy the results to the DOM as clickable links with fancy icons!
+      result.forEach(function(file) {
+        var div = document.createElement('div');
+        var link = document.createElement('a');
+        link.href = file.alternateLink;
+        var icon = document.createElement('img');
+        icon.src = file.iconLink;
+        var title = document.createElement('span');
+        title.innerHTML = file.title;
+        link.appendChild(icon);
+        link.appendChild(title);
+        div.appendChild(link);
+        document.body.appendChild(div);
+      });
+    }
+  </script>
+  <script type="text/javascript" src="https://cdn.firebase.com/js/client/2.2.7/firebase.js"></script>
+  <script type="text/javascript" src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>

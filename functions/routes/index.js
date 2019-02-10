@@ -27,4 +27,14 @@ router.get('/aboutUs', function (req, res, next) {
         title: 'About Us'
     });
 });
+/*Renders a verification page to google that tells it that we are the owners of this site DO NOT REMOVE*/
+router.get('/googlee5811be4d44f6a39.html',function(req,res,next){
+	res.render('googlee5811be4d44f6a39', {
+		title: 'Verification of Ownership'
+	});
+});
+
+router.get('/test', function(req, res, next){
+    res.render('/test');
+});
 module.exports = router;
