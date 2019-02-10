@@ -25,10 +25,12 @@ function initClient(){
 
     $('#sign-in-or-out-button').click(function(){ //Upon Click of button user gets asked for authorisation
       handleAuthClick();
+      retrieveAllFiles();
     });
     $('revoke-access-button').click(function(){ //De-authorisation
       revokeAccess();
     });
+    
 	});
 
 }
@@ -62,4 +64,46 @@ function setSigninStatus(isSignedIn){
   }
 function updateSigninStatus(isSignedIn){
   setSigninStatus();
+}
+
+function retrieveAllFiles(callback){
+  var retrievePageOfFiles = function(request, result){
+    request.execute(function(resp){
+      
+      result = result.concat(resp.items);
+      var nextPageToken = resp.nextPageToken;
+      if(nextPageToken){
+        request = gapi.client.drive.files.list({
+          'pageToken': nextPageToken
+        });
+        retrievePageOfFiles(request, result);
+      }else{
+        callback(result);
+      }
+    });
+    handleFileResults(result);
+  }
+  var initialRequest = gapi.client.drive.files.list();
+  retrievePageOfFiles(initialRequest, []);
+}
+
+function handleFileResults(result){
+	console.log('Got files', result);
+
+	result.forEach(function(file){
+		var div = document.createElement('div');
+		var link = document.createElement('a');
+		link.href = file.alternateLink;
+
+		var icon = document.createElement('img');
+		icon.src = file.iconLink;
+
+		var title = document.createElement('span');
+		title.innerHTML = file.title;
+
+		link.appendChild(icon);
+		link.appendChild(title);
+		div.appendChild(link);
+		document.body.appendChild(div);
+	});
 }
