@@ -34,7 +34,4 @@ router.get('/googlee5811be4d44f6a39.html',function(req,res,next){
 	});
 });
 
-router.get('/test', function(req, res, next){
-    res.render('/test');
-});
 module.exports = router;
