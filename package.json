@@ -9,7 +9,6 @@
     "logs": "firebase functions:log"
   },
   "dependencies": {
-    "cloudrail-si": "^2.21.12",
     "consolidate": "^0.15.1",
     "express": "^4.16.4",
     "express-handlebars": "^3.0.0",

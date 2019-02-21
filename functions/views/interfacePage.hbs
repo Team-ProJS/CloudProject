@@ -12,7 +12,55 @@
     <progress value="0" max = "100" id = "uploader">0%</progress>
     <input type="file" value="upload" id="fileButton"/>
 </div>
-<script type="text/javascript" src="/javascripts/interfacePage.js"></script>
+<div>
+    <input type="file" value="upload" id="fileButton2"/>
+</div>
+
+<div class="container main">
+    <div id="pre-auth-section" style="display:none;">
+      <p>This example takes the user through Dropbox's API OAuth flow using <code>Dropbox.getAuthenticationUrl()</code> method [<a href="http://dropbox.github.io/dropbox-sdk-js/Dropbox.html#getAuthenticationUrl">docs</a>] and then uses the generated access token to list the contents of their root directory.</p>
+      <a href="" id="authlink" class="button">Authenticate</a>
+      <p class="info">Once authenticated, it will use the access token to list the files in your root directory.</p>
+    </div>
+
+ <form onSubmit="return downloadFile()">
+      <input type="text" id="access-token" placeholder="Access token" />
+      <input type="text" id="shared-link" placeholder="Dropbox shared link to a file" />
+      <button type="submit">Submit</button>
+    </form>
+
+    <!-- The download button is added here -->
+    <div id="results" style="margin-top: 30px"></div>
+
+<div>
+  <button id="dropboxloginbtn"
+        style="margin-left: 25px" onclick ="dropboxlogin();">DropBox Login</button>
+</div>
+
+    <div id="authed-section" style="display:none;">
+      <p>You have successfully authenticated. Below are the contents of your root directory. They were fetched using the SDK and access token.</p>
+  <!--    <ul id="files"></ul>-->
+  <div id ="files"></div>
+    </div>
+  </div>
+  <div>
+    <progress value="0" max = "100" id = "uploader2">0%</progress>
+    <input type="file" value="upload" id="fileButton2"/>
+</div>
+<button onclick="downloadFile();"
+        style="margin-left: 25px">Download</button>
+<div><p id = 'results'></p></div>
+</div>
+<script
+  src="https://code.jquery.com/jquery-3.3.1.js"
+  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+  crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/promise-polyfill@7/dist/polyfill.min.js"></script><!--DropBox API-->
+<script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="1qwuqul2z1v27e1"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropbox.js/4.0.16/Dropbox-sdk.js"></script> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.js"></script>
+<script src="/javascripts/utils.js"></script>
+<script type="text/javascript" src="/javascripts/interfacePage.js"></script> 
 <script async defer src="https://apis.google.com/js/api.js" 
         onload="this.onload=function(){};handleClientLoad()" 
         onreadystatechange="if (this.readyState === 'complete') this.onload()">
