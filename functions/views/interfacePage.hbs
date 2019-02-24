@@ -1,10 +1,14 @@
 <div class="container">
     <br><br>
-    <header class="pt-5"> HELLO WORLD</header>
+    <header class="pt-5"> Interface Page</header>
+
+    <!--Google Api-->
     <button id="sign-in-or-out-button"
         style="margin-left: 25px">Sign In/Authorize</button>
 <button id="revoke-access-button"
         style="display: none; margin-left: 25px">Revoke access</button>
+
+
 
 <div id="auth-status" style="display: inline; padding-left: 25px"></div><hr>
 </div>
@@ -12,30 +16,16 @@
     <progress value="0" max = "100" id = "uploader">0%</progress>
     <input type="file" value="upload" id="fileButton"/>
 </div>
-<div>
-    <input type="file" value="upload" id="fileButton2"/>
-</div>
-
 <div class="container main">
     <div id="pre-auth-section" style="display:none;">
-      <p>This example takes the user through Dropbox's API OAuth flow using <code>Dropbox.getAuthenticationUrl()</code> method [<a href="http://dropbox.github.io/dropbox-sdk-js/Dropbox.html#getAuthenticationUrl">docs</a>] and then uses the generated access token to list the contents of their root directory.</p>
       <a href="" id="authlink" class="button">Authenticate</a>
       <p class="info">Once authenticated, it will use the access token to list the files in your root directory.</p>
     </div>
 
- <form onSubmit="return downloadFile()">
-      <input type="text" id="access-token" placeholder="Access token" />
-      <input type="text" id="shared-link" placeholder="Dropbox shared link to a file" />
-      <button type="submit">Submit</button>
-    </form>
 
     <!-- The download button is added here -->
     <div id="results" style="margin-top: 30px"></div>
 
-<div>
-  <button id="dropboxloginbtn"
-        style="margin-left: 25px" onclick ="dropboxlogin();">DropBox Login</button>
-</div>
 
     <div id="authed-section" style="display:none;">
       <p>You have successfully authenticated. Below are the contents of your root directory. They were fetched using the SDK and access token.</p>
@@ -44,9 +34,13 @@
     </div>
   </div>
   <div>
-    <progress value="0" max = "100" id = "uploader2">0%</progress>
-    <input type="file" value="upload" id="fileButton2"/>
+    <p>Pick a file to upload to DropBox</p>
+    <input type="file" value="upload" id="uploadToDB"/>
 </div>
+<button onclick="deleteFile();"
+        style="margin-left: 25px">Delete</button>
+        <button onclick="transferFile();"
+        style="margin-left: 25px">Transfer to Firebase</button>
 <button onclick="downloadFile();"
         style="margin-left: 25px">Download</button>
 <div><p id = 'results'></p></div>

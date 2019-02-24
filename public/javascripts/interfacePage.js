@@ -137,16 +137,16 @@ fileButton.addEventListener('change', function(e){
 var CLIENT_ID ='1qwuqul2z1v27e1';
 var dbx;
 
-function getAccessTokenFromUrl(){
+function getAccessTokenFromUrl(){ //Function to call parser for access token
   return utils.parseQueryString(window.location.hash).access_token;
 }
 
-function isAuthenticated(){
+function isAuthenticated(){ //Function to check Auth
   return !!getAccessTokenFromUrl();
 }
+
 var StringOutput = " ";
-function renderItems(items){
-  
+function renderItems(items){ //Function for rendering files in DB
   items.forEach(function(item){
     console.log(item);
     if(item.hasOwnProperty('rev')){
@@ -163,28 +163,21 @@ function renderItems(items){
         StringOutput += "<li class = 'derp'  name='" +name+" '  >" + item.name + "</li>";
         StringOutput +="<li >"+item.path_lower+"</li>";
   });
-
   var fileContainer = document.getElementById('files');
   fileContainer.innerHTML = StringOutput;
- 
 }
 
+var currPath ="/mystuff/graph.fig";
+files.addEventListener('click', function(e){ //Function to add listener to Files
+  currPath = e.target.innerText;
+  console.log(currPath);
+});
 
-var currPath;
-
-document.addEventListener('click', function(e) {
-  e = e || window.event;
-  var target = e.target || e.srcElement,
-   currPath = target.textContent || target.innerText;   
-    //text = target.name;
-      console.log(currPath);
-}, false);
-
-function showPageSection(elementId){
+function showPageSection(elementId){ //Function to show hidden elements
   document.getElementById(elementId).style.display ='block';
 }
 
-if(isAuthenticated()){
+if(isAuthenticated()){ //Function that is called upon auth
   showPageSection('authed-section');
    dbx = new Dropbox.Dropbox({ accessToken: getAccessTokenFromUrl() });
   dbx.filesListFolder({path: ''}).then(function(response){
@@ -199,9 +192,40 @@ if(isAuthenticated()){
       document.getElementById('authlink').href = authUrl;
 }
 
-function downloadFile(){
+function deleteFile(){ //Function to delete DB file that is at path currpath
   dbx = new Dropbox.Dropbox({ accessToken: getAccessTokenFromUrl() });
-  dbx.filesDownload({path:'/new page.txt'
+  dbx.filesDelete({path:""+currPath});
+  alert("File at: "+currPath +" has been deleted");
+}
+
+
+function downloadFile(){ //Function to download a DB file to the browser
+  dbx = new Dropbox.Dropbox({ accessToken: getAccessTokenFromUrl() });
+  alert("Current pathfile: "+currPath);
+  dbx.filesDownload({path:""+currPath
+}).then(function(response){
+  console.log(response);
+  if(navigator.msSaveBlob){
+    return navigator.msSaveBlob(response.content, response.name);
+  }else{
+    let link = document.createElement('a');
+    link.href = window.URL.createObjectURL(response.fileBlob);
+    link.download = response.name;
+    document.body.appendChild(link);
+    link.dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true, view: window}));
+    link.remove();
+    window.URL.revokeObjectURL(link.href);
+  }
+}).catch(function(error){
+  console.error(error);
+});
+return false;
+}
+
+function transferFile(){ //Function to transfer files from DB to Firebase
+  dbx = new Dropbox.Dropbox({ accessToken: getAccessTokenFromUrl() });
+  alert("Current pathfile: "+currPath);
+  dbx.filesDownload({path:""+currPath
 }).then(function(response){
   var results = document.getElementById('results');
   results.appendChild(document.createTextNode('File Downloaded!'));
@@ -214,7 +238,7 @@ function downloadFile(){
 return false;
 }
 
-function uploadToFirebase(file){
+function uploadToFirebase(file){ //Function to upload file to firebase
   var storageRef = firebase.storage().ref('test/' +file.name);
   var task = storageRef.put(file.fileBlob);
 
@@ -224,24 +248,22 @@ function uploadToFirebase(file){
       uploader.value = precentage;
   },
   function error(err){
-
   },
   function complete(){
-
   }
   );
-
 }
 
-function uploadToDropBox(file){
+function uploadToDropBox(file){ //Function to upload file to DB
   const UPLOAD_FILE_SIZE_LIMIT = 150*1024*1024;
 
   if(file.size < UPLOAD_FILE_SIZE_LIMIT){
     dbx.filesUpload({path: '/' + file.name, contents: file}).then(function(response){
       console.log('File Uploaded');
       console.log(response);
+      alert("File with name: "+file.name+" has been uploaded to your dropbox account!\nRe-Auth to view updated list of files.");
     }).catch(function(error){
-      console.eroor(error);
+      console.error(error);
     });
   }else{
     const maxBlob = 8*1000*1000;
@@ -286,8 +308,8 @@ function uploadToDropBox(file){
   return false;
   
 }
-fileButton2.addEventListener('change', function(e){
 
+uploadToDB.addEventListener('change', function(e){ //Starts upload to DB through uploader
   var file = e.target.files[0];
 uploadToDropBox(file);
 });
