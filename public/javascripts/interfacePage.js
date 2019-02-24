@@ -313,3 +313,25 @@ uploadToDB.addEventListener('change', function(e){ //Starts upload to DB through
   var file = e.target.files[0];
 uploadToDropBox(file);
 });
+
+function revokeDB(){
+  dbx.authTokenRevoke();
+ document.getElementById("files").style.display = "none";
+  StringOutput = "";
+    showPageSection('pre-auth-section');
+     dbx = new Dropbox.Dropbox({ clientId: CLIENT_ID });
+        var authUrl = dbx.getAuthenticationUrl('https://cloudjs-projs.firebaseapp.com/interfacePage');
+        document.getElementById('authlink').href = authUrl;
+  }
+
+
+  function logoutDB(){
+   let link = document.createElement('a');
+    link.href = "https://www.dropbox.com/logout";
+    link.target = "_blank";
+    document.body.appendChild(link);
+    link.dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true, view: window}));
+    link.remove();
+    
+    revokeDB();
+  }
