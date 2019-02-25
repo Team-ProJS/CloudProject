@@ -42,12 +42,20 @@
 
                     <a class="nav-link" href="/aboutUs">About Us</a>
                 </li>
-                <li class="nav-item">
+                <li id="btnSI" class="nav-item">
                     <a class="nav-link" href="/users/login">Sign In</a>
                 </li>
-                <li class="nav-item">
+                <li id="btnRG" class="nav-item">
                     <!-- Contavt Section Jump -->
                     <a class="nav-link" href="/users/register">Register</a>
+                </li>
+                <li id="btnIF" class="nav-item d-none">
+                    <!-- Contavt Section Jump -->
+                    <a class="nav-link" href="/users/interfacePage">Interface</a>
+                </li>
+                <li id="btnSO" class="nav-item d-none">
+                    <!-- Contavt Section Jump -->
+                    <a class="nav-link" href="/">Sign Out</a>
                 </li>
             </ul>
         </div>
@@ -113,12 +121,17 @@
     <!---- Mdbootstrap.js
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.6.1/js/mdb.min.js"></script>----->
 
-    <!-- Firebase.js -->
-     <script type="text/javascript" src="https://cdn.firebase.com/js/client/2.2.7/firebase.js"></script>
+
     <!--Google Handle Client Load -->
     <script type="text/javascript" src="https://apis.google.com/js/client.js?onload=handleClientLoad"></script>
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase.js"></script>
+    <!-- Firebase Initialization Javascript file -->
+    <script src="/javascripts/fbInit.js"></script>
     <!-- main Javascript file ---->
     <script src="/javascripts/main.js"></script>
+    <!-- Authentication Javascript file -->
+    <script src="/javascripts/authFb.js"></script>
     <!----------------------  END - LINKS ---------------------------------->
 </body>
 
