@@ -147,24 +147,58 @@ function isAuthenticated(){ //Function to check Auth
 
 var StringOutput = " ";
 function renderItems(items){ //Function for rendering files in DB
-  items.forEach(function(item){
-    console.log(item);
-    if(item.hasOwnProperty('rev')){
-      console.log("I AM A FILE");
-    }else{
-      console.log("I AM A FOLDER");
-      dbx.filesListFolder({path: ''+item.path_lower+''}).then(function(response){
+  var location = $('#files');
+  location.empty();
+    location.append($('<div/>').append($('<a href="javascript:;">...</a>').on('click',function(e){
+      dbx.filesListFolder({path: ''}).then(function(response){
         renderItems(response.entries);
       }).catch(function(error){
         console.error(error);
       });
+    })
+    ));
+  
+  items.forEach(function(item){
+    console.log(item);
+    if(item.hasOwnProperty('rev')){
+      console.log("I AM A FILE");
+      location.append($('<div/>').append($('<span/>').text(item.name)).append(' | ').append($('<a href="javascript:;">Download</a>').on('click',function(e){
+        console.log('Clicked on: ', item.path_lower);
+        downloadDBXSFile(item.path_lower);
+      })
+      ).append(' | ').append($('<a href="javascript:;">Delete</a>').on('click',function(e){
+        deleteDBXFile(item.path_lower);
+        dbx.filesListFolder({path: ''}).then(function(response){
+          renderItems(response.entries);
+        }).catch(function(error){
+          console.error(error);
+        });
+      })).append(" | ").append($('<a href="javascript:;">Rename</a>').on('click', function(e){
+        renameDBXFile(item.path_lower);
+        dbx.filesListFolder({path: ''}).then(function(response){
+          renderItems(response.entries);
+        }).catch(function(error){
+          console.error(error);
+        });
+      }))
+      );
+    }else{
+      console.log("I AM A FOLDER");
+      location.append($('<div/>').append($('<span/>').text(item.name)).append(' | ').append($('<a href="javascript:;">Enter Folder</a>').on('click',function(e){
+        console.log('Clicked on: ', item.path_lower);
+        dbx.filesListFolder({path: ''+item.path_lower}).then(function(response){
+          renderItems(response.entries);
+        }).catch(function(error){
+          console.error(error);
+        });
+      })
+      )
+      );
     }
     var name = JSON.stringify(item.path_lower);
-        StringOutput += "<li class = 'derp'  name='" +name+" '  >" + item.name + "</li>";
-        StringOutput +="<li >"+item.path_lower+"</li>";
+
+
   });
-  var fileContainer = document.getElementById('files');
-  fileContainer.innerHTML = StringOutput;
 }
 
 var currPath ="/mystuff/graph.fig";
@@ -192,17 +226,26 @@ if(isAuthenticated()){ //Function that is called upon auth
       document.getElementById('authlink').href = authUrl;
 }
 
-function deleteFile(){ //Function to delete DB file that is at path currpath
+function deleteDBXFile(path){ //Function to delete DB file that is at path currpath
   dbx = new Dropbox.Dropbox({ accessToken: getAccessTokenFromUrl() });
-  dbx.filesDelete({path:""+currPath});
-  alert("File at: "+currPath +" has been deleted");
+  dbx.filesDelete({path:""+path});
+  alert("File at: "+path +" has been deleted");
 }
 
+function renameDBXFile(path){
+var dest = prompt("Enter the new name", ""+path);
+alert(dest);
+if(dest == null || dest == ""){
+  alert("Got error");
+  return;
+}
+dbx.filesMoveV2({from_path:path, to_path:dest});
+}
 
-function downloadFile(){ //Function to download a DB file to the browser
+function downloadDBXSFile(path){ //Function to download a DB file to the browser
   dbx = new Dropbox.Dropbox({ accessToken: getAccessTokenFromUrl() });
-  alert("Current pathfile: "+currPath);
-  dbx.filesDownload({path:""+currPath
+  alert("Current pathfile: "+path);
+  dbx.filesDownload({path:""+path
 }).then(function(response){
   console.log(response);
   if(navigator.msSaveBlob){
