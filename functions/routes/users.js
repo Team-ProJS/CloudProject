@@ -9,13 +9,13 @@ var firebaseAdmin=admin.initializeApp({
 });
 
 function isAuthenticated(req, res, next){
-    try {
-        var sessionCookie = req.cookies.session;
+        try {
+        var sessionCookie = req.cookies.__session;
         console.log(sessionCookie);
         admin.auth().verifySessionCookie(sessionCookie, true)
             .then(function(decodedClaims){
                 console.log("token verified");
-                next()
+                next();
                     })
             .catch(function(error){
                 console.log(error);
@@ -62,7 +62,7 @@ router.post('/authIn', function (req, res, next) {
                 .then(function(sessionCookie)
                       {//triggers if session cookie created successfuly
                         res.setHeader('Cache-Control', 'private');
-                        res.cookie('session', sessionCookie);//saves cookie
+                        res.cookie('__session', sessionCookie);//saves cookie
                         res.send("response");
                         })
                 .catch(function(error)
@@ -78,7 +78,7 @@ router.post('/authIn', function (req, res, next) {
 
 router.post('/authOut', function (req, res, next) {
     res.setHeader('Cache-Control', 'private');
-    res.clearCookie('session');//removes cookie named session (that we save in authIn)
+    res.clearCookie('__session');//removes cookie named session (that we save in authIn)
     res.send("response");
 });
 module.exports = router;
