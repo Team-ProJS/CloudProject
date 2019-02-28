@@ -37,6 +37,9 @@
     <p>Pick a file to upload to DropBox</p>
     <input type="file" value="upload" id="uploadToDB"/>
 </div>
+<div>
+          <input type="file" value="upload" id="uploaderPCloud"/>
+</div>
 <div id="pcloudfiles"></div>
 <button onclick="deleteFile();"
         style="margin-left: 25px">Delete</button>
@@ -45,12 +48,12 @@
 <button onclick="downloadFile();"
         style="margin-left: 25px">Download</button>
         <button onclick="revokeDB();"
-        style="margin-left: 25px">RevokeAccess</button>
+        style="margin-left: 25px">Dropbox RevokeAccess</button>
         <button onclick="logoutDB();"
-        style="margin-left: 25px">Logout</button><button onclick="initPCloud();"
-        style="margin-left: 25px">PCloud Login</button>
-        <button id="pcloudtoken">Get Token(redirect)</button>
-  <button id="pcloudtokken">Get Token(poll)</button>
+        style="margin-left: 25px">Dropbox Logout</button>
+        <button onclick="pCloudLogout();"
+        style="margin-left: 25px">pCloud Logout</button>
+  <button id="pcloudtokken">pCloud Login</button>
 <div><p id = 'results'></p></div>
 
 </div>
@@ -65,7 +68,7 @@
 <script type="text/javascript" src="https://unpkg.com/pcloud-sdk-js@latest/dist/pcloudsdk.js"></script>
 <script src="/javascripts/utils.js"></script>
 <script type="text/javascript" src="/javascripts/interfacePage.js"></script> 
-<script type="text/javascript" src="/javascripts/box.js"></script> 
+<script type="text/javascript" src="/javascripts/pcloud.js"></script> 
 <script async defer src="https://apis.google.com/js/api.js" 
         onload="this.onload=function(){};handleClientLoad()" 
         onreadystatechange="if (this.readyState === 'complete') this.onload()">

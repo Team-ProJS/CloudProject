@@ -134,19 +134,21 @@ fileButton.addEventListener('change', function(e){
   );
 });
 /*                                                                                         DropBox API                                                                                         */
+//Client ID of the Dropbox App
 var CLIENT_ID ='1qwuqul2z1v27e1';
+//Dropbox Object used for api calls
 var dbx;
 
-function getAccessTokenFromUrl(){ //Function to call parser for access token
+ //Function to call parser for access token
+function getAccessTokenFromUrl(){
   return utils.parseQueryString(window.location.hash).access_token;
 }
-
-function isAuthenticated(){ //Function to check Auth
+ //Function to check Auth
+function isAuthenticated(){
   return !!getAccessTokenFromUrl();
 }
-
-var StringOutput = " ";
-function renderItems(items){ //Function for rendering files in DB
+//Function for rendering files in DB
+function renderItems(items){ 
   var location = $('#files');
   location.empty();
     location.append($('<div/>').append($('<a href="javascript:;">...</a>').on('click',function(e){
@@ -157,7 +159,6 @@ function renderItems(items){ //Function for rendering files in DB
       });
     })
     ));
-  
   items.forEach(function(item){
     console.log(item);
     if(item.hasOwnProperty('rev')){
@@ -195,24 +196,22 @@ function renderItems(items){ //Function for rendering files in DB
       )
       );
     }
-    var name = JSON.stringify(item.path_lower);
-
-
   });
 }
-
+ /*Temp Function to add listener to Files
 var currPath ="/mystuff/graph.fig";
-files.addEventListener('click', function(e){ //Function to add listener to Files
+files.addEventListener('click', function(e){
   currPath = e.target.innerText;
   console.log(currPath);
 });
-
-function showPageSection(elementId){ //Function to show hidden elements
+*/
+ //Function to show hidden elements
+function showPageSection(elementId){
   document.getElementById(elementId).style.display ='block';
 }
-
-if(isAuthenticated()){ //Function that is called upon auth
-  showPageSection('authed-section');
+ //Function that is called upon auth
+if(isAuthenticated()){
+   showPageSection('authed-section');
    dbx = new Dropbox.Dropbox({ accessToken: getAccessTokenFromUrl() });
   dbx.filesListFolder({path: ''}).then(function(response){
     renderItems(response.entries);
@@ -220,18 +219,18 @@ if(isAuthenticated()){ //Function that is called upon auth
     console.error(error);
   });
 }else{
-  showPageSection('pre-auth-section');
+   showPageSection('pre-auth-section');
    dbx = new Dropbox.Dropbox({ clientId: CLIENT_ID });
       var authUrl = dbx.getAuthenticationUrl('https://cloudjs-projs.firebaseapp.com/interfacePage');
       document.getElementById('authlink').href = authUrl;
 }
-
-function deleteDBXFile(path){ //Function to delete DB file that is at path currpath
+//Function to delete DB file that is at specified path
+function deleteDBXFile(path){ 
   dbx = new Dropbox.Dropbox({ accessToken: getAccessTokenFromUrl() });
   dbx.filesDelete({path:""+path});
   alert("File at: "+path +" has been deleted");
 }
-
+//Function to rename DB file that is at specified path
 function renameDBXFile(path){
 var dest = prompt("Enter the new name", ""+path);
 alert(dest);
@@ -241,8 +240,8 @@ if(dest == null || dest == ""){
 }
 dbx.filesMoveV2({from_path:path, to_path:dest});
 }
-
-function downloadDBXSFile(path){ //Function to download a DB file to the browser
+ //Function to download a DB file to the browser
+function downloadDBXSFile(path){
   dbx = new Dropbox.Dropbox({ accessToken: getAccessTokenFromUrl() });
   alert("Current pathfile: "+path);
   dbx.filesDownload({path:""+path
@@ -264,8 +263,8 @@ function downloadDBXSFile(path){ //Function to download a DB file to the browser
 });
 return false;
 }
-
-function transferFile(){ //Function to transfer files from DB to Firebase
+ //Function to transfer files from DB to Firebase
+function transferFile(){
   dbx = new Dropbox.Dropbox({ accessToken: getAccessTokenFromUrl() });
   alert("Current pathfile: "+currPath);
   dbx.filesDownload({path:""+currPath
@@ -274,17 +273,15 @@ function transferFile(){ //Function to transfer files from DB to Firebase
   results.appendChild(document.createTextNode('File Downloaded!'));
   console.log(response);
   uploadToFirebase(response);
-
 }).catch(function(error){
   console.error(error);
 });
 return false;
 }
-
-function uploadToFirebase(file){ //Function to upload file to firebase
+ //Function to upload file to firebase
+function uploadToFirebase(file){
   var storageRef = firebase.storage().ref('test/' +file.name);
   var task = storageRef.put(file.fileBlob);
-
   task.on('state_changed',
   function progress(snapshot){
      var precentage = (snapshot.bytesTransferred/snapshot.totalBytes)*100;
@@ -296,10 +293,9 @@ function uploadToFirebase(file){ //Function to upload file to firebase
   }
   );
 }
-
-function uploadToDropBox(file){ //Function to upload file to DB
+//Function to upload file to DB
+function uploadToDropBox(file){ 
   const UPLOAD_FILE_SIZE_LIMIT = 150*1024*1024;
-
   if(file.size < UPLOAD_FILE_SIZE_LIMIT){
     dbx.filesUpload({path: '/' + file.name, contents: file}).then(function(response){
       console.log('File Uploaded');
@@ -349,25 +345,23 @@ function uploadToDropBox(file){ //Function to upload file to DB
     
   }
   return false;
-  
 }
-
-uploadToDB.addEventListener('change', function(e){ //Starts upload to DB through uploader
+//Starts upload to DB through uploader
+uploadToDB.addEventListener('change', function(e){ 
   var file = e.target.files[0];
 uploadToDropBox(file);
 });
-
+//Function to revoke access Token to DB
 function revokeDB(){
   dbx.authTokenRevoke();
  document.getElementById("files").style.display = "none";
-  StringOutput = "";
+ window.history.replaceState({}, document.title, "/" + "interfacePage");
     showPageSection('pre-auth-section');
      dbx = new Dropbox.Dropbox({ clientId: CLIENT_ID });
         var authUrl = dbx.getAuthenticationUrl('https://cloudjs-projs.firebaseapp.com/interfacePage');
         document.getElementById('authlink').href = authUrl;
   }
-
-
+//Function to bring user to logout screen in DB
   function logoutDB(){
    let link = document.createElement('a');
     link.href = "https://www.dropbox.com/logout";
@@ -375,6 +369,5 @@ function revokeDB(){
     document.body.appendChild(link);
     link.dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true, view: window}));
     link.remove();
-    
     revokeDB();
   }
