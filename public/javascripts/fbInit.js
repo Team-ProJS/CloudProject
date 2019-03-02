@@ -1,4 +1,4 @@
-    var config = {
+var config = {
             apiKey: 'AIzaSyAABz0NTPYELmQVbgs2h08bF5qzhJZkckA',
             authDomain: 'https://cloudjs-projs.firebaseapp.com',
             databaseURL: 'https://cloudjs-projs.firebaseio.com/',

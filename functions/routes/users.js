@@ -8,6 +8,8 @@ var firebaseAdmin=admin.initializeApp({
   databaseURL: "https://cloudjs-projs.firebaseio.com"
 });
 
+var db = admin.firestore();
+
 function isAuthenticated(req, res, next){
         try {
         var sessionCookie = req.cookies.__session;
@@ -81,4 +83,62 @@ router.post('/authOut', function (req, res, next) {
     res.clearCookie('__session');//removes cookie named session (that we save in authIn)
     res.send("response");
 });
+
+router.post('/createUserInfo', function (req, res, next) {
+    let query=db.collection('UserInfo').where('userID','==',req.body.uid);
+    query.get().then(
+        function(querySnapshot)
+            {
+                if (querySnapshot.empty)
+                {
+                    var docRef = db.collection('UserInfo').doc(req.body.uid);
+                    var setUser = docRef.set({
+                    pCloudTransfer:0,
+                    pCloudUpload:0,
+                    oneDriveTransfer:0,
+                    oneDriveUpload:0,
+                    oneDriveDownload:0,
+                    gDriveTransfer:0,
+                    gDriveUpload:0,
+                    gDriveDownload:0,
+                    dBoxTransfer:0,
+                    dBoxUpload:0,
+                    dBoxDownload:0
+                    });
+                }
+            })
+    .catch(function(err){console.log(err);});
+    res.send("response");
+});
+
+/*router.post('/increment', function (req, res, next) {
+    var ref = db.collection('UserInfo').doc(req.body.uid);
+    //var field=req.body.field;
+    var value=req.body.value;
+    
+    var transaction = db.runTransaction(function(t) {
+            return t.get(ref)
+        .then(function(doc) {
+            var curr = doc.data().(req.body.field) + value;
+            t.update(ref, {(req.body.field): (doc.data().(req.body.field) + value)});
+            });
+    }).then(function(result) {
+        console.log('Transaction success!');
+    }).catch(function(err) {
+        console.log('Transaction failure:', err);
+    });
+    res.send("response");
+});*/
+
+router.post('/getUserInfo', function (req, res, next) {
+    const document = db.doc('UserInfo/'+req.body.uid);
+    let info=document.get()
+        .then(function(documentSnapshot)
+            {
+                res.send(documentSnapshot.data());
+            })
+        .catch(function(err){console.log(err);});
+        
+});
+
 module.exports = router;

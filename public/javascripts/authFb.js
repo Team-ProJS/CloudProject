@@ -83,6 +83,7 @@ $(document).ready(function () {
         firebase.auth().onAuthStateChanged(function(firebaseUser){//triggers automatically whever authentication state, client-side, changes
             if(firebaseUser!=null){
                     user = 1;
+                    createInfo(firebase.auth().currentUser.uid);
             }else
                 {
                     user=0;
@@ -129,6 +130,33 @@ function sendToken(token)
                     }else
                     {
                         window.alert("Something went wrong,please try again later!");
+                    }
+                    
+                },
+                error: function(errMsg)
+                    {
+                        console.log(errMsg);
+                    }
+            });
+        
+    }
+
+function createInfo(uid)
+    {
+        $.ajax({//sends token to server for cookie generating
+                type: 'POST',
+                url: '/users/createUserInfo',
+                credentials: 'same-origin',
+                data: {
+                    'uid' : uid
+                },
+                success: function(data){
+                    if(data=="response")
+                    {
+                        
+                    }else
+                    {
+                        console.log(data);
                     }
                     
                 },
