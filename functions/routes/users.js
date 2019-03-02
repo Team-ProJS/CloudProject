@@ -107,7 +107,7 @@ router.post('/createUserInfo', function (req, res, next) {
                     });
                 }
             })
-    .catch(function(err){console.log(err);});
+    .catch(function(err){res.send(err);});
     res.send("response");
 });
 
@@ -137,7 +137,7 @@ router.post('/getUserInfo', function (req, res, next) {
             {
                 res.send(documentSnapshot.data());
             })
-        .catch(function(err){console.log(err);});
+        .catch(function(err){res.send(err);});
         
 });
 
