@@ -7,7 +7,7 @@ var firebaseAdmin=admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://cloudjs-projs.firebaseio.com"
 });
-
+    
 var db = admin.firestore();
 
 function isAuthenticated(req, res, next){
@@ -88,12 +88,10 @@ router.post('/authOut', function (req, res, next) {
     "uid":uid
 }*/
 router.post('/createUserInfo', function (req, res, next) {
-    let query=db.collection('UserInfo').where('userID','==',req.body.uid);
-    query.get().then(
-        function(querySnapshot)
-            {
-                if (querySnapshot.empty)
-                {
+    let documentRef = db.doc('UserInfo/'+req.body.uid);
+
+documentRef.get().then(function(documentSnapshot){
+  if (!documentSnapshot.exists) {
                     var docRef = db.collection('UserInfo').doc(req.body.uid);
                     var setUser = docRef.set({
                     pCloudTransfer:0,
@@ -108,9 +106,8 @@ router.post('/createUserInfo', function (req, res, next) {
                     dBoxUpload:0,
                     dBoxDownload:0
                     });
-                }
-            })
-    .catch(function(err){console.log(err);});
+            }
+        });
     res.send("response");
 });
 
