@@ -1,3 +1,36 @@
+/***********************************************************************************************
+ * 
+ *            This section contains the front-end dependant JAVASCRIPT
+ * 
+ ************************************************************************************************/
+
+$(document).ready(function () {
+  /* This on click the button, will expand navbar, and change the
+  profile size */
+
+  $('#sidebarCollapse').on('click', function () {
+      $('#sidebar').toggleClass('active');
+  });
+  $('#toolbarBtn, #toolbarsBtn').on('click',function() {
+      $('.toolSection').toggleClass('remove');
+      $('.header').toggle();
+  })
+
+  /* tooltip */
+  $('[data-toggle="tooltip"]').tooltip();
+
+
+});
+
+/***********************************************************************************************
+ * 
+ *            This section contains the SDK interaction. :
+ *                                                          Google
+ *                                                          Firebase
+ *                                                          Dropbox                 
+ * 
+ ************************************************************************************************/
+
 /*                                                                                          Google Drive API                                                                                          */
 
 var GoogleAuth;
@@ -55,13 +88,9 @@ function setSigninStatus(isSignedIn){
   if(isAuthorized){
     $('#sign-in-or-out-button').html('Sign out');  //If user logs in, change sign in button to sign out
       $('#revoke-access-button').css('display', 'inline-block'); //Make button visible
-      $('#auth-status').html('You are currently signed in and have granted ' +
-          'access to this app.');//Status is updated to reflect scopes granted
     } else {
       $('#sign-in-or-out-button').html('Sign In/Authorize'); //If user logs off, change sign out button to sign in
       $('#revoke-access-button').css('display', 'none'); // make invisble
-      $('#auth-status').html('You have not authorized this app or you are ' +
-          'signed out.');//Status is updated to reflect scopes granted
     }
   }
 function updateSigninStatus(isSignedIn){
@@ -211,7 +240,6 @@ function showPageSection(elementId){
 }
  //Function that is called upon auth
 if(isAuthenticated()){
-   showPageSection('authed-section');
    dbx = new Dropbox.Dropbox({ accessToken: getAccessTokenFromUrl() });
   dbx.filesListFolder({path: ''}).then(function(response){
     renderItems(response.entries);
@@ -219,7 +247,6 @@ if(isAuthenticated()){
     console.error(error);
   });
 }else{
-   showPageSection('pre-auth-section');
    dbx = new Dropbox.Dropbox({ clientId: CLIENT_ID });
       var authUrl = dbx.getAuthenticationUrl('https://cloudjs-projs.firebaseapp.com/interfacePage');
       document.getElementById('authlink').href = authUrl;
@@ -371,3 +398,6 @@ function revokeDB(){
     link.remove();
     revokeDB();
   }
+
+
+

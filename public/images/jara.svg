@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 460">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+        stroke: #74b9ff;
+        stroke-width: 10px;
+      }
+
+      .cls-2, .cls-3 {
+        fill: #2d3436;
+      }
+
+      .cls-2 {
+        font-size: 86px;
+        font-family: CircularStd-Medium, Circular Std Medium;
+        font-weight: 500;
+      }
+
+      .cls-3 {
+        font-size: 50px;
+        font-family: CircularStd-Book, Circular Std Book;
+      }
+
+      .cls-4 {
+        stroke: none;
+      }
+
+      .cls-5 {
+        fill: none;
+      }
+    </style>
+  </defs>
+  <g id="Group_121" data-name="Group 121" transform="translate(-730 -3611)">
+    <g id="Rectangle_131" data-name="Rectangle 131" class="cls-1" transform="translate(1190 3611) rotate(90)">
+      <path class="cls-4" d="M200,0H460a0,0,0,0,1,0,0V260A200,200,0,0,1,260,460H0a0,0,0,0,1,0,0V200A200,200,0,0,1,200,0Z"/>
+      <path class="cls-5" d="M200,5H450a5,5,0,0,1,5,5V260A195,195,0,0,1,260,455H10a5,5,0,0,1-5-5V200A195,195,0,0,1,200,5Z"/>
+    </g>
+    <text id="Jara" class="cls-2" transform="translate(782 3791)"><tspan x="0" y="0">Jara</tspan></text>
+    <text id="Cloud_API_Client-side_JS" data-name="Cloud API
+Client-side JS" class="cls-3" transform="translate(1144 3932)"><tspan x="-226.7" y="0">Cloud API</tspan><tspan x="-313.95" y="70">Client-side JS</tspan></text>
+  </g>
+</svg>

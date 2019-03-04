@@ -2,7 +2,7 @@ var access_token = false;
 var client = false;
 //Function to list files
   function listfiles() {
-          var place = $('#pcloudfiles');
+          var place = $('#files');
           client.listfolder(0).then(function(metadata) {
                      metadata.contents.forEach(function(item, n) {
                                if (!item.isfolder) {
@@ -27,10 +27,11 @@ function receiveTokenCb(token) {
 //Function to logout of pCloud
 function pCloudLogout(){
           access_token = false;
-          var place = $('#pcloudfiles');
+          var place = $('#files');
           place.empty();
 }
 //Upload file to pCloud
+/*
 uploaderPCloud.addEventListener('change', function(e){
           if(!client){
                     this.value = '';
@@ -49,6 +50,7 @@ uploaderPCloud.addEventListener('change', function(e){
                     }
           });
 }, false);
+*/
 
 // Oauth authenticate without redirect uri
 pcloudtokken.addEventListener('click', function (e) {

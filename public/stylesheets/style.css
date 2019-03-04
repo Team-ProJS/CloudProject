@@ -25,13 +25,6 @@ header {
 
 /* ------------ Navbar ------------*/
 
-.navbar-brand {
-    font-family: 'quicksand';
-    font-size: 2em !important;
-    color: #707070 !important;
-    transition: 0.2s;
-}
-
 .logoIMG {
     padding: 0;
     margin-bottom: 5px;
@@ -40,6 +33,7 @@ header {
 .navbar {
     font-family: 'circular';
     font-size: 1em;
+    width:100%;
 }
 
 .nav-item {
@@ -53,7 +47,7 @@ header {
 
 .page-footer {
 
-    background-color: rgb(0, 0, 0);
+    background-color:#2D2D35;
     font-family: 'circular';
     color: #444554;
 }
@@ -62,16 +56,30 @@ header {
 
 /* ------------ Landing Page ------------*/
 
-/* This is the landing page's dark background */
+/* This is the landing page's light blue background */
 
 .bg {
-    background-image: url('/images/Background_D.svg');
+    background-color: #74B9FF;
     height: 100%;
     width: 100%;
-    background-position: top;
-    background-repeat: no-repeat;
-    background-size: cover;
+}
 
+.landingPage {
+    height: 100%;
+}
+
+.landingTextSec {
+    padding-top: 12%;
+    color: white; 
+}
+.landingText {
+    font-size: 8em;
+    text-align: center;
+}
+.landingSubText {
+    font-size: 2em;
+    padding: 0 5em;
+    text-align: end;
 }
 
 /* Main Pc */
@@ -79,8 +87,7 @@ header {
 .landingIMG {
     position: absolute;
     bottom: 0;
-    width: 60%;
-    height: 60%;
+    width: 90%;
 }
 
 /* ------------ Landing Page END ------------*/
@@ -285,8 +292,15 @@ header {
 
 /* --------------Break-points Media Queries --------------*/
 
-@media only screen and (max-width: 600px) {
-    .exTxt_1 {
-        background-color: red;
+@media only screen and (max-width: 900px) {
+    .desktopImg {
+        display:none;
     }
+    .landingSubText{
+        text-align: center;
+    }
+}
+
+@media only screen and (max-width:600){
+
 }
