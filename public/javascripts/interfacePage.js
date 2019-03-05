@@ -248,7 +248,7 @@ if(isAuthenticated()){
   });
 }else{
    dbx = new Dropbox.Dropbox({ clientId: CLIENT_ID });
-      var authUrl = dbx.getAuthenticationUrl('https://cloudjs-projs.firebaseapp.com/interfacePage');
+      var authUrl = dbx.getAuthenticationUrl('https://cloudjs-projs.firebaseapp.com/users/interfacePage');
       document.getElementById('authlink').href = authUrl;
 }
 //Function to delete DB file that is at specified path
