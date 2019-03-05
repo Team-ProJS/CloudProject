@@ -42,4 +42,10 @@ and the .hbs files.
  cd functions
  npm install cookie-parser
  ```
-  > If all else fails cry in a corner and ask group chat for help :) 
+ * Another error is that if gRPC module isnt found. _solution_ this could be due to the fact that firebase isn't updated to the version that is deployed. Simply install grpc
+ ```
+ cd functions
+ npm install grpc
+ ```
+ 
+  >If all else fails cry in a corner and ask group chat for help :) 
