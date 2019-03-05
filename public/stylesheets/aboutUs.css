@@ -1,0 +1,78 @@
+body {
+    padding: 0;
+    margin: 0; 
+}
+.aboutUsHeader {
+    width: 100%;
+}
+.footer {
+    padding-top: 5em;
+}
+
+/* ----------------------------------- /
+/           projs_Section              /
+/--------------------------------------*/ 
+header {
+    font-size: 500%;
+    color:#2D2D35;
+}
+subHeader {
+    font-size: 400%;
+}
+#small {
+    font-size: 20%;
+    color: #707070;
+}
+.proJS_txt {
+    font-size: 2em;
+    color: #707070;
+    text-align: center;
+}
+
+/* ----------------------------------- /
+/       Meet The Team section          /
+/--------------------------------------*/
+.imageSec img {
+    padding-top: 3em;
+    width: 90%;
+}
+.imageSec {
+    text-align: center;
+}
+.githubLink {
+    text-align: end;
+    padding-top:100%;
+}
+.githubLink a{
+    text-decoration: none;
+    color: #ACAFB0;
+    font-size: 150%;
+}
+a:hover {
+    color: rgb(113, 114, 114);
+}
+/* ----------------------------------- /
+/           Media Queries              /
+/--------------------------------------*/
+@media only screen and (max-width: 768px) {
+
+    body {
+        padding-top:1em;
+    }
+    
+    subHeader {
+        font-size: 3em;
+    }
+    .imageSec img {
+        width: 100%;
+    }
+    .teamSec {
+        text-align: center;
+    }
+    .memberTxt {
+        display:none;
+    }
+    .githubLink {
+        padding-top:10%;
+    }
+  }

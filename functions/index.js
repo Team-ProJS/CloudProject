@@ -11,11 +11,16 @@ const functions = require('firebase-functions');
 var express = require('express');
 const engines = require('express-handlebars');
 var path = require('path');
+var cookieParser = require('cookie-parser');
+const firebase = require("firebase");
+// Required for side-effects
+const firestore=require("firebase/firestore");
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
+app.use(cookieParser());
 
 //view engine setup
 app.set('views', path.join(__dirname, 'views'));

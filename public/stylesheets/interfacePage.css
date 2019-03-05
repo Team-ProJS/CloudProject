@@ -1,0 +1,168 @@
+body {
+    overflow: hidden;
+}
+
+.cloudBtn {
+    padding: 10px 20px;
+    background-color: #2F3542;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+}
+.subtext {
+    color: #7F7B82;
+}
+
+/* ---------------------------------------------------
+    SIDEBAR STYLE
+----------------------------------------------------- */
+
+.wrapper {
+    display: flex;
+    align-items: stretch;
+}
+
+#sidebar {
+    min-width: 250px;
+    max-width: 250px;
+    background: #74B9FF;
+    color: #fff;
+    transition: all 0.3s;
+}
+
+.sidebar-header img {
+    cursor: pointer;
+    width: 50%;
+    height: 50%;
+}
+
+
+/* Sidebar active */
+
+#sidebar.active {
+    min-width: 80px;
+    max-width: 80px;
+    text-align: center;
+}
+
+#sidebar.active .loginLinks p,
+#sidebar.active .loginLinks .cloudBtn {
+    display: none;
+}
+
+#sidebar.active .sidebar-header img {
+    width: 70%;
+    height: 70%;
+}
+
+#sidebar.active .uploadSec {
+    display: none;
+}
+
+#sidebar.active .dropdown-toggle::after {
+    top: auto;
+    bottom: 10px;
+    right: 50%;
+    -webkit-transform: translateX(50%);
+    -ms-transform: translateX(50%);
+    transform: translateX(50%);
+}
+/* ---------------------------------------------------
+    UPLOAD SECTION STYLE --- INCLUDES others.
+----------------------------------------------------- */
+.uploadSec {
+    cursor: pointer;
+}
+progress {
+    width: 100%;
+}
+
+/* ---------------------------------------------------
+    TOOLBAR STYLE
+----------------------------------------------------- */
+.toolSection{
+    width:100%;
+    height:50px;
+    background-color: #E2E2E2;
+    border: rgba(112, 112, 112, 0.096) 2px solid;
+    border-radius: 10px;
+}
+
+.actionBtn {
+    height: 100%;
+    border: none;
+    background-color: transparent;
+    font-family: 'circular';
+    padding: 0 2%;
+    cursor: pointer;
+}
+
+.toolSecCloseBtn{
+    height:100%;    
+}
+.actionBtn:hover {
+    border-bottom: solid 2.5px #74B9FF;
+    color: #74B9FF;
+}
+.toolSection.remove {
+    display: none;
+}
+
+/* ---------------------------------------------------
+    CONTENT STYLE
+----------------------------------------------------- */
+.header {
+    font-size: 2em;
+    opacity: 0.2;
+    color: #2D2D35;
+    display:none;
+}
+#content {
+    width: 100%;
+    padding: 20px;
+    min-height: 100vh;
+    transition: all 0.3s;
+}
+
+.fileSection {
+    border: rgba(112, 112, 112, 0.096) 2px solid;
+    background-color: #E2E2E2;
+    max-height: 95%;
+    min-height: 85%;
+    width: 100%;
+    border-radius: 10px;
+}
+
+/* ---------------------------------------------------
+    FOOTER
+----------------------------------------------------- */
+.page-footer {
+    display: none;
+}
+
+/* ---------------------------------------------------
+    MEDIAQUERIES
+----------------------------------------------------- */
+
+@media (max-width: 768px) {
+    #sidebar {
+        min-width: 80px;
+        max-width: 80px;
+        text-align: center;
+        margin-left: -80px !important;
+    }
+
+    .dropdown-toggle::after {
+        top: auto;
+        bottom: 10px;
+        right: 50%;
+        -webkit-transform: translateX(50%);
+        -ms-transform: translateX(50%);
+        transform: translateX(50%);
+    }
+
+    #sidebar.active {
+        margin-left: 0 !important;
+    }
+}
