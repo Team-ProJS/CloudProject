@@ -1,5 +1,6 @@
 $(document).ready(function () {
     var rootRef = firebase.database().ref();//needed for accessing firebase database
+    var locStor=window.localStorage;
       //Sign-up event start
     $( "#reg-form" ).submit(function( event ) {
             event.preventDefault();
@@ -83,7 +84,8 @@ $(document).ready(function () {
         firebase.auth().onAuthStateChanged(function(firebaseUser){//triggers automatically whever authentication state, client-side, changes
             if(firebaseUser!=null){
                     user = 1;
-                    createInfo(firebase.auth().currentUser.uid);
+                    localStorage.setItem('email', firebase.auth().currentUser.email);
+                    createInfo(firebase.auth().currentUser.email);
             }else
                 {
                     user=0;
@@ -141,14 +143,14 @@ function sendToken(token)
         
     }
 
-function createInfo(uid)
+function createInfo(email)
     {
-        $.ajax({//sends token to server for cookie generating
+        $.ajax({
                 type: 'POST',
                 url: '/users/createUserInfo',
                 credentials: 'same-origin',
                 data: {
-                    'uid' : uid
+                    'email' : email
                 },
                 success: function(data){
                     if(data=="response")
