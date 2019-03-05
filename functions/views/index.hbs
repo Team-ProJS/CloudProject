@@ -1,13 +1,22 @@
 <!--- landing page --->
-<div class="container-fluid bg  d-flex justify-content-center">
-    <img src='/images/PCFull_D.png' class="landingIMG img-fluid animated bounce">
+<div class="container-fluid bg ">
+<div class="row landingPage">
+    <div class = "col landingTextSec"> 
+        <p class="landingText">Cloud.js</p> 
+        <p class="landingSubText">Get Organised<br> With us</p> 
+        <div class ="d-flex justify-content-center">
+        <button type="button" onclick="location.href='/users/register';" class=" btn btn-outline-light btn-lg mt-5 ">Sign Up</button> 
+        </div>
+    </div>
+    <div class="col align-items-end animated bounce desktopImg"><img class="landingIMG" src="/images/mainPC.png"></div>
+</div>
+    
 </div>
 
 <!-- after landing page -->
 <div class="container" id="pt2">
     <div class="row resourceH">
         <p data-aos="fade-in">We Provide The Resources...</p>
-
     </div>
     <div class="row justify-content-end">
 
@@ -114,7 +123,7 @@
     <p class="topBtn"> Still Reading This? Sign Up Today</p>
 </div>
 <div class="row justify-content-center">
-    <button type="button" onclick="startGoogle()" class="btn btn-dark btn-lg">Sign Up</button>
+    <button type="button" onclick="location.href='/users/register';" class="btn btn-dark btn-lg">Sign Up</button>
 
 </div>
 <!--- Butten section END --->

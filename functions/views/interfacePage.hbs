@@ -1,19 +1,154 @@
-<div class="container">
-    <br><br>
-    <header class="pt-5"> HELLO WORLD</header>
-    <button id="sign-in-or-out-button"
-        style="margin-left: 25px">Sign In/Authorize</button>
-<button id="revoke-access-button"
-        style="display: none; margin-left: 25px">Revoke access</button>
+<div class="wrapper">
+    <!-- Sidebar  -->
+    <nav id="sidebar" class="pt-5 mt-5">
+        <div class="sidebar-header d-flex justify-content-center ">
+            <img src="/images/profilePic.svg" id="sidebarCollapse" data-toggle="tooltip" title="Click Me"
+                data-placement="right">
+        </div>
 
-<div id="auth-status" style="display: inline; padding-left: 25px"></div><hr>
+        <div class="loginLinks mt-5">
+            <div class="google text-center ">
+                <!-- Google Section -->
+                <p> Google </p>
+                <button type="button" class="cloudBtn" id="sign-in-or-out-button">Login</button>
+                <button id="revoke-access-button" class="cloudBtn" id="revoke-access-button">Revoke access</button>
+            </div>
+            <div id="auth-status" style="display: inline; padding-left: 25px"></div>
+            <!-- end of Google Section -->
+
+            <!-- dropbox section --> 
+
+            <div class="dropbox text-center">
+                <p> Dropbox</p>
+                <button type="button" class="cloudBtn"><a href="" id="authlink">Login</a></button>
+                <button type="button" class="cloudBtn" onclick="logoutDB();"> Logout</button>
+                <button type="button" class="cloudBtn" onclick="revokeDB();"> Revoke Access</button>
+                <!-- Here will be used to login and out of dropbox -->
+
+            </div>
+            <!-- pcloud section --> 
+
+            <div class="pcloud text-center">
+                <p>pCloud</p>
+                <button type="button" class="cloudBtn" id="pcloudtokken">Login</button>
+                <button type="button" class="cloudBtn" onclick="pCloudLogout();">Logout</button>
+            </div>
+            <hr>
+            <!-- link to upload files -->
+            <div class="uploadSec text-center">
+                <p data-toggle="modal" data-target="#myModal"><i class="fa fa-cloud-upload"></i> Upload Files</p>
+                <p id="toolbarBtn"><i class="fa fa-gear"></i> ToolBar</p>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Content  
+             NB ***  the class = fileSection  ***
+            Each of the drives will display their folders and files on this 
+            one pane
+            -->
+    <div id="content" class="pt-5 mt-4">
+        <!-- tool section -->
+        <nav class="toolSection ">
+            <button type="button" class="actionBtn upload ml-2">Upload</button>
+            <button type="button" class="actionBtn transfer">Transfer</button>
+            <button type="button" class="actionBtn delete">Delete</button>
+            <button type="button" class="actionBtn connectAccount"  data-toggle="modal" data-target="#loginModal">Connect Account</button>
+            <button type="button" class="close justify-content-end pr-3 toolSecCloseBtn" id="toolbarsBtn">&times;</button>
+        </nav>
+         <div class="header">CloudJS | Getting Organised</div>
+
+        <div class="container-fluid fileSection mt-3" id="files">
+            <!-- only one account at a time can display their folders/files--> 
+        </div>
+    </div>
 </div>
-<div>
-    <progress value="0" max = "100" id = "uploader">0%</progress>
-    <input type="file" value="upload" id="fileButton"/>
+
+<!-- The Modal  for login to accounts -->
+<div class="modal" id="loginModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Login To Account <i class="fa fa-user"></i></h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal Body -->
+            <div class="modal-body justify-content-center">
+                <p> Login to accounts</p>
+            </div>
+        </div>
+    </div>
 </div>
-<script type="text/javascript" src="/javascripts/interfacePage.js"></script>
+
+<!-- THE MODAL   for upload -->
+
+<div class="modal" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Upload Files <i class="fa fa-cloud-upload"></i></h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body justify-content-center">
+                <progress value="0" max="100" id="uploader">0%</progress>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+                    </div>
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="fileButton" aria-describedby="inputGroupFileAddon01" value ="upload">
+                        <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                    </div>
+                    
+                </div>
+                <p class="subtext mt-3 small"> Let's quickly get started by uploading a file to your drive. Have something to post? <br> We'll do it for you</p>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Finished</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- *******************************************************************
+                        SCRIPTS, SDK, STYLESHEETS
+******************************************************************* --> 
+<!-- fa fa icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<!--interfacePage stylesheet -->
+<link rel='stylesheet' href='/stylesheets/interfacePage.css' />
+<!-- script -->
+<!-- jquery --> 
+<script
+  src="https://code.jquery.com/jquery-3.3.1.js"
+  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+  crossorigin="anonymous"></script>
+  <!-- promises --> 
+<script src="https://cdn.jsdelivr.net/npm/promise-polyfill@7/dist/polyfill.min.js"></script>
+<!--DropBox API-->
+<script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="1qwuqul2z1v27e1"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropbox.js/4.0.16/Dropbox-sdk.js"></script> 
+<!-- fetches-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.js"></script>
+<!-- pcloud API--> 
+<script type="text/javascript" src="https://unpkg.com/pcloud-sdk-js@latest/dist/pcloudsdk.js"></script>
+<!-- Google API --> 
 <script async defer src="https://apis.google.com/js/api.js" 
         onload="this.onload=function(){};handleClientLoad()" 
         onreadystatechange="if (this.readyState === 'complete') this.onload()">
 </script>
+<!-- url parser --> 
+<script src="/javascripts/utils.js"></script>
+<!-- interface script--> 
+<script type="text/javascript" src="/javascripts/interfacePage.js"></script> 
+<!-- pcloud script --> 
+<script type="text/javascript" src="/javascripts/pcloud.js"></script> 
