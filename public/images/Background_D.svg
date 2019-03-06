@@ -1,0 +1,14 @@
+<svg id="Symbol_7_3" data-name="Symbol 7 – 3" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1920 1068">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: url(#linear-gradient);
+      }
+    </style>
+    <linearGradient id="linear-gradient" x1="0.5" x2="0.5" y2="1" gradientUnits="objectBoundingBox">
+      <stop offset="0" stop-color="#2d2d35"/>
+      <stop offset="1"/>
+    </linearGradient>
+  </defs>
+  <path id="Path_31" data-name="Path 31" class="cls-1" d="M0,0H1920V1068H0Z" transform="translate(1920 1068) rotate(180)"/>
+</svg>
