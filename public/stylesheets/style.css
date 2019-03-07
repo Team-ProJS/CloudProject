@@ -6,6 +6,7 @@ html {
     margin: 0;
     height: 100%;
     font-family: 'circular' !important;
+    /*overflow-x: hidden;*/
 }
 
 a {
@@ -21,6 +22,35 @@ header {
     font-size: 400%;
 }
 
+/* personal button used on Index Page */ 
+.signBtn {
+    border-radius: 50px;
+    border-color: transparent;
+    padding: 10px 60px;
+    background-color: #74B9FF;
+    color: white;
+    transition: 0.3s;
+    font-size: 150%;
+}
+.signUp_1 {
+    text-align: center;
+}
+
+.topBtn {
+    font-size: 150%;
+    color:black;
+    padding-bottom: 0;
+}
+.bottomBtn {
+    font-size: 110%;
+    color:black;
+}
+
+.signBtn:hover {
+    background-color: #0984E3;
+    cursor: pointer;
+}
+
 /* ------------GENERAL END ----------------*/
 
 /* ------------ Navbar ------------*/
@@ -33,7 +63,7 @@ header {
 .navbar {
     font-family: 'circular';
     font-size: 1em;
-    width:100%;
+    width: 100%;
 }
 
 .nav-item {
@@ -47,7 +77,7 @@ header {
 
 .page-footer {
 
-    background-color:#2D2D35;
+    background-color: #2D2D35;
     font-family: 'circular';
     color: #444554;
 }
@@ -70,12 +100,14 @@ header {
 
 .landingTextSec {
     padding-top: 12%;
-    color: white; 
+    color: white;
 }
+
 .landingText {
     font-size: 8em;
     text-align: center;
 }
+
 .landingSubText {
     font-size: 2em;
     padding: 0 5em;
@@ -93,30 +125,36 @@ header {
 /* ------------ Landing Page END ------------*/
 
 /* After landing page [pt2] */
+#pt2 .header {
+    font-size: 250%;
+    color: #2D2D35;
+}
 
 #pt2 {
-    padding-top: 10%;
-    padding-bottom: 5%;
+    text-align: center;
 }
 
-.row {
-    font-family: 'circular';
+#pt2 .subtext {
+    font-size: 150%;
+    color: #444553;
 }
 
-.resourceH {
-    font-size: 5em;
-    padding-bottom: 5%;
+#pt2 .introTxt {
+    text-align: end;
+    font-size: 150%;
 }
 
-.para2,
-.para3 {
-    color: #7F7B82;
-    font-size: 5em;
+#pt2 img {
+    width: 60%;
+}
+
+#pt2 p {
+    font-size: 110%;
 }
 
 /*After LandingPage End*/
 
-/*--------------------- Think Big Section ------------*/
+/*--------------------- ------------*/
 
 .cloudsIMG {
     height: 100%;
@@ -127,121 +165,98 @@ header {
 /*----- Grey SEction ------- */
 
 .greySec {
-    background-color: rgba(68, 69, 84, 0.1);
+    background-color: #2D3436;
     padding: 20px 0px;
+    color: white;
 }
 
 .exTxt_1 {
     text-align: center;
     padding-bottom: 3%;
     width: 100%;
-    font-size: 1.5em;
+    font-size: 150%;
 }
 
-.movementTxt {
-    font-size: 4em;
+.greySec .createNameTxt {
+    font-size: 300%;
 }
 
-.deleteTxt {
-    text-align: auto;
+.greySec .transfer {
+    color: #FF6B81;
 }
 
-.transferTxt {
-    text-align: auto;
+.greySec .delete {
+    color: #FF6348;
 }
 
-.createNameTxt {
-    color: #000000;
+.greySec .save {
+    color: #FF4757;
 }
 
-/*--------- with us.... part[2] of think big sction -----*/
+.greySec .fullStop {
+    color: #FFA502;
+}
 
-.thinkBigTXT_1,
-#thinkBigTXT_2 {
+/*------------------------ Statistics Section ------------------------*/
+
+
+.statisticsIconSection img {
+    width: 40%;
+}
+
+.statisticsIconSection .col-sm-4 {
     text-align: center;
-    color: #2D2D35;
+    padding-top: 1em;
 }
 
-.thinkBigTXT_1 {
-    margin-top: 5%;
-    margin-bottom: 5%;
-    font-size: 1.5em;
-
+/* Stat's Txt Section */
+.statisticsTextSection .row {
+    text-align: center;
 }
-
-#and {
-    font-family: 'quicksand';
-    font-size: 3em;
+.pinkTxt {
+    color: #E84393;
+    font-size: 170%;
 }
-
-#bigDataTxt {
-    font-size: 2em;
-    color: #2D2D35;
-    font-weight: 400;
-}
-
-#nowTxt {
-    font-size: 1.5em;
-}
-
-#thinkBigTXT_2 {
-    font-size: 2em;
-}
-
-.organise {
-    color: #EFC411;
-}
-
-/*------------ Think big section's BUTTON ------*/
-
-.topBtn {
-    padding: 0;
-    margin: 0;
-}
-
-.bottomBtn {
-    font-size: 90%;
-}
-
-
-.signUp_1 {
-    font-size: 200%;
-    color: #E5D0CC;
-}
-
-
-
-/* think big - BUTTON - END */
-
-/*------------------------Think Big Section End------------------------*/
-
-/*------------------------Organised/floating ------------------------*/
-
-.organisedHdr,
-.organisedTxt {
+.blueTxt {
+    color: #74B9FF;
     font-size: 500%;
 }
-
-.organisedHdr {
-    color: #BFACB5;
+.FileExplanationTxt {
+    font-size: 150%;
 }
 
-.organisedTxt {
-    color: #7F7B82;
-    text-align: center;
+/*------------------------ Statistics Section END------------------------*/
+
+
+/*------------------------ Grey Section pt2  ------------------------*/
+
+.biggerTxtp  {
+    font-size: 170%;
+}
+.bigPinkTxt {
+    font-size: 200%;
+    color:  #E84393;
+}
+.and {
+    font-family: 'quicksand';
+    font-size: 200%;
 }
 
-.wuTxt {
-    font-size: 700%;
-    text-align: center;
+/*------------------------ Grey Section pt2 Section END------------------------*/
+
+
+/*------------------------ Resource Section  ------------------------*/
+.resourceSection .row {
+    text-align:center;
 }
-
-.floatIMG {
-    width: 80%;
-
+.googleIcon img, .dropboxIcon img {
+    width: 30%;
 }
-
-/*------------------------Organised/floating End------------------------*/
+.onedriveIcon img {
+    width: 55%;
+    padding-top:5%;
+}
+/*------------------------ Resource Section END ------------------------*/
 
 /* ------------ Fonts ------------*/
 
@@ -293,14 +308,27 @@ header {
 /* --------------Break-points Media Queries --------------*/
 
 @media only screen and (max-width: 900px) {
+
+    /* landing area */
     .desktopImg {
-        display:none;
+        display: none;
     }
-    .landingSubText{
+
+    .landingSubText {
         text-align: center;
     }
-}
 
-@media only screen and (max-width:600){
+    .bg {
+        background-image: url('/images/BG_M.svg');
+    }
+
+    /* After landing page */
+    #pt2 .imgSec {
+        display: none;
+    }
+
+    #pt2 .introTxt {
+        text-align: center;
+    }
 
 }
