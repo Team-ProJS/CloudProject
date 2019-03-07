@@ -53,7 +53,9 @@ router.get('/interfacePage', isAuthenticated,function (req, res, next) {
     //isAuthenticated is called when this get is called. If next() is called from isAuthenticated, then function (req, res, next) is called which renders page
     res.render('interfacePage');
 });
-
+router.get('/profile',isAuthenticated, function(req,res,next){
+          res.render('profile');
+          });
 
 router.post('/authIn', function (req, res, next) {
     var token = req.body.token.toString();
@@ -85,14 +87,14 @@ router.post('/authOut', function (req, res, next) {
 });
 
 /*{
-    "uid":uid
+    "email":email
 }*/
 router.post('/createUserInfo', function (req, res, next) {
-    let documentRef = db.doc('UserInfo/'+req.body.uid);
+    let documentRef = db.doc('UserInfo/'+req.body.email);
 
 documentRef.get().then(function(documentSnapshot){
   if (!documentSnapshot.exists) {
-                    var docRef = db.collection('UserInfo').doc(req.body.uid);
+                    var docRef = db.collection('UserInfo').doc(req.body.email);
                     var setUser = docRef.set({
                     pCloudTransfer:0,
                     pCloudUpload:0,
@@ -112,10 +114,10 @@ documentRef.get().then(function(documentSnapshot){
 });
 
 /*{
-    "uid":uid
+    "email":email
 }*/
 router.post('/getUserInfo', function (req, res, next) {
-    const document = db.doc('UserInfo/'+req.body.uid);
+    const document = db.doc('UserInfo/'+req.body.email);
     let info=document.get()
         .then(function(documentSnapshot)
             {
@@ -127,11 +129,11 @@ router.post('/getUserInfo', function (req, res, next) {
 
 
 /*{
-    "uid":uid,
+    "email":email,
     "value":13.5(this is an example, put any num)
 }*/
 router.post('/pcT', function (req, res, next) {
-    var ref = db.collection('UserInfo').doc(req.body.uid);
+    var ref = db.collection('UserInfo').doc(req.body.email);
     var value=req.body.value;
     
     var transaction = db.runTransaction(function(t) {
@@ -148,7 +150,7 @@ router.post('/pcT', function (req, res, next) {
     res.send("response");
 });
 router.post('/pcU', function (req, res, next) {
-    var ref = db.collection('UserInfo').doc(req.body.uid);
+    var ref = db.collection('UserInfo').doc(req.body.email);
     var value=req.body.value;
     
     var transaction = db.runTransaction(function(t) {
@@ -166,7 +168,7 @@ router.post('/pcU', function (req, res, next) {
 });
 
 router.post('/odT', function (req, res, next) {
-    var ref = db.collection('UserInfo').doc(req.body.uid);
+    var ref = db.collection('UserInfo').doc(req.body.email);
     var value=req.body.value;
     
     var transaction = db.runTransaction(function(t) {
@@ -183,7 +185,7 @@ router.post('/odT', function (req, res, next) {
     res.send("response");
 });
 router.post('/odU', function (req, res, next) {
-    var ref = db.collection('UserInfo').doc(req.body.uid);
+    var ref = db.collection('UserInfo').doc(req.body.email);
     var value=req.body.value;
     
     var transaction = db.runTransaction(function(t) {
@@ -200,7 +202,7 @@ router.post('/odU', function (req, res, next) {
     res.send("response");
 });
 router.post('/odD', function (req, res, next) {
-    var ref = db.collection('UserInfo').doc(req.body.uid);
+    var ref = db.collection('UserInfo').doc(req.body.email);
     var value=req.body.value;
     
     var transaction = db.runTransaction(function(t) {
@@ -218,7 +220,7 @@ router.post('/odD', function (req, res, next) {
 });
 
 router.post('/gdT', function (req, res, next) {
-    var ref = db.collection('UserInfo').doc(req.body.uid);
+    var ref = db.collection('UserInfo').doc(req.body.email);
     var value=req.body.value;
     
     var transaction = db.runTransaction(function(t) {
@@ -235,7 +237,7 @@ router.post('/gdT', function (req, res, next) {
     res.send("response");
 });
 router.post('/gdU', function (req, res, next) {
-    var ref = db.collection('UserInfo').doc(req.body.uid);
+    var ref = db.collection('UserInfo').doc(req.body.email);
     var value=req.body.value;
     
     var transaction = db.runTransaction(function(t) {
@@ -252,7 +254,7 @@ router.post('/gdU', function (req, res, next) {
     res.send("response");
 });
 router.post('/gdD', function (req, res, next) {
-    var ref = db.collection('UserInfo').doc(req.body.uid);
+    var ref = db.collection('UserInfo').doc(req.body.email);
     var value=req.body.value;
     
     var transaction = db.runTransaction(function(t) {
@@ -270,7 +272,7 @@ router.post('/gdD', function (req, res, next) {
 });
 
 router.post('/dbT', function (req, res, next) {
-    var ref = db.collection('UserInfo').doc(req.body.uid);
+    var ref = db.collection('UserInfo').doc(req.body.email);
     var value=req.body.value;
     
     var transaction = db.runTransaction(function(t) {
@@ -287,7 +289,7 @@ router.post('/dbT', function (req, res, next) {
     res.send("response");
 });
 router.post('/dbU', function (req, res, next) {
-    var ref = db.collection('UserInfo').doc(req.body.uid);
+    var ref = db.collection('UserInfo').doc(req.body.email);
     var value=req.body.value;
     
     var transaction = db.runTransaction(function(t) {
@@ -304,7 +306,7 @@ router.post('/dbU', function (req, res, next) {
     res.send("response");
 });
 router.post('/dbD', function (req, res, next) {
-    var ref = db.collection('UserInfo').doc(req.body.uid);
+    var ref = db.collection('UserInfo').doc(req.body.email);
     var value=req.body.value;
     
     var transaction = db.runTransaction(function(t) {
