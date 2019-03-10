@@ -9,35 +9,34 @@
         <div class="loginLinks mt-5">
             <div class="google text-center ">
                 <!-- Google Section -->
-                <p> Google </p>
-                <button type="button" class="cloudBtn" id="sign-in-or-out-button">Login</button>
-                <button id="revoke-access-button" class="cloudBtn" id="revoke-access-button">Revoke access</button>
+                <p class="mb-0"> Google </p>
+                <button type="button" class=" mt-0 cloudBtn" id="sign-in-or-out-button">Login</button>
             </div>
             <div id="auth-status" style="display: inline; padding-left: 25px"></div>
             <!-- end of Google Section -->
 
             <!-- dropbox section --> 
 
-            <div class="dropbox text-center">
-                <p> Dropbox</p>
-                <button type="button" class="cloudBtn"><a href="" id="authlink">Login</a></button>
-                <button type="button" class="cloudBtn" onclick="logoutDB();"> Logout</button>
-                <button type="button" class="cloudBtn" onclick="revokeDB();"> Revoke Access</button>
+            <div class="dropbox text-center mt-1">
+                <p class="mb-0"> Dropbox</p>
+                <button type="button" class=" mt-0 cloudBtn dropboxSignIn"><a href="" id="authlink">Login</a></button>
+                <button type="button" class="cloudBtn dropboxLogout" onclick="logoutDB();"> Logout</button>
                 <!-- Here will be used to login and out of dropbox -->
 
             </div>
             <!-- pcloud section --> 
 
-            <div class="pcloud text-center">
-                <p>pCloud</p>
-                <button type="button" class="cloudBtn" id="pcloudtokken">Login</button>
+            <div class="pcloud text-center mt-1">
+                <p class="pb-0 mb-0 pt-3">pCloud</p>
+                <button type="button" class=" mt-0 cloudBtn" id="pcloudtokken">Login</button>
                 <button type="button" class="cloudBtn" onclick="pCloudLogout();">Logout</button>
             </div>
             <hr>
             <!-- link to upload files -->
             <div class="uploadSec text-center">
                 <p data-toggle="modal" data-target="#myModal"><i class="fa fa-cloud-upload"></i> Upload Files</p>
-                <p id="toolbarBtn"><i class="fa fa-gear"></i> ToolBar</p>
+                <!-- <p id="toolbarBtn"><i class="fa fa-gear"></i> ToolBar</p> -->
+                <p onclick="location.href='/users/profile'"> <i class="fa fa-user"></i> Profile Page</p>
             </div>
         </div>
     </nav>
@@ -48,18 +47,20 @@
             one pane
             -->
     <div id="content" class="pt-5 mt-4">
-        <!-- tool section -->
+        <!-- tool section 
         <nav class="toolSection ">
             <button type="button" class="actionBtn upload ml-2">Upload</button>
-            <button type="button" class="actionBtn transfer">Transfer</button>
-            <button type="button" class="actionBtn delete">Delete</button>
+            <button type="button" class="actionBtn ml-2" onclick="location.href='/users/profile'">Profile Page</button>
             <button type="button" class="actionBtn connectAccount"  data-toggle="modal" data-target="#loginModal">Connect Account</button>
             <button type="button" class="close justify-content-end pr-3 toolSecCloseBtn" id="toolbarsBtn">&times;</button>
-        </nav>
-         <div class="header">CloudJS | Getting Organised</div>
+        </nav> 
 
-        <div class="container-fluid fileSection mt-3" id="files">
-            <!-- only one account at a time can display their folders/files--> 
+         <div class="header">CloudJS | Getting Organised</div>-->
+        <div class="container-fluid fileSection mt-3">
+        <div id="files">
+            <!-- only one account at a time can display their folders/files-->  
+
+        </div>
         </div>
     </div>
 </div>
@@ -77,6 +78,16 @@
             <!-- Modal Body -->
             <div class="modal-body justify-content-center">
                 <p> Login to accounts</p>
+                <!-- Google Login --> 
+                <button type="button" class=" mt-3 cloudBtnInPopup" id="sign-in-or-out-button">Google Login</button>
+                <!-- Dropbox Login -->
+                <button type="button" class=" mt-3 cloudBtnInPopup"><a href="" id="authlink">Dropbox Login</a></button>
+                <!-- Onedrive Login -->
+                <button type="button" class=" mt-0 cloudBtnInPopup" id="pcloudtokken">Pcloud Login</button>
+
+            </div>
+            <div class="modal-footer">
+                 <button type="button" class="btn btn-dark" data-dismiss="modal">Let's Go</button>
             </div>
         </div>
     </div>

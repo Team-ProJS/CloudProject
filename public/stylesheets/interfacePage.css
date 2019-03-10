@@ -4,14 +4,32 @@ body {
 
 .cloudBtn {
     padding: 10px 20px;
-    background-color: #2F3542;
+    margin:0;
     color: white;
-    border-radius: 5px;
-    border: none;
+    border: solid 2px white;
     cursor: pointer;
+    background-color: transparent;
+    border-radius: 2px;
+}
+.cloudBtn a {
+    color: white;
+    text-decoration: none;
+}
+
+ .cloudBtn:hover {
+    border-color: #FF6B81;
 }
 .subtext {
     color: #7F7B82;
+}
+
+.cloudBtnInPopup {
+    padding: 10px 20px;
+    margin-right: 5%;
+    border: none;
+    background-color:#74B9FF;
+    cursor:pointer;
+    border-radius:2px;
 }
 
 /* ---------------------------------------------------
@@ -87,6 +105,7 @@ progress {
     background-color: #E2E2E2;
     border: rgba(112, 112, 112, 0.096) 2px solid;
     border-radius: 10px;
+    color: rgb(112, 112, 112);
 }
 
 .actionBtn {
@@ -96,6 +115,7 @@ progress {
     font-family: 'circular';
     padding: 0 2%;
     cursor: pointer;
+    text-decoration: none;
 }
 
 .toolSecCloseBtn{
@@ -104,7 +124,9 @@ progress {
 .actionBtn:hover {
     border-bottom: solid 2.5px #74B9FF;
     color: #74B9FF;
+    text-decoration: none;
 }
+
 .toolSection.remove {
     display: none;
 }
@@ -127,11 +149,42 @@ progress {
 
 .fileSection {
     border: rgba(112, 112, 112, 0.096) 2px solid;
-    background-color: #E2E2E2;
-    max-height: 95%;
-    min-height: 85%;
-    width: 100%;
     border-radius: 10px;
+    background-color: #E2E2E2;
+    min-height: 95%;
+    width: 100%;
+    padding:0;
+    font-size: 100%;
+    color: #444553;
+}
+
+.fileTitle {
+    font-size: 200%;
+}
+.fileTitle a{
+    color: #7F7B82;
+}
+
+.iconImg {
+    padding-right: 2%;
+}
+.greyFileSec, .whiteFileSec {
+    padding: 5px 2px;
+}
+.greyFileSec {
+    background-color: #CDCDCD;
+    color: black;
+    width: 100%;
+}
+.whiteFileSec {
+    background-color:rgba(255, 255, 255, 0.247);
+    color: black;
+    width:100%;
+}
+.greyFileSec:hover, .whiteFileSec:hover {
+    background-color: lightblue;
+    cursor: pointer;
+
 }
 
 /* ---------------------------------------------------
@@ -140,6 +193,7 @@ progress {
 .page-footer {
     display: none;
 }
+
 
 /* ---------------------------------------------------
     MEDIAQUERIES

@@ -18,7 +18,7 @@ $(document).ready(function () {
 
   /* tooltip */
   $('[data-toggle="tooltip"]').tooltip();
-
+  
 
 });
 
@@ -89,7 +89,7 @@ function setSigninStatus(isSignedIn){
     $('#sign-in-or-out-button').html('Sign out');  //If user logs in, change sign in button to sign out
       $('#revoke-access-button').css('display', 'inline-block'); //Make button visible
     } else {
-      $('#sign-in-or-out-button').html('Sign In/Authorize'); //If user logs off, change sign out button to sign in
+      $('#sign-in-or-out-button').html('Sign In'); //If user logs off, change sign out button to sign in
       $('#revoke-access-button').css('display', 'none'); // make invisble
     }
   }
@@ -180,7 +180,8 @@ function isAuthenticated(){
 function renderItems(items){ 
   var location = $('#files');
   location.empty();
-    location.append($('<div/>').append($('<a href="javascript:;">...</a>').on('click',function(e){
+  location.append($('<div class="fileTitle pt-3 pl-5 ml-2"> <p> View Dropbox items.. </p></div>')); // header
+    location.append($('<div class="greyFileSec" />').append($('<a href="javascript:;">...</a>').on('click',function(e){   // routing ' ...'
       dbx.filesListFolder({path: ''}).then(function(response){
         renderItems(response.entries);
       }).catch(function(error){
@@ -188,11 +189,20 @@ function renderItems(items){
       });
     })
     ));
+    var counter = 1; 
   items.forEach(function(item){
     console.log(item);
+    if ( (counter%2) == 1) {
+      var count = "whiteFileSec";
+    }
+    else {
+      count = "greyFileSec";
+    }
+    //
     if(item.hasOwnProperty('rev')){
       console.log("I AM A FILE");
-      location.append($('<div/>').append($('<span/>').text(item.name)).append(' | ').append($('<a href="javascript:;">Download</a>').on('click',function(e){
+      //
+      location.append($('<div class="'+ count+'"/>').append($('<img class=" pl-5 iconImg" src="/images/imgIcon.png"/>')).append($('<span/>').text(item.name)).append(' | ').append($('<a href="javascript:;">Download</a>').on('click',function(e){
         console.log('Clicked on: ', item.path_lower);
         downloadDBXSFile(item.path_lower);
       })
@@ -214,7 +224,8 @@ function renderItems(items){
       );
     }else{
       console.log("I AM A FOLDER");
-      location.append($('<div/>').append($('<span/>').text(item.name)).append(' | ').append($('<a href="javascript:;">Enter Folder</a>').on('click',function(e){
+      //
+      location.append($('<div class="'+ count +'"/>').append($('<img class="pl-5 iconImg" src="/images/folderIcon.png"/>')).append($('<span/>').text(item.name)).append(' | ').append($('<a href="javascript:;">Enter Folder</a>').on('click',function(e){
         console.log('Clicked on: ', item.path_lower);
         dbx.filesListFolder({path: ''+item.path_lower}).then(function(response){
           renderItems(response.entries);
@@ -225,6 +236,7 @@ function renderItems(items){
       )
       );
     }
+    counter++;
   });
 }
  /*Temp Function to add listener to Files

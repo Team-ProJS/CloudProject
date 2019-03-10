@@ -1,11 +1,12 @@
 /* Style sheet for register/login page */
 
 .formRegister {
-    margin-top: 100px;
+    margin-top: 5%;
     padding: 0;
-
 }
-
+.formRegister #log-form {
+    margin-top: 10%;
+}
 header {
     font-size: 500%;
 }
@@ -13,3 +14,14 @@ header {
 input {
     border-radius: 10px !important;
 }
+body {
+    overflow: hidden;
+}
+
+/* ---------------------------------------------------
+    FOOTER
+----------------------------------------------------- */
+.page-footer {
+    display: none;
+}
+

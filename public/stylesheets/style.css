@@ -10,7 +10,7 @@ html {
 }
 
 a {
-    text-decoration: none;
+    text-decoration: none !important;
 }
 
 .btn {
@@ -104,14 +104,14 @@ header {
 }
 
 .landingText {
-    font-size: 8em;
+    font-size: 700%;
     text-align: center;
 }
 
 .landingSubText {
-    font-size: 2em;
+    font-size: 200%;
     padding: 0 5em;
-    text-align: end;
+    text-align: center;
 }
 
 /* Main Pc */
@@ -314,8 +314,13 @@ header {
         display: none;
     }
 
+    .landingText {
+        font-size:500%;
+        margin-top:20%;
+    }
     .landingSubText {
-        text-align: center;
+        font-size: 200%;
+        padding: 0;
     }
 
     .bg {
@@ -326,7 +331,7 @@ header {
     #pt2 .imgSec {
         display: none;
     }
-
+    
     #pt2 .introTxt {
         text-align: center;
     }

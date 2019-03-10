@@ -2,20 +2,28 @@ var access_token = false;
 var client = false;
 //Function to list files
   function listfiles() {
+    var counter = 0;
           var place = $('#files');
           client.listfolder(0).then(function(metadata) {
                      metadata.contents.forEach(function(item, n) {
+
+                      if ( (counter%2) == 1) {
+                        var count = "whiteFileSec";
+                      }
+                      else {
+                        count = "greyFileSec";
+                      }
                                if (!item.isfolder) {
                                console.log(item);
-                               place.append(
-                               $('<div />')
-                               .append($('<span />').text(item.name))
-                    
-          );
-        }
+                               place.append($('<div class="fileTitle pt-3 pl-5 ml-2"> <p> View Dropbox items.. </p></div>'));
+                               place.append($('<div class="'+count+'" />').append($('<img class=" pl-5 iconImg" src="/images/imgIcon.png"/>')).append($('<span />').text(item.name)));
+                               count++;
+                              }
       });
     });
   }
+
+  
 
 //Function getToken
 function receiveTokenCb(token) {
