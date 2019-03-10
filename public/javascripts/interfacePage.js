@@ -30,14 +30,19 @@ function showPageSection(elementId){
 var locStor; //Cookie Storage
 var email;//User email, used for identifying the user
 var activeGoogle = false;//Boolean used to identify transfers for Google Drive
-var activeDropBox = true;//Boolean used to identify transfer for DropBox
+var activeDropBox = false;//Boolean used to identify transfer for DropBox
 var activeOneDrive = false;//Boolean used to identify transfer
 var filename;//Variable used for checking name of file to transfer
 var GoogleAuth;//Google drive client
 var SCOPE = 'https://www.googleapis.com/auth/drive';//Google drive scope
 var CLIENT_ID ='1qwuqul2z1v27e1';//DropBox Client ID
 var dbx;//DropBox Client
-
+var clientEnum ={ //Client Enumeration
+          DROPBOX: 1,
+          GOOGLEDRIVE: 2,
+          ONEDRIVE: 3,
+};
+var currentClient;//Used to tell which Client is currently Active
 /*************************************************************************** */
 //                                            General Javascript                                             //
 /*************************************************************************** */
@@ -45,15 +50,14 @@ var dbx;//DropBox Client
 //Function for uploading files
 fileUploadTransfer.addEventListener('change', function(e){
           var file = e.target.files[0];
-          if(activeDropBox){
+          if(currentClient == clientEnum.DROPBOX){
                     uploadToDropBox(file);
-                    activeDropBox = false;
-          }else if(activeGoogle){
+          }else if(currentClient == clientEnum.GOOGLEDRIVE){
 
-                    activeGoogle = false;
-          }else if(activeOneDrive){
+                    
+          }else if(currentClient == clientEnum.ONEDRIVE){
 
-                    activeOneDrive= false;
+          
           }else{
                     alert("Error: No Service Selected");
           }
@@ -124,8 +128,10 @@ function handleClientLoad() {
  function handleAuthClick(){
            if(GoogleAuth.isSignedIn.get()){
                     GoogleAuth.signOut();
+                    currentClient = null;
           }else{
                     GoogleAuth.signIn();
+                    currentClient = clientEnum.GOOGLEDRIVE;
           }
  }
 
@@ -266,6 +272,7 @@ function renderItems(items){
  //Function that is called upon auth
  if(isAuthenticated()){
           dbx = new Dropbox.Dropbox({ accessToken: getAccessTokenFromUrl() });
+          currentClient = clientEnum.DROPBOX;
           dbx.filesListFolder({path: ''}).then(function(response){
                     renderItems(response.entries);
           }).catch(function(error){
@@ -336,7 +343,10 @@ function renameDBXFile(path){
 
 //Function to upload file to DB
 function uploadToDropBox(file){ 
+          var uploadbar = document.getElementById('uploader');
+          uploadbar.value = 10;
           const UPLOAD_FILE_SIZE_LIMIT = 150*1024*1024;
+          uploadbar.value = 15;
           if(file.size < UPLOAD_FILE_SIZE_LIMIT){
                     $.ajax({
                               type: 'POST',
@@ -353,10 +363,11 @@ function uploadToDropBox(file){
                               }
                     });
           checkDetails();
+          uploadbar.value = 30;
           dbx.filesUpload({path: '/' + file.name, contents: file}).then(function(response){
+                    uploadbar.value = 100;
                     console.log('File Uploaded');
                     console.log(response);
-                    alert("File with name: "+file.name+" has been uploaded to your dropbox account!\nRe-Auth to view updated list of files.");
           }).catch(function(error){
                     console.error(error);
           });
@@ -379,6 +390,7 @@ function uploadToDropBox(file){
                     }
                     });
                     checkDetails();
+                    uploadbar.value = 40;
                     while(offset < file.size){
                               var chunkSize = Math.min(maxBlob, file.size - offset);
                               workItems.push(file.slice(offset, offset + chunkSize));
@@ -407,8 +419,7 @@ function uploadToDropBox(file){
                      }          
           }, Promise.resolve());
           task.then(function(result) {
-                    var results = document.getElementById('results');
-                    results.appendChild(document.createTextNode('File uploaded!'));
+                    uploadbar.value = 100;
           }).catch(function(error) {
                     console.error(error);
           });  
@@ -436,6 +447,7 @@ function logoutDB(){
            link.dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true, view: window}));
            link.remove();
            revokeDB();
+           currentClient = null;
 }
 
   //Function to transfer files from DBX
