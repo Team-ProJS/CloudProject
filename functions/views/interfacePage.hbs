@@ -28,7 +28,7 @@
 
             <div class="pcloud text-center mt-1">
                 <p class="pb-0 mb-0 pt-3">pCloud</p>
-                <button type="button" class=" mt-0 cloudBtn" id="pcloudtokken">Login</button>
+                <button type="button" class=" mt-0 cloudBtn" id="pcloudtokken" onclick="pCloudLogin();">Login</button>
                 <button type="button" class="cloudBtn" onclick="pCloudLogout();">Logout</button>
             </div>
             <hr>
@@ -82,7 +82,7 @@
                 <button type="button" class=" mt-3 cloudBtnInPopup" id="sign-in-or-out-button">Google Login</button>
                 <!-- Dropbox Login -->
                 <button type="button" class=" mt-3 cloudBtnInPopup"><a href="" id="authlink">Dropbox Login</a></button>
-                <!-- Onedrive Login -->
+                <!-- pCloud Login -->
                 <button type="button" class=" mt-0 cloudBtnInPopup" id="pcloudtokken">Pcloud Login</button>
 
             </div>
@@ -113,7 +113,7 @@
                         <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
                     </div>
                     <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="fileButton" aria-describedby="inputGroupFileAddon01" value ="upload">
+                        <input type="file" class="custom-file-input" id="fileUploadTransfer" aria-describedby="inputGroupFileAddon01" value ="upload">
                         <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
                     </div>
                     
