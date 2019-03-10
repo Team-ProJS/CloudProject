@@ -15,7 +15,10 @@ $(document).ready(function () {
           /* tooltip */
           $('[data-toggle="tooltip"]').tooltip();
            getEmailInfo();//Get Ajax Information About User
+           setProfilePicture();
            completeTransfer();
+           var emailStuff = document.getElementById('userEmailDetails');
+           emailStuff.innerHTML=email;
  });
 
 //Function to show hidden elements
@@ -566,7 +569,7 @@ function setProfilePicture(){
                               console.log("Default Picture loaded");
                     }else{
                               storageRef.child('users/'+email+'/'+data.pCloudTransfer).getDownloadURL().then(function(url) {
-                                        var img = document.getElementById('profilepic');
+                                        var img = document.getElementById('sidebarCollapse');
                                         img.src = url;
                                         console.log("Saved picture loaded");
                                       }).catch(function(error) {
