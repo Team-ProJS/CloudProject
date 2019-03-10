@@ -255,7 +255,6 @@ function renderItems(items){
                               );
                     }else{
                               location.append($('<div class="'+count+'"/>').append($('<img class="pl-5 iconImg" src="/images/folderIcon.png"/>')).append($('<span/>').text(item.name)).append(' | ').append($('<a href="javascript:;">Enter Folder</a>').on('click',function(e){
-                              console.log('Clicked on: ', item.path_lower);
                               dbx.filesListFolder({path: ''+item.path_lower}).then(function(response){
                                         renderItems(response.entries);
                               }).catch(function(error){
