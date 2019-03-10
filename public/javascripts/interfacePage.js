@@ -198,7 +198,7 @@ function retrieveAllFiles(callback){
 }
 
 /*************************************************************************** */
-//                                            DropBox API                                                      //
+//                        DropBox API                                        //
 /*************************************************************************** */
 
  //Function to call parser for access token
@@ -216,7 +216,7 @@ function renderItems(items){
           var location = $('#files');
           location.empty();
           location.append($('<div class="fileTitle pt-3 pl-5 ml-2"> <p> View Dropbox items.. </p></div>'));
-          location.append($('<div class="greyFileSec" />').append($('<a href="javascript:;">...</a>').on('click',function(e){
+          location.append($('<div class="greyFileSec" />').append($('<a class="pl-3" href="javascript:;">...</a>').on('click',function(e){
                     dbx.filesListFolder({path: ''}).then(function(response){
                     renderItems(response.entries);
           }).catch(function(error){
@@ -232,29 +232,29 @@ function renderItems(items){
                               count = "greyFileSec";
                     }
                     if(item.hasOwnProperty('rev')){
-                              location.append($('<div class="'+count+'"/>').append($('<img class=" pl-5 iconImg" src="/images/imgIcon.png"/>')).append($('<span/>').text(item.name)).append(' | ').append($('<a href="javascript:;">Download</a>').on('click',function(e){
+                              location.append($('<div class="'+count+'"/>').append($('<img class=" pl-5 iconImg" src="/images/imgIcon.png"/>')).append($('<span/>').text(item.name)).append(' <p class="float-right"> |</p> ').append($('<a class="float-right" href="javascript:;">Download</a>').on('click',function(e){
                                         downloadDBXSFile(item.path_lower);
                               })
-                              ).append(' | ').append($('<a href="javascript:;">Delete</a>').on('click',function(e){
+                              ).append("<p class='float-right'> |</p>").append($('<a class="float-right" href="javascript:;">Delete</a>').on('click',function(e){
                                         deleteDBXFile(item.path_lower);
                                         dbx.filesListFolder({path: ''}).then(function(response){
                                                   renderItems(response.entries);
                                         }).catch(function(error){
                                                   console.error(error);
                                         });
-                              })).append(" | ").append($('<a href="javascript:;">Rename</a>').on('click', function(e){
+                              })).append(" <p class='float-right'> |</p> ").append($('<a class="float-right" href="javascript:;">Rename</a>').on('click', function(e){
                                         renameDBXFile(item.path_lower);
                                         dbx.filesListFolder({path: ''}).then(function(response){
                                                   renderItems(response.entries);
                                         }).catch(function(error){
                                                   console.error(error);
                                         });
-                              })).append(" | ").append($('<a href="javascript:;">Transfer</a>').on('click',function(e){
+                              })).append(" <p class='float-right'> |</p> ").append($('<a class="float-right" href="javascript:;">Transfer</a>').on('click',function(e){
                                         transferDBXFile(item.path_lower);
                               }))
                               );
                     }else{
-                              location.append($('<div class="'+count+'"/>').append($('<img class="pl-5 iconImg" src="/images/folderIcon.png"/>')).append($('<span/>').text(item.name)).append(' | ').append($('<a href="javascript:;">Enter Folder</a>').on('click',function(e){
+                              location.append($('<div class="'+count+'"/>').append($('<img class="pl-5 iconImg" src="/images/folderIcon.png"/>')).append($('<span/>').text(item.name)).append(' <p class="float-right"> |</p> ').append($('<a class="float-right" href="javascript:;">Enter Folder</a>').on('click',function(e){
                               dbx.filesListFolder({path: ''+item.path_lower}).then(function(response){
                                         renderItems(response.entries);
                               }).catch(function(error){
