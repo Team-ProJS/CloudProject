@@ -23,7 +23,7 @@ $(document).ready(function () {
                         .then(function(value) {//triggers when a new user is created
                             firebase.auth().currentUser.getIdToken(true)//gets IdToken for creating session cookie
                                 .then(function(idToken) {//triggers if token retrieved successfuly
-                                    sendToken(idToken);//passes token as parameter to sendToken function (below)
+                                    sendTokenOnEntry(idToken);//passes token as parameter to sendToken function (below)
                                     })
                                 .catch(function(error) {//triggers if token not retrieved
                                     console.log(error.message);
@@ -48,7 +48,7 @@ $(document).ready(function () {
                 .then(function(value) {//triggers if user logs in successfuly
                         firebase.auth().currentUser.getIdToken(true)
                                 .then(function(idToken) {//triggers if token retrieved successfuly
-                                    sendToken(idToken);//passes token as parameter to sendToken function (below)
+                                    sendTokenOnEntry(idToken);//passes token as parameter to sendToken function (below)
                                     })
                                 .catch(function(error) {//triggers if token not retrieved
                                     console.log(error.message);
@@ -85,6 +85,14 @@ $(document).ready(function () {
             if(firebaseUser!=null){
                     user = 1;
                     localStorage.setItem('email', firebase.auth().currentUser.email);
+                    firebase.auth().currentUser.getIdToken(true)
+                                .then(function(idToken) {//triggers if token retrieved successfuly
+                                    sendTokenOnBack(idToken);//passes token as parameter to sendToken function (below)
+                                    console.log("sent token");
+                                    })
+                                .catch(function(error) {//triggers if token not retrieved
+                                    console.log(error.message);
+                                    });
                     createInfo(firebase.auth().currentUser.email);
             }else
                 {
@@ -116,7 +124,34 @@ $(document).ready(function () {
       
 });
 
-function sendToken(token)
+function sendTokenOnBack(token)
+    {
+        $.ajax({//sends token to server for cookie generating
+                type: 'POST',
+                url: '/users/authIn',
+                credentials: 'same-origin',
+                data: {
+                    'token' : token
+                },
+                success: function(data){
+                    if(data=="response")
+                    {
+                        console.log("set cookie");
+                    }else
+                    {
+                        window.alert("Something went wrong,please try again later!");
+                    }
+                    
+                },
+                error: function(errMsg)
+                    {
+                        console.log(errMsg);
+                    }
+            });
+        
+    }
+
+function sendTokenOnEntry(token)
     {
         $.ajax({//sends token to server for cookie generating
                 type: 'POST',
@@ -142,7 +177,6 @@ function sendToken(token)
             });
         
     }
-
 function createInfo(email)
     {
         $.ajax({
