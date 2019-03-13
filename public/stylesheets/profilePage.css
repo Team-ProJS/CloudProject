@@ -1,0 +1,142 @@
+body {
+    height: 100%;
+    overflow: hidden;
+    background-color: #74B9FF;
+}
+.row {
+    height:100%;
+}
+
+.navbar{
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+.page-footer {
+    display: none;
+}
+.logoIMG {
+    padding-left: 5px;
+}
+
+
+/* *****************************************
+//          Side content section
+***************************************** */
+.sideContentSection {
+    background-color:#2D2D35;
+    width: 80px;
+    height: 100%;
+    padding: 5%;
+    text-align: center;
+}
+#profilepic {
+    cursor: pointer;
+}
+#profilepic:hover {
+    border: dashed 1px #74B9FF;
+    width: 100%;
+}
+.uploadBtn {
+    border: none;
+    background-color: transparent;
+    font-size: 100%;
+    text-align: center;
+    color:  rgba(180, 180, 180, 0.76);
+    cursor: pointer;
+    width: 100%;
+    transition: 0.3s;
+    font-weight: bold;
+}
+.uploadBtn::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 2px;
+    background: white;
+    transition: width .3s;
+    font-weight: bold;
+}
+
+.uploadBtn:hover::after {
+    width: 100%;
+}
+.uploadBtn:hover {
+    color: rgb(255, 255, 255);
+}
+
+.backToInterface {
+    cursor: pointer;
+    text-align: center;
+    border: none;
+    background-color: transparent;
+    font-size: 100%;
+    text-align: center;
+    color: rgba(180, 180, 180, 0.76);;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.backToInterface::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 2px;
+    background: rgb(255, 255, 255);
+    transition: width .3s;
+}
+.backToInterface:hover::after {
+    width: 100%;
+}
+.backToInterface:hover {
+    color:rgb(255, 255, 255);
+}
+/* *****************************************
+//            Upload Modal
+***************************************** */
+
+#profilePictureUpload {
+    width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+#profilePictureUpload + label {
+    font-size: 1.25em;
+    font-weight: 700;
+    color: white;
+    background-color: rgba(240, 128, 128, 0.418);
+    display: inline-block;
+    padding: 2px 5px;
+    border-radius: 10px;
+}
+
+#profilePictureUpload:focus + label,
+#profilePictureUpload + label:hover {
+    background-color: rgba(255, 0, 0, 0.308);
+}
+
+#profilePictureUpload + label {
+	cursor: pointer; /* "hand" cursor */
+}
+
+/* *****************************************
+//             Main Content 
+***************************************** */
+.contentSection {
+    background-image: url('/images/cloud.png');
+    background-size: cover; 
+    height: 100%;
+}
+
+
+.displayBox {
+    background-color: rgba(255, 255, 255, 0.397);
+    border-radius: 20px;
+    height: 100%;
+    width: 100%;
+}
+.subtitle {
+    color: #E3E3E3;
+}
