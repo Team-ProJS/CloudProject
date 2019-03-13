@@ -2,7 +2,7 @@
     <!-- Sidebar  -->
     <nav id="sidebar" class="pt-5 mt-5">
         <div class="sidebar-header d-flex justify-content-center ">
-            <img src="/images/profilePic.svg" id="sidebarCollapse" class="profilePictureStyle" data-toggle="tooltip" title="Click Me"
+            <img src="/images/profilePic.svg" id="sidebarCollapse" class="profilePictureStyle rounded-circle img-fluid" data-toggle="tooltip" title="Click Me"
                 data-placement="right">
         </div>
           <div class="userDetailsSection d-flex justify-content-center">
@@ -32,7 +32,7 @@
 
             <div class="pcloud text-center mt-1">
                 <p class="pb-0 mb-0 pt-3">pCloud</p>
-                <button type="button" class=" mt-0 cloudBtn" id="pcloudtokken">Login</button>
+                <button type="button" class=" mt-0 cloudBtn" onclick="pCloudLogin();">Login</button>
                 <button type="button" class="cloudBtn" onclick="pCloudLogout();">Logout</button>
             </div>
             <hr>
@@ -51,15 +51,6 @@
             one pane
             -->
     <div id="content" class="pt-5 mt-4">
-        <!-- tool section 
-        <nav class="toolSection ">
-            <button type="button" class="actionBtn upload ml-2">Upload</button>
-            <button type="button" class="actionBtn ml-2" onclick="location.href='/users/profile'">Profile Page</button>
-            <button type="button" class="actionBtn connectAccount"  data-toggle="modal" data-target="#loginModal">Connect Account</button>
-            <button type="button" class="close justify-content-end pr-3 toolSecCloseBtn" id="toolbarsBtn">&times;</button>
-        </nav> 
-
-         <div class="header">CloudJS | Getting Organised</div>-->
         <div class="container-fluid fileSection mt-3">
         <div id="files">
             <!-- only one account at a time can display their folders/files-->  

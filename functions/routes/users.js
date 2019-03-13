@@ -36,25 +36,35 @@ router.get('/', function (req, res, next) {
 /*Renders register page*/
 router.get('/register', function (req, res, next) {
     
-    res.render('register');
+    res.render('register', {
+        title: 'Cloud | Register'
+    });
 });
 /*Renders login page*/
 router.get('/login', function (req, res, next) {
     
-    res.render('login');
+    res.render('login', {
+        title: 'Cloud | Login'
+    });
 });
 /*Renders privacy policy page*/
 router.get('/policy', function (req, res, next) {
     
-    res.render('policy');
+    res.render('policy', {
+        title: 'Cloud | Policy'
+    });
 });
 
 router.get('/interfacePage', isAuthenticated,function (req, res, next) {
     //isAuthenticated is called when this get is called. If next() is called from isAuthenticated, then function (req, res, next) is called which renders page
-    res.render('interfacePage');
+    res.render('interfacePage', {
+        title: 'Cloud | Main'
+    });
 });
 router.get('/profile',isAuthenticated, function(req,res,next){
-          res.render('profile');
+          res.render('profile',{
+            title: 'Cloud | Profile'
+        });
           });
 
 router.post('/authIn', function (req, res, next) {

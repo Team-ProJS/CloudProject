@@ -1,7 +1,8 @@
-body {
-    overflow: hidden;
-}
 
+
+/* ---------------------------------------------------
+                General Style
+----------------------------------------------------- */
 .cloudBtn {
     padding: 10px 20px;
     margin:0;
@@ -39,6 +40,7 @@ body {
 .wrapper {
     display: flex;
     align-items: stretch;
+    overflow: hidden;
 }
 
 #sidebar {
@@ -78,6 +80,10 @@ body {
     display: none;
 }
 
+#sidebar.active #userEmailDetails {
+    display: none;
+}
+
 #sidebar.active .dropdown-toggle::after {
     top: auto;
     bottom: 10px;
@@ -96,50 +102,29 @@ progress {
     width: 100%;
 }
 
-/* ---------------------------------------------------
-    TOOLBAR STYLE
------------------------------------------------------ */
-.toolSection{
-    width:100%;
-    height:50px;
-    background-color: #E2E2E2;
-    border: rgba(112, 112, 112, 0.096) 2px solid;
-    border-radius: 10px;
-    color: rgb(112, 112, 112);
-}
-
-.actionBtn {
-    height: 100%;
-    border: none;
-    background-color: transparent;
-    font-family: 'circular';
-    padding: 0 2%;
-    cursor: pointer;
-    text-decoration: none;
-}
-
-.toolSecCloseBtn{
-    height:100%;    
-}
-.actionBtn:hover {
-    border-bottom: solid 2.5px #74B9FF;
-    color: #74B9FF;
-    text-decoration: none;
-}
-
-.toolSection.remove {
-    display: none;
-}
 
 /* ---------------------------------------------------
     CONTENT STYLE
 ----------------------------------------------------- */
+
+.actionBtn{
+    border-right: solid 0.5px rgba(145, 145, 145, 0.473);
+    padding: 0 3px;
+    font-size: 110%;
+    height:100% !important;
+    text-decoration: none;
+    color: rgb(73, 73, 73);
+    margin: 2px;
+    font-family: 'circular';
+}
+
 .header {
     font-size: 2em;
     opacity: 0.2;
     color: #2D2D35;
     display:none;
 }
+
 #content {
     width: 100%;
     padding: 20px;
@@ -148,6 +133,8 @@ progress {
 }
 
 .fileSection {
+    background-image: url('/images/cloudsIcons.png');
+    background-size:cover;
     border: rgba(112, 112, 112, 0.096) 2px solid;
     border-radius: 10px;
     background-color: #E2E2E2;
@@ -155,7 +142,8 @@ progress {
     width: 100%;
     padding:0;
     font-size: 100%;
-    color: #444553;
+    color: #2D2D35; 
+    overflow: scroll;
 }
 
 .fileTitle {
