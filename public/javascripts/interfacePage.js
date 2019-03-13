@@ -37,7 +37,7 @@ var activeDropBox = false;//Boolean used to identify transfer for DropBox
 var activeOneDrive = false;//Boolean used to identify transfer
 var filename;//Variable used for checking name of file to transfer
 var GoogleAuth;//Google drive client
-var SCOPE = 'https://www.googleapis.com/auth/drive';//Google drive scope
+var SCOPE ='https://www.googleapis.com/auth/drive';//Google drive scope
 var CLIENT_ID ='1qwuqul2z1v27e1';//DropBox Client ID
 var dbx;//DropBox Client
 var clientEnum ={ //Client Enumeration
@@ -46,6 +46,14 @@ var clientEnum ={ //Client Enumeration
           ONEDRIVE: 3,
 };
 var currentClient;//Used to tell which Client is currently Active
+var FOLDER_NAME = "";
+var FOLDER_ID = "root";
+var FOLDER_PERMISSION = true;
+var FOLDER_LEVEL = 0;
+var NO_OF_FILES = 1000;
+var DRIVE_FILES = [];
+var FILE_COUNTER = 0;
+var FOLDER_ARRAY = [];
 /*************************************************************************** */
 //                                            General Javascript                                             //
 /*************************************************************************** */
@@ -99,107 +107,111 @@ function checkDetails(){
 //                                            Google Drive API                                               //
 /*************************************************************************** */
 
-//Function to load Google API client and auth modules
+var authorizeButton = document.getElementById('authorize-button');
+var signoutButton = document.getElementById('signout-button');
+
 function handleClientLoad() {
+          // Load the API client and auth2 library
           gapi.load('client:auth2', initClient);
- }
+}
 
- //Function to start Google Drive Client
- function initClient(){
-          var discoveryUrl = 'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest';
+var discoveryUrl = ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'];
+function initClient() {
           gapi.client.init({
-                    'apiKey':'AIzaSyD0DDd42dvcvFR0zb4ZsSFcBnHy3kUemoU',
-                     'discoveryDocs':[discoveryUrl],
-                    'clientId':'684132652830-gofob1h0fnmfcusfmq7lrhu9j5t0ek6p.apps.googleusercontent.com',
-                    'scope': SCOPE        
-                  }).then(function(){
-                               GoogleAuth = gapi.auth2.getAuthInstance();
-                               GoogleAuth.isSignedIn.listen(updateSigninStatus);
-                               var user = GoogleAuth.currentUser.get();
-                              setSigninStatus();
-                              $('#sign-in-or-out-button').click(function(){
-                               handleAuthClick();
-                              //retrieveAllFiles();
-                     });
-          $('revoke-access-button').click(function(){
-          revokeAccess();
-          });  
+              apiKey: 'AIzaSyD0DDd42dvcvFR0zb4ZsSFcBnHy3kUemoU',
+              discoveryDocs: discoveryUrl,
+              clientId: '684132652830-gofob1h0fnmfcusfmq7lrhu9j5t0ek6p.apps.googleusercontent.com',
+              scope: SCOPE
+          }).then(function () {
+            // Listen for sign-in state changes.
+            gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+            // Handle the initial sign-in state.
+            updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+            authorizeButton.onclick = handleAuthClick;
+            signoutButton.onclick = handleSignoutClick;
           });
- }
+}
 
- //Function to SIgn in/out of google drive
- function handleAuthClick(){
-           if(GoogleAuth.isSignedIn.get()){
-                    GoogleAuth.signOut();
-                    currentClient = null;
-          }else{
-                    GoogleAuth.signIn();
-                    currentClient = clientEnum.GOOGLEDRIVE;
-          }
- }
-
- //Disconnects Google Api from OAuth
- function revokeAccess(){
-          GoogleAuth.disconnect();
- }
-
- //Function for JQuery display of Buttons
- function setSigninStatus(isSignedIn){
-           var user = GoogleAuth.currentUser.get();
-           var isAuthorized = user.hasGrantedScopes(SCOPE);
-           if(isAuthorized){
-                    $('#sign-in-or-out-button').html('Sign out');  //If user logs in, change sign in button to sign out
-                     $('#revoke-access-button').css('display', 'inline-block'); //Make button visible
+function updateSigninStatus(isSignedIn) {
+          if (isSignedIn) {
+            authorizeButton.style.display = 'none';
+            signoutButton.style.display = 'block';
+            makeApiCall();
           } else {
-                    $('#sign-in-or-out-button').html('Sign In/Authorize'); //If user logs off, change sign out button to sign in
-                    $('#revoke-access-button').css('display', 'none'); // make invisble
+            authorizeButton.style.display = 'block';
+            signoutButton.style.display = 'none';
           }
 }
 
-//Function to update SIgn in Status
-function updateSigninStatus(isSignedIn){
-          setSigninStatus();
-}
-
-//Function to get files from google drive
-function retrieveAllFiles(callback){
-           var retrievePageOfFiles = function(request, result){
-                    request.execute(function(resp){    
-                              result = result.concat(resp.items);
-                              var nextPageToken = resp.nextPageToken;
-                              if(nextPageToken){
-                                        request = gapi.client.drive.files.list({
-                                        'pageToken': nextPageToken
-                               });
-                     retrievePageOfFiles(request, result);
-                              }else{
-                                        callback(result);
-                               }
-                     });
-          handleFileResults(result);
-          }
-          var initialRequest = gapi.client.drive.files.list();
-          retrievePageOfFiles(initialRequest, []);
+function handleAuthClick(event) {
+          gapi.auth2.getAuthInstance().signIn();
+ }
+function handleSignoutClick(event) {
+          gapi.auth2.getAuthInstance().signOut();
  }
 
- //Function to display files
- function handleFileResults(result){
-          console.log('Got files', result);
-          result.forEach(function(file){
-	          var div = document.createElement('div');
-		var link = document.createElement('a');
-		link.href = file.alternateLink;
-		var icon = document.createElement('img');
-		icon.src = file.iconLink;
-		var title = document.createElement('span');
-		title.innerHTML = file.title;
-		link.appendChild(icon);
-		link.appendChild(title);
-		div.appendChild(link);
-		document.body.appendChild(div);
-	});
+function makeApiCall() {
+         console.log("Got to API call");
+         gapi.client.load('drive', 'v2', function(){
+          var query = "trashed=false and '" + FOLDER_ID + "' in parents";
+          var request = gapi.client.drive.files.list({
+                    'maxResults': 1000,
+                    'q': query
+          });
+          request.execute(function(resp){
+                    if(!resp.error){
+                     DRIVE_FILES = resp.files;
+                     console.log(DRIVE_FILES);
+                    buildFiles();   
+                    }else{
+                     showErrorMessage("Error: " + resp.error.message);   
+                    }
+          });
+         });
 }
 
+function buildFiles(){
+          if(DRIVE_FILES.length > 0){
+          var location = $('#files');
+          location.empty();
+          location.append($('<div class="fileTitle pt-3 pl-5 ml-2"> <p> View Google Drive items.. </p></div>'));
+          location.append($('<div class="greyFileSec" />').append($('<a href="javascript:;">...</a>').on('click',function(e){
+                    makeApiCall();
+          })
+          ));
+          var counter = 1;
+          console.log(DRIVE_FILES);
+          console.log(DRIVE_FILES[0]);
+          console.log(DRIVE_FILES[0].name);
+          for (var i = 0; i < DRIVE_FILES.length; i++) {
+                    if ((counter%2) == 1) {
+                              var count = "whiteFileSec";
+                    }else {
+                              count = "greyFileSec";
+                    }
+
+          if(DRIVE_FILES[i].mimeType ==="application/vnd.google-apps.folder"){
+          location.append($('<div class="'+count+'"/>').append($('<img class=" pl-5 iconImg" src="/images/imgIcon.png"/>')).append($('<span/>').text(DRIVE_FILES[i].name)).append(' | ').append($('<a href="javascript:;">Enter</a>').on('click',function(e){
+                    var FOLDER_ID = DRIVE_FILES[i].
+         
+           })));
+}else{
+          location.append($('<div class="'+count+'"/>').append($('<img class=" pl-5 iconImg" src="/images/imgIcon.png"/>')).append($('<span/>').text(DRIVE_FILES[i].name)).append(' | ').append($('<a href="javascript:;">Download</a>').on('click',function(e){
+                    
+          })).append(' | ').append($('<a href="javascript:;">Delete</a>').on('click',function(e){
+                    
+          })).append(" | ").append($('<a href="javascript:;">Rename</a>').on('click', function(e){
+                   
+          })).append(" | ").append($('<a href="javascript:;">Transfer</a>').on('click',function(e){
+                    
+          }))
+          );
+}
+          counter++;
+}
+
+}
+}
 /*************************************************************************** */
 //                                            DropBox API                                                      //
 /*************************************************************************** */
