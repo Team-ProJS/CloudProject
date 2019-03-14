@@ -16,7 +16,7 @@ $(document).ready(function () {
           $('[data-toggle="tooltip"]').tooltip();
            getEmailInfo();//Get Ajax Information About User
            setProfilePicture();
-           completeTransfer();
+           //completeTransfer();
            var emailStuff = document.getElementById('userEmailDetails');
            emailStuff.innerHTML=email;
  });
@@ -494,29 +494,29 @@ function transferDBXFile(path){
 }
 
 //Function to complete transfer of DBX 2 DBX
-function completeTransfer(){
-                    var filename =  locStor.getItem('transfer');
-                    if(typeof filename !== 'undefined'){
-                     var storageRef = firebase.storage().ref(email+'/' +filename).getDownloadURL().then(function(url){
-                               console.log(url);
-                              var xhr = new XMLHttpRequest();
-                              xhr.open("GET", url);
-                              xhr.responseType = 'blob';
-                              xhr.onload = function(event){
-                                         var blob = xhr.response;
-                                         console.log(blob);
-                                        var file = new Blob([blob],{type:"application/octet-stream"});
-                                        file.name = filename;
-                                         console.log(file);
-                                         uploadToDropBox(file);
-                                         delOldFile();
-                               };
-                               xhr.send();
-                     }).catch(function(error){
-                               console.log(error);
-                     });
-                    }
-}
+// function completeTransfer(){
+//                     var filename =  locStor.getItem('transfer');
+//                     if(typeof filename !== 'undefined'){
+//                      var storageRef = firebase.storage().ref(email+'/' +filename).getDownloadURL().then(function(url){
+//                                console.log(url);
+//                               var xhr = new XMLHttpRequest();
+//                               xhr.open("GET", url);
+//                               xhr.responseType = 'blob';
+//                               xhr.onload = function(event){
+//                                          var blob = xhr.response;
+//                                          console.log(blob);
+//                                         var file = new Blob([blob],{type:"application/octet-stream"});
+//                                         file.name = filename;
+//                                          console.log(file);
+//                                          uploadToDropBox(file);
+//                                          delOldFile();
+//                                };
+//                                xhr.send();
+//                      }).catch(function(error){
+//                                console.log(error);
+//                      });
+//                     }
+// }
 
 /*************************************************************************** */
 //                                            Firebase Storage                                                //
@@ -564,17 +564,21 @@ function setProfilePicture(){
                               'email':email
                     },
           success: function(data){
-                    console.log(data);
-                   if(new String("default").valueOf() == data.pCloudTransfer.valueOf()){
-                              console.log("Default Picture loaded");
-                    }else{
-                              storageRef.child('users/'+email+'/'+data.pCloudTransfer).getDownloadURL().then(function(url) {
-                                        var img = document.getElementById('sidebarCollapse');
-                                        img.src = url;
-                                        console.log("Saved picture loaded");
-                                      }).catch(function(error) {
-                                      });
-                    }
+            if(data === null){
+              console.log("Recieved null from server. /users/getUserInfo")
+            }
+              console.log(data);
+              if(new String("default").valueOf() == data.pCloudTransfer.valueOf()){
+                console.log("Default Picture loaded");
+              }else{
+                storageRef.child('users/'+email+'/'+data.pCloudTransfer).getDownloadURL().then(function(url) {
+                  var img = document.getElementById('sidebarCollapse');
+                  img.src = url;
+                  console.log("Saved picture loaded");
+                }).catch(function(error) {
+                  console.log("ERROR IN SETPROFILE PICTURE javascripts/interfacePage");
+                });
+              }
           },
           error: function(errMsg)
           {

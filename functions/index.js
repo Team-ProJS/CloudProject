@@ -19,6 +19,8 @@ const firestore=require("firebase/firestore");
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
+var oneDriveAuth = require("./routes/auth");
+
 var app = express();
 app.use(cookieParser());
 
@@ -31,7 +33,8 @@ app.set('view engine', 'hbs');
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/users', usersRouter.router);
+app.use('/auth', oneDriveAuth);
 
 // Leave this here for now please. - sofia.
 /*

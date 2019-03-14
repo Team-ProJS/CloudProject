@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();/* GET users listing. */
+
 var admin = require("firebase-admin");
 var serviceAccount = require("./adminsdk.json");
 
@@ -10,16 +11,19 @@ var firebaseAdmin=admin.initializeApp({
     
 var db = admin.firestore();
 
+
+
 function isAuthenticated(req, res, next){
         try {
         var sessionCookie = req.cookies.__session;
-        console.log(sessionCookie);
+        console.log("Running authentication check...")
         admin.auth().verifySessionCookie(sessionCookie, true)
             .then(function(decodedClaims){
                 console.log("token verified");
                 next();
                     })
             .catch(function(error){
+                console.log("Error encountered in users/isAuthenticated function.")
                 console.log(error);
                 res.redirect('/users/login');
                 });
@@ -54,8 +58,8 @@ router.get('/interfacePage', isAuthenticated,function (req, res, next) {
     res.render('interfacePage');
 });
 router.get('/profile',isAuthenticated, function(req,res,next){
-          res.render('profile');
-          });
+    res.render('profile');
+});
 
 router.post('/authIn', function (req, res, next) {
     var token = req.body.token.toString();
@@ -91,7 +95,7 @@ router.post('/authOut', function (req, res, next) {
 }*/
 router.post('/createUserInfo', function (req, res, next) {
     let documentRef = db.doc('UserInfo/'+req.body.email);
-
+    console.log(req.body);
 documentRef.get().then(function(documentSnapshot){
   if (!documentSnapshot.exists) {
                     var docRef = db.collection('UserInfo').doc(req.body.email);
@@ -110,6 +114,7 @@ documentRef.get().then(function(documentSnapshot){
                     });
             }
         });
+        res.status(200);
     res.send("response");
 });
 
@@ -117,13 +122,20 @@ documentRef.get().then(function(documentSnapshot){
     "email":email
 }*/
 router.post('/getUserInfo', function (req, res, next) {
-    const document = db.doc('UserInfo/'+req.body.email);
-    let info=document.get()
-        .then(function(documentSnapshot)
-            {
+
+    db.doc('UserInfo/'+req.body.email).get()
+        .then((documentSnapshot) => {
+                console.log("Got USERINFO/email: ")
+                console.log(documentSnapshot.data)
+                res.status(200);
                 res.send(documentSnapshot.data());
+            },(rejected) => {
+                console.log("Could not find UserInfo/" + req.body.email + " in getUserInfo route.");
+                res.status(302);
+                res.send(null)
             })
-        .catch(function(err){console.log(err);});
+        .catch((err) => console.log(err));
+        
         
 });
 
@@ -132,195 +144,202 @@ router.post('/getUserInfo', function (req, res, next) {
     "email":email,
     "value":13.5(this is an example, put any num)
 }*/
-router.post('/pcT', function (req, res, next) {
-    var ref = db.collection('UserInfo').doc(req.body.email);
-    var value=req.body.value;
+// router.post('/pcT', function (req, res, next) {
+//     var ref = db.collection('UserInfo').doc(req.body.email);
+//     var value=req.body.value;
     
-    var transaction = db.runTransaction(function(t) {
-            return t.get(ref)
-        .then(function(doc) {
-            var curr = doc.data().pCloudTransfer = value;
-            t.update(ref, {pCloudTransfer: curr});
-            });
-    }).then(function(result) {
-        console.log('Transaction success!');
-    }).catch(function(err) {
-        console.log('Transaction failure:', err);
-    });
-    res.send("response");
-});
-router.post('/pcU', function (req, res, next) {
-    var ref = db.collection('UserInfo').doc(req.body.email);
-    var value=req.body.value;
+//     var transaction = db.runTransaction(function(t) {
+//             return t.get(ref)
+//         .then(function(doc) {
+//             var curr = doc.data().pCloudTransfer = value;
+//             t.update(ref, {pCloudTransfer: curr});
+//             });
+//     }).then(function(result) {
+//         console.log('Transaction success!');
+//     }).catch(function(err) {
+//         console.log('Transaction failure:', err);
+//     });
+//     res.send("response");
+// });
+// router.post('/pcU', function (req, res, next) {
+//     var ref = db.collection('UserInfo').doc(req.body.email);
+//     var value=req.body.value;
     
-    var transaction = db.runTransaction(function(t) {
-            return t.get(ref)
-        .then(function(doc) {
-            var curr = doc.data().pCloudUpload + parseFloat(value);
-            t.update(ref, {pCloudUpload: curr});
-            });
-    }).then(function(result) {
-        console.log('Transaction success!');
-    }).catch(function(err) {
-        console.log('Transaction failure:', err);
-    });
-    res.send("response");
-});
+//     var transaction = db.runTransaction(function(t) {
+//             return t.get(ref)
+//         .then(function(doc) {
+//             var curr = doc.data().pCloudUpload + parseFloat(value);
+//             t.update(ref, {pCloudUpload: curr});
+//             });
+//     }).then(function(result) {
+//         console.log('Transaction success!');
+//     }).catch(function(err) {
+//         console.log('Transaction failure:', err);
+//     });
+//     res.send("response");
+// });
 
-router.post('/odT', function (req, res, next) {
-    var ref = db.collection('UserInfo').doc(req.body.email);
-    var value=req.body.value;
+// router.post('/odT', function (req, res, next) {
+//     var ref = db.collection('UserInfo').doc(req.body.email);
+//     var value=req.body.value;
     
-    var transaction = db.runTransaction(function(t) {
-            return t.get(ref)
-        .then(function(doc) {
-            var curr = doc.data().oneDriveTransfer + parseFloat(value);
-            t.update(ref, {oneDriveTransfer: curr});
-            });
-    }).then(function(result) {
-        console.log('Transaction success!');
-    }).catch(function(err) {
-        console.log('Transaction failure:', err);
-    });
-    res.send("response");
-});
-router.post('/odU', function (req, res, next) {
-    var ref = db.collection('UserInfo').doc(req.body.email);
-    var value=req.body.value;
+//     var transaction = db.runTransaction(function(t) {
+//             return t.get(ref)
+//         .then(function(doc) {
+//             var curr = doc.data().oneDriveTransfer + parseFloat(value);
+//             t.update(ref, {oneDriveTransfer: curr});
+//             });
+//     }).then(function(result) {
+//         console.log('Transaction success!');
+//     }).catch(function(err) {
+//         console.log('Transaction failure:', err);
+//     });
+//     res.send("response");
+// });
+// router.post('/odU', function (req, res, next) {
+//     var ref = db.collection('UserInfo').doc(req.body.email);
+//     var value=req.body.value;
     
-    var transaction = db.runTransaction(function(t) {
-            return t.get(ref)
-        .then(function(doc) {
-            var curr = doc.data().oneDriveUpload+ parseFloat(value);
-            t.update(ref, {oneDriveUpload: curr});
-            });
-    }).then(function(result) {
-        console.log('Transaction success!');
-    }).catch(function(err) {
-        console.log('Transaction failure:', err);
-    });
-    res.send("response");
-});
-router.post('/odD', function (req, res, next) {
-    var ref = db.collection('UserInfo').doc(req.body.email);
-    var value=req.body.value;
+//     var transaction = db.runTransaction(function(t) {
+//             return t.get(ref)
+//         .then(function(doc) {
+//             var curr = doc.data().oneDriveUpload+ parseFloat(value);
+//             t.update(ref, {oneDriveUpload: curr});
+//             });
+//     }).then(function(result) {
+//         console.log('Transaction success!');
+//     }).catch(function(err) {
+//         console.log('Transaction failure:', err);
+//     });
+//     res.send("response");
+// });
+// router.post('/odD', function (req, res, next) {
+//     var ref = db.collection('UserInfo').doc(req.body.email);
+//     var value=req.body.value;
     
-    var transaction = db.runTransaction(function(t) {
-            return t.get(ref)
-        .then(function(doc) {
-            var curr = doc.data().oneDriveDownload + parseFloat(value);
-            t.update(ref, {oneDriveDownload: curr});
-            });
-    }).then(function(result) {
-        console.log('Transaction success!');
-    }).catch(function(err) {
-        console.log('Transaction failure:', err);
-    });
-    res.send("response");
-});
+//     var transaction = db.runTransaction(function(t) {
+//             return t.get(ref)
+//         .then(function(doc) {
+//             var curr = doc.data().oneDriveDownload + parseFloat(value);
+//             t.update(ref, {oneDriveDownload: curr});
+//             });
+//     }).then(function(result) {
+//         console.log('Transaction success!');
+//     }).catch(function(err) {
+//         console.log('Transaction failure:', err);
+//     });
+//     res.send("response");
+// });
 
-router.post('/gdT', function (req, res, next) {
-    var ref = db.collection('UserInfo').doc(req.body.email);
-    var value=req.body.value;
+// router.post('/gdT', function (req, res, next) {
+//     var ref = db.collection('UserInfo').doc(req.body.email);
+//     var value=req.body.value;
     
-    var transaction = db.runTransaction(function(t) {
-            return t.get(ref)
-        .then(function(doc) {
-            var curr = doc.data().gDriveTransfer + parseFloat(value);
-            t.update(ref, {gDriveTransfer: curr});
-            });
-    }).then(function(result) {
-        console.log('Transaction success!');
-    }).catch(function(err) {
-        console.log('Transaction failure:', err);
-    });
-    res.send("response");
-});
-router.post('/gdU', function (req, res, next) {
-    var ref = db.collection('UserInfo').doc(req.body.email);
-    var value=req.body.value;
+//     var transaction = db.runTransaction(function(t) {
+//             return t.get(ref)
+//         .then(function(doc) {
+//             var curr = doc.data().gDriveTransfer + parseFloat(value);
+//             t.update(ref, {gDriveTransfer: curr});
+//             });
+//     }).then(function(result) {
+//         console.log('Transaction success!');
+//     }).catch(function(err) {
+//         console.log('Transaction failure:', err);
+//     });
+//     res.send("response");
+// });
+// router.post('/gdU', function (req, res, next) {
+//     var ref = db.collection('UserInfo').doc(req.body.email);
+//     var value=req.body.value;
     
-    var transaction = db.runTransaction(function(t) {
-            return t.get(ref)
-        .then(function(doc) {
-            var curr = doc.data().gDriveUpload + parseFloat(value);
-            t.update(ref, {gDriveUpload: curr});
-            });
-    }).then(function(result) {
-        console.log('Transaction success!');
-    }).catch(function(err) {
-        console.log('Transaction failure:', err);
-    });
-    res.send("response");
-});
-router.post('/gdD', function (req, res, next) {
-    var ref = db.collection('UserInfo').doc(req.body.email);
-    var value=req.body.value;
+//     var transaction = db.runTransaction(function(t) {
+//             return t.get(ref)
+//         .then(function(doc) {
+//             var curr = doc.data().gDriveUpload + parseFloat(value);
+//             t.update(ref, {gDriveUpload: curr});
+//             });
+//     }).then(function(result) {
+//         console.log('Transaction success!');
+//     }).catch(function(err) {
+//         console.log('Transaction failure:', err);
+//     });
+//     res.send("response");
+// });
+// router.post('/gdD', function (req, res, next) {
+//     var ref = db.collection('UserInfo').doc(req.body.email);
+//     var value=req.body.value;
     
-    var transaction = db.runTransaction(function(t) {
-            return t.get(ref)
-        .then(function(doc) {
-            var curr = doc.data().gDriveDownload + parseFloat(value);
-            t.update(ref, {gDriveDownload: curr});
-            });
-    }).then(function(result) {
-        console.log('Transaction success!');
-    }).catch(function(err) {
-        console.log('Transaction failure:', err);
-    });
-    res.send("response");
-});
+//     var transaction = db.runTransaction(function(t) {
+//             return t.get(ref)
+//         .then(function(doc) {
+//             var curr = doc.data().gDriveDownload + parseFloat(value);
+//             t.update(ref, {gDriveDownload: curr});
+//             });
+//     }).then(function(result) {
+//         console.log('Transaction success!');
+//     }).catch(function(err) {
+//         console.log('Transaction failure:', err);
+//     });
+//     res.send("response");
+// });
 
-router.post('/dbT', function (req, res, next) {
-    var ref = db.collection('UserInfo').doc(req.body.email);
-    var value=req.body.value;
+// router.post('/dbT', function (req, res, next) {
+//     var ref = db.collection('UserInfo').doc(req.body.email);
+//     var value=req.body.value;
     
-    var transaction = db.runTransaction(function(t) {
-            return t.get(ref)
-        .then(function(doc) {
-            var curr = doc.data().dBoxTransfer + parseFloat(value);
-            t.update(ref, {dBoxTransfer: curr});
-            });
-    }).then(function(result) {
-        console.log('Transaction success!');
-    }).catch(function(err) {
-        console.log('Transaction failure:', err);
-    });
-    res.send("response");
-});
-router.post('/dbU', function (req, res, next) {
-    var ref = db.collection('UserInfo').doc(req.body.email);
-    var value=req.body.value;
+//     var transaction = db.runTransaction(function(t) {
+//             return t.get(ref)
+//         .then(function(doc) {
+//             var curr = doc.data().dBoxTransfer + parseFloat(value);
+//             t.update(ref, {dBoxTransfer: curr});
+//             });
+//     }).then(function(result) {
+//         console.log('Transaction success!');
+//     }).catch(function(err) {
+//         console.log('Transaction failure:', err);
+//     });
+//     res.send("response");
+// });
+// router.post('/dbU', function (req, res, next) {
+//     var ref = db.collection('UserInfo').doc(req.body.email);
+//     var value=req.body.value;
     
-    var transaction = db.runTransaction(function(t) {
-            return t.get(ref)
-        .then(function(doc) {
-            var curr = doc.data().dBoxUpload + parseFloat(value);
-            t.update(ref, {dBoxUpload: curr});
-            });
-    }).then(function(result) {
-        console.log('Transaction success!');
-    }).catch(function(err) {
-        console.log('Transaction failure:', err);
-    });
-    res.send("response");
-});
-router.post('/dbD', function (req, res, next) {
-    var ref = db.collection('UserInfo').doc(req.body.email);
-    var value=req.body.value;
+//     var transaction = db.runTransaction(function(t) {
+//             return t.get(ref)
+//         .then(function(doc) {
+//             var curr = doc.data().dBoxUpload + parseFloat(value);
+//             t.update(ref, {dBoxUpload: curr});
+//             });
+//     }).then(function(result) {
+//         console.log('Transaction success!');
+//     }).catch(function(err) {
+//         console.log('Transaction failure:', err);
+//     });
+//     res.send("response");
+// });
+// router.post('/dbD', function (req, res, next) {
+//     var ref = db.collection('UserInfo').doc(req.body.email);
+//     var value=req.body.value;
     
-    var transaction = db.runTransaction(function(t) {
-            return t.get(ref)
-        .then(function(doc) {
-            var curr = doc.data().dBoxDownload + parseFloat(value);
-            t.update(ref, {dBoxDownload: curr});
-            });
-    }).then(function(result) {
-        console.log('Transaction success!');
-    }).catch(function(err) {
-        console.log('Transaction failure:', err);
-    });
-    res.send("response");
-});
+//     var transaction = db.runTransaction(function(t) {
+//             return t.get(ref)
+//         .then(function(doc) {
+//             var curr = doc.data().dBoxDownload + parseFloat(value);
+//             t.update(ref, {dBoxDownload: curr});
+//             });
+//     }).then(function(result) {
+//         console.log('Transaction success!');
+//     }).catch(function(err) {
+//         console.log('Transaction failure:', err);
+//     });
+//     res.send("response");
+// });
 
-module.exports = router;
+
+
+module.exports = {
+    router,
+    admin,
+    isAuthenticated,
+    db
+};
