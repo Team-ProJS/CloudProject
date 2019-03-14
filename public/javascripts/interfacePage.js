@@ -64,8 +64,7 @@ fileUploadTransfer.addEventListener('change', function(e){
           if(currentClient == clientEnum.DROPBOX){
                     uploadToDropBox(file);
           }else if(currentClient == clientEnum.GOOGLEDRIVE){
-
-                    
+                    uploadToGoogleDrive(file);
           }else if(currentClient == clientEnum.ONEDRIVE){
 
           
@@ -145,13 +144,15 @@ function updateSigninStatus(isSignedIn) {
 
 function handleAuthClick(event) {
           gapi.auth2.getAuthInstance().signIn();
+          currentClient = clientEnum.GOOGLEDRIVE;
  }
 function handleSignoutClick(event) {
           gapi.auth2.getAuthInstance().signOut();
+          currentClient = null;
  }
 
 function makeApiCall() {
-         console.log("Got to API call");
+         //console.log("Got to API call");
          gapi.client.load('drive', 'v2', function(){
           var query = "trashed=false and '" + FOLDER_ID + "' in parents";
           var request = gapi.client.drive.files.list({
@@ -160,8 +161,7 @@ function makeApiCall() {
           });
           request.execute(function(resp){
                     if(!resp.error){
-                     DRIVE_FILES = resp.files;
-                     console.log(DRIVE_FILES);
+                     DRIVE_FILES = resp.result.files;
                     buildFiles();   
                     }else{
                      showErrorMessage("Error: " + resp.error.message);   
@@ -169,31 +169,31 @@ function makeApiCall() {
           });
          });
 }
-
+function setFolder(i){
+          FOLDER_ID = DRIVE_FILES[i].id;
+          makeApiCall();
+}
 function buildFiles(){
           if(DRIVE_FILES.length > 0){
           var location = $('#files');
           location.empty();
           location.append($('<div class="fileTitle pt-3 pl-5 ml-2"> <p> View Google Drive items.. </p></div>'));
-          location.append($('<div class="greyFileSec" />').append($('<a href="javascript:;">...</a>').on('click',function(e){
+          location.append($('<div class="greyFileSec" />').append($('<a href="javascript:;" class="pl-5">...</a>').on('click',function(e){
+                    FOLDER_ID ="root";
                     makeApiCall();
           })
           ));
           var counter = 1;
-          console.log(DRIVE_FILES);
-          console.log(DRIVE_FILES[0]);
-          console.log(DRIVE_FILES[0].name);
           for (var i = 0; i < DRIVE_FILES.length; i++) {
                     if ((counter%2) == 1) {
                               var count = "whiteFileSec";
                     }else {
                               count = "greyFileSec";
                     }
-
+                    
           if(DRIVE_FILES[i].mimeType ==="application/vnd.google-apps.folder"){
-          location.append($('<div class="'+count+'"/>').append($('<img class=" pl-5 iconImg" src="/images/imgIcon.png"/>')).append($('<span/>').text(DRIVE_FILES[i].name)).append(' | ').append($('<a href="javascript:;">Enter</a>').on('click',function(e){
-                    var FOLDER_ID = DRIVE_FILES[i].
-         
+          location.append($('<div class="'+count+'"/>').append($('<img class="pl-5 iconImg" src="/images/folderIcon.png"/>')).append($('<span/>').text(DRIVE_FILES[i].name)).append(' | ').append($('<a href="javascript:;" name="'+i+'" onclick="setFolder('+i+')">Enter</a>').on('click',function(e){
+                    
            })));
 }else{
           location.append($('<div class="'+count+'"/>').append($('<img class=" pl-5 iconImg" src="/images/imgIcon.png"/>')).append($('<span/>').text(DRIVE_FILES[i].name)).append(' | ').append($('<a href="javascript:;">Download</a>').on('click',function(e){
@@ -209,11 +209,32 @@ function buildFiles(){
 }
           counter++;
 }
+}
+}
 
+function uploadToGoogleDrive(file){
+          var uploadbar = document.getElementById('uploader');
+          uploadbar.value = 10;
+          var accessTokenUpload = gapi.auth.getToken().access_token;
+          var metadata = {
+                    'name': file.name, // Filename at Google Drive
+                    'mimeType': file.type, // mimeType at Google Drive
+                    'parents': ['root'], // Folder ID at Google Drive
+          };
+          var form = new FormData();
+          form.append('metadata', new Blob([JSON.stringify(metadata)], {type:'application/json'}));
+          form.append('file', file);
+          var xhr = new XMLHttpRequest();
+          xhr.open('post', 'https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id');
+          xhr.setRequestHeader('Authorization', 'Bearer ' + accessTokenUpload);
+          xhr.responseType = 'json';
+          xhr.onload = () => {
+                    console.log(xhr.response.id); // Retrieve uploaded file ID.
+          };
+          xhr.send(form);
 }
-}
+ 
 /*************************************************************************** */
-//                        DropBox API                                        //
 /*************************************************************************** */
 
  //Function to call parser for access token
@@ -231,7 +252,6 @@ function renderItems(items){
           var location = $('#files');
           location.empty();
           location.append($('<div class="fileTitle pt-3 pl-5 ml-2"> <p> View Dropbox items.. </p></div>'));
-          location.append($('<div class="greyFileSec" />').append($('<a class="pl-3" href="javascript:;">...</a>').on('click',function(e){
                     dbx.filesListFolder({path: ''}).then(function(response){
                     renderItems(response.entries);
           }).catch(function(error){
@@ -247,29 +267,24 @@ function renderItems(items){
                               count = "greyFileSec";
                     }
                     if(item.hasOwnProperty('rev')){
-                              location.append($('<div class="'+count+'"/>').append($('<img class=" pl-5 iconImg" src="/images/imgIcon.png"/>')).append($('<span/>').text(item.name)).append($('<a class="float-right actionBtn" href="javascript:;">Download</a>').on('click',function(e){
                                         downloadDBXSFile(item.path_lower);
                               })
-                              ).append($('<a class="float-right actionBtn" href="javascript:;">Delete</a>').on('click',function(e){
                                         deleteDBXFile(item.path_lower);
                                         dbx.filesListFolder({path: ''}).then(function(response){
                                                   renderItems(response.entries);
                                         }).catch(function(error){
                                                   console.error(error);
                                         });
-                              })).append($('<a class="float-right actionBtn" href="javascript:;">Rename</a>').on('click', function(e){
                                         renameDBXFile(item.path_lower);
                                         dbx.filesListFolder({path: ''}).then(function(response){
                                                   renderItems(response.entries);
                                         }).catch(function(error){
                                                   console.error(error);
                                         });
-                              })).append($('<a class="float-right actionBtn" href="javascript:;">Transfer</a>').on('click',function(e){
                                         transferDBXFile(item.path_lower);
                               }))
                               );
                     }else{
-                              location.append($('<div class="'+count+'"/>').append($('<img class="pl-5 iconImg" src="/images/folderIcon.png"/>')).append($('<span/>').text(item.name)).append($('<a class="float-right actionBtn" href="javascript:;">Enter Folder</a>').on('click',function(e){
                               dbx.filesListFolder({path: ''+item.path_lower}).then(function(response){
                                         renderItems(response.entries);
                               }).catch(function(error){
