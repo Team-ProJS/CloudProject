@@ -1,5 +1,5 @@
 
-var users;
+var oneDriveUsers;
 
 let uid;
 $(document).ready(() => {
@@ -30,7 +30,7 @@ $(document).ready(() => {
                     success: function (response) {
                         if (response.value === true) {
                             console.log("Signed OneDrive user in...")
-                            window.location.href = "/users/interfacePage";
+                            //window.location = "/users/interfacePage";
                             userLoggedIn();
                         }
                         else {
@@ -45,6 +45,7 @@ $(document).ready(() => {
         }
         else console.log("NO USER SIGNED IN.");
     });
+
 });
 
 
@@ -91,33 +92,12 @@ function hasTokenExpired(uid) {
 
                 if (currentTime > parseInt(file.token.expires)) {
                     // TOKEN HAS EXPIRED
-                    console.log("OneDrive Token has expired.")
-                    $.ajax({
-                        type: "DELETE",
-                        url: "/auth/onedrive/signout",
-                        data: { uid: uid },
-                        dataType: "json",
-                        success: function (response) {
-                            if (response.value === true) {
-                                console.log("Successfully deleted oneDrive user")
-                                swal({
-                                    title: "Session Expired",
-                                    text: "Your OneDrive session has expired.\nPlease sign-in again.",
-                                    icon: "info"
-                                });
-                                userLoggedOut();
-                                //alert("Your OneDrive session has expired.\nPlease log-in again.");
-
-                                //window.location.replace("/auth/signout");
-                                resolve(true);
-                            }
-                            else {
-                                console.log("RESPONSE TO DELETING EXPIRED TOKEN: ", response);
-                                console.log("Error. Did not delete oneDrive user.");
-                                resolve(false);
-                            }
-                        }
-                    });
+                    signoutExpiredUser(uid);
+                    resolve(true);
+                }
+                else {
+                    //Still valid 
+                    resolve(false);
                 }
             },
             error: (err) => {
@@ -145,6 +125,30 @@ function hasToken(uid) {
             }
         });
 
+    });
+}
+function signoutExpiredUser(uid) {
+    // TOKEN HAS EXPIRED
+    console.log("OneDrive Token has expired.")
+    $.ajax({
+        type: "DELETE",
+        url: "/auth/onedrive/signout",
+        data: { uid: uid },
+        dataType: "json",
+        success: function (response) {
+            if (response.value === true) {
+                console.log("Successfully deleted oneDrive user")
+                swal({
+                    title: "Session Expired",
+                    text: "Your OneDrive session has expired.\nPlease sign-in again.",
+                    icon: "info"
+                });
+                userLoggedOut();
+            }
+            else {
+                console.log("Error. Did not delete oneDrive user.");
+            }
+        }
     });
 }
 function signoutUser(uid) {
@@ -176,15 +180,79 @@ function userLoggedIn() {
     $("#oneDriveAuth").attr("onclick", "signoutUser('" + uid + "')");
     $("#oneDriveAuth").text("Sign-Out");
 }
+/**
+ * Summary. Manages one drive user status.
+ * 
+ * Description. Sets OneDrive log-in/log-out button text and changes their links respectively.
+ *              logs out user if their token has expired.
+ * 
+ * @param   {string}    uid   User ID of logged in user
+ */
 function checkUserToken(uid) {
     hasToken(uid).then((result) => {                              // Returns a promise
         if (result === true) {
-            //console.log("RESULT OF HASTOKEN : ", result);
-            userLoggedIn();
-            hasTokenExpired(uid);
+            userLoggedIn();                                 // Sets OD button text and link to log out
+
+            hasTokenExpired(uid).then((result) => {
+                if (result === false) {             //Token was still valid
+                    getToken(uid).then((result) => {
+                        oneDriveUsers = result;
+                        getProfile(oneDriveUsers.token.access_token);
+
+                    });              
+                    
+                }
+            }).catch((err) => console.error("Error in hasTokenExpired(uid) method.", err));
         }
         else {
             userLoggedOut();
+        }
+    }).catch((err) => console.log("Error in hasToken(uid) method.", err));
+}
+function getToken(uid) {
+    // Make AJAX call to our server, get access token from database, store it locally for fast access
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            type: "GET",
+            url: "/auth/onedrive/token/get",
+            data: { uid: uid },
+            dataType: "json",
+            success: function (response) {
+                if (response.value === false) {          // User file did not exist
+                    console.log("Could not get token from db. : getToken(uid)");
+                    resolve(null);
+                }
+                console.log("Response", response);
+                resolve(JSON.parse((JSON.stringify(response))));
+            },
+            error: (err) => {
+                console.log("Error in getToken(uid)", err);
+                resolve(null);
+            }
+        });
+    });
+}
+function getProfile(token) {
+    // Make call to user, send token and then make microsoft graph request 
+    console.log("Got to get User function")
+    $.ajax({
+        type: "POST",
+        url: "/auth/onedrive/getUser",
+        data: { token: token },
+        dataType: "json",
+        success: function (response) {
+            if (response.value === false) {
+                console.log("Error : Did not get user details : oneDriveAuth.js -> getUser(token).");
+                return null;
+            }
+            else {
+                oneDriveUsers.profile = response.profile;
+                console.log(oneDriveUsers);
+            }
+        },
+        error: (err) => {
+            console.log("Error in getUser(token)", err);
+            return null;
         }
     });
 }

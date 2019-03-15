@@ -1,8 +1,8 @@
 let https = require("https");
 let express = require("express");
 let router = express.Router();
-let graph = require("@microsoft/microsoft-graph-client");
 let db = require("./users").db
+let oneDrive = require("../OneDrive/graph");
 
 
 
@@ -17,7 +17,7 @@ let redirectURI = "http://localhost:5000/auth/openid/return"
 let base = "https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=";
 
 let login = encodeURI(base + appID + "&redirect_uri=" + redirectURI + "&response_type=token&scope=" + tempScope);
-let logout = encodeURI("https://login.microsoftonline.com/common/oauth2/v2.0/logout?post_logout_redirect_uri="+ redirectURI) 
+let logout = encodeURI("https://login.microsoftonline.com/common/oauth2/v2.0/logout?post_logout_redirect_uri=" + redirectURI)
 
 router.get("/signin", (req, res, next) => {
     res.status(200).redirect(login);
@@ -39,10 +39,10 @@ router.post("/onedrive/sign-in", (req, res, next) => {
         uid: req.body.uid
     }).then(() => {
         console.log("Signed OneDrive user!");
-        return res.status(200).send({value: true});
+        return res.status(200).send({ value: true });
     }).catch((err) => {
         console.log("Encountered error in /onedrive/sign-in", err);
-        return res.status(302).send({value: false});
+        return res.status(302).send({ value: false });
     });
 });
 
@@ -58,12 +58,26 @@ router.get("/onedrive/checkExpiry", (req, res, next) => {
 
 router.get("/onedrive/token", (req, res, next) => {
     let uid = req.query.uid;
-    if (uid === undefined){
+    if (uid === undefined) {
         return res.status(500).send("UID was undefined.");
     }
     db.collection("oneDriveUsers").doc(uid).get().then((doc) => {
-        if (!doc.exists) return res.status(200).send({value: false});
-        else return res.status(200).send({value: true});
+        if (!doc.exists) return res.status(200).send({ value: false });
+        else return res.status(200).send({ value: true });
+    }).catch((err) => {
+        console.log("Error encountered in /onedrive/token", err)
+        return res.status(500).send("Error");
+    });
+});
+
+router.get("/onedrive/token/get", (req, res, next) => {
+    let uid = req.query.uid;
+    if (uid === undefined) {
+        return res.status(500).send("UID was undefined.");
+    }
+    db.collection("oneDriveUsers").doc(uid).get().then((doc) => {
+        if (!doc.exists) return res.status(200).send({ value: false });
+        else return res.status(200).send(doc.data());
     }).catch((err) => {
         console.log("Error encountered in /onedrive/token", err)
         return res.status(500).send("Error");
@@ -75,10 +89,10 @@ router.delete("/onedrive/signout", (req, res, next) => {
     let uid = req.body.uid;
     db.collection("oneDriveUsers").doc(uid).delete().then(() => {
         console.log("Deleted oneDrive user successfully.");
-        return res.status(200).send({value: true});
+        return res.status(200).send({ value: true });
     }).catch((err) => {
         console.log("Error encountered while deleting file", err)
-        return res.status(404).send({value: false});
+        return res.status(404).send({ value: false });
     });
 });
 
@@ -88,25 +102,22 @@ router.get("/onedrive/signout", (req, res, next) => {
     console.log("GET SIGNOUT UID : ", req.query.uid);
     db.collection("oneDriveUsers").doc(uid).delete().then(() => {
         console.log("Deleted oneDrive user successfully.");
-        return res.status(200).send({value: true})
+        return res.status(200).send({ value: true })
     }).catch((err) => {
         console.log("Error encountered while deleting file", err)
-        return res.status(500).send({value: false});
+        return res.status(500).send({ value: false });
     });
 });
 
-function getAuthenticatedClient(accessToken) {
-    // Initialize Graph client
-    const client = graph.Client.init({
-        // Use the provided access token to authenticate
-        // requests
-        authProvider: (done) => {
-            done(null, accessToken);
-        }
-    });
+router.post("/onedrive/getUser", (req, res, next) => {
+    let token = req.body.token;
+    if (token === undefined) return res.status(500).send("TOKEN WAS UNDEFINED");
+    oneDrive.getUserDetails(token).then((profile) => {
+        //console.log(profile);
+        return res.status(200).send({ value: true, profile : profile });
+    }).catch((err) => { return res.status(500).send("ERROR GETING USER DETAILS : /onedrive/getUser") });
+});
 
-    return client;
-}
 
 
 module.exports = router;
