@@ -9,6 +9,7 @@
     "logs": "firebase functions:log"
   },
   "dependencies": {
+    "@microsoft/microsoft-graph-client": "^1.5.2",
     "ajax": "0.0.4",
     "consolidate": "^0.15.1",
     "cookie": "^0.3.1",
