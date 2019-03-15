@@ -273,7 +273,10 @@ function downloadGoogleDriveFile(i){
           }
           xhr.send();
 }
- 
+
+function revokeAccess(){
+          GoogleAuth.disconnect();
+}
 function downloadGoogleDriveFileBinary(i){
           var accessTokenDownload = gapi.auth.getToken().access_token;
           var identifaction = DRIVE_FILES[i].id;
