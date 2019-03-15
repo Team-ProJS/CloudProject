@@ -196,13 +196,13 @@ function buildFiles(){
                     
            })));
 }else{
-          location.append($('<div class="'+count+'"/>').append($('<img class=" pl-5 iconImg" src="/images/imgIcon.png"/>')).append($('<span/>').text(DRIVE_FILES[i].name)).append(' | ').append($('<a href="javascript:;">Download</a>').on('click',function(e){
+          location.append($('<div class="'+count+'"/>').append($('<img class=" pl-5 iconImg" src="/images/imgIcon.png"/>')).append($('<span/>').text(DRIVE_FILES[i].name)).append(' | ').append($('<a href="javascript:;"onclick="downloadGoogleDriveFile('+i+')">Download</a>').on('click',function(e){
                     
-          })).append(' | ').append($('<a href="javascript:;">Delete</a>').on('click',function(e){
+          })).append(' | ').append($('<a href="javascript:;" onclick="deleteGoogleDriveFile('+i+');">Delete</a>').on('click',function(e){
                     
           })).append(" | ").append($('<a href="javascript:;">Rename</a>').on('click', function(e){
                    
-          })).append(" | ").append($('<a href="javascript:;">Transfer</a>').on('click',function(e){
+          })).append(" | ").append($('<a href="javascript:;" onclick="transferGoogleDriveFile('+i+');">Transfer</a>').on('click',function(e){
                     
           }))
           );
@@ -233,8 +233,167 @@ function uploadToGoogleDrive(file){
           };
           xhr.send(form);
 }
+
+function downloadGoogleDriveFile(i){
+          var identifaction = DRIVE_FILES[i].id;
+          var typeOFFile ="";
+          var typeToEnd ="";
+          var accessTokenDownload = gapi.auth.getToken().access_token;
+          var xhr = new XMLHttpRequest();
+          if(DRIVE_FILES[i].mimeType =="application/vnd.google-apps.document"){
+                    typeOFFile = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+                    typeToEnd =".docx";
+          }else if(DRIVE_FILES[i].mimeType =="application/vnd.google-apps.presentation"){
+                    typeOFFile = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+                    typeToEnd =".pptx";
+          }else if(DRIVE_FILES[i].mimeType =="application/vnd.google-apps.spreadsheet"){
+                    typeOFFile = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                    typeToEnd =".xlsx";
+          }else{
+                    downloadGoogleDriveFileBinary(i);
+                    return;
+          }
+          xhr.withCredentials = true;
+          xhr.open("GET", "https://www.googleapis.com/drive/v3/files/"+identifaction+'/export?mimeType='+typeOFFile, true);
+          xhr.setRequestHeader('authorization','Bearer '+accessTokenDownload);
+          xhr.responseType = 'blob';
+          xhr.onload = function(){
+                    var blob = xhr.response;
+                    var file = new Blob([blob],{type:"application/octet-stream"});
+                    file.name = DRIVE_FILES[i].name+typeToEnd;
+                    console.log(file);
+                              let link = document.createElement('a');
+                              link.href = window.URL.createObjectURL(file);
+                              link.download = file.name;
+                              document.body.appendChild(link);
+                              link.dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true, view: window}));
+                              link.remove();
+                              window.URL.revokeObjectURL(link.href);
+
+          }
+          xhr.send();
+}
  
+function downloadGoogleDriveFileBinary(i){
+          var accessTokenDownload = gapi.auth.getToken().access_token;
+          var identifaction = DRIVE_FILES[i].id;
+          var xhr = new XMLHttpRequest();
+          xhr.open("GET", "https://www.googleapis.com/drive/v3/files/"+identifaction+'?alt=media', true);
+          xhr.setRequestHeader('authorization','Bearer '+accessTokenDownload);
+          xhr.responseType = 'blob';
+          xhr.onload = function(){
+                    var blob = xhr.response;
+                    var file = new Blob([blob],{type:"application/octet-stream"});
+                    file.name = DRIVE_FILES[i].name;
+                    console.log(file);
+                              let link = document.createElement('a');
+                              link.href = window.URL.createObjectURL(file);
+                              link.download = file.name;
+                              document.body.appendChild(link);
+                              link.dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true, view: window}));
+                              link.remove();
+                              window.URL.revokeObjectURL(link.href);
+          }
+          xhr.send();
+}
+
+function transferGoogleDriveFile(i){
+          var accessTokenDownload = gapi.auth.getToken().access_token;
+          var identifaction = DRIVE_FILES[i].id;
+          var typeOFFile ="";
+          var typeToEnd ="";
+          var xhr = new XMLHttpRequest();
+          var file;
+          var binary = false;
+          if(DRIVE_FILES[i].mimeType =="application/vnd.google-apps.document"){
+                    typeOFFile = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+                    typeToEnd =".docx";
+                    
+          }else if(DRIVE_FILES[i].mimeType =="application/vnd.google-apps.presentation"){
+                    typeOFFile = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
+                    typeToEnd =".pptx";
+                   
+          }else if(DRIVE_FILES[i].mimeType =="application/vnd.google-apps.spreadsheet"){
+                    typeOFFile = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                    typeToEnd =".xlsx";
+                    
+          }else{
+                    binary = true;
+          }
+
+          if(binary){
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("GET", "https://www.googleapis.com/drive/v3/files/"+identifaction+'?alt=media', true);
+                    xhr.setRequestHeader('authorization','Bearer '+accessTokenDownload);
+                    xhr.responseType = 'blob';
+                    xhr.onload = function(){
+                              var blob = xhr.response;
+                              file = new Blob([blob],{type:"application/octet-stream"});
+                              file.name = DRIVE_FILES[i].name;
+                              console.log(file);
+                              if(activeDropBox){
+                                        dbx = new Dropbox.Dropbox({ clientId: CLIENT_ID });
+                                        var authUrl = dbx.getAuthenticationUrl('https://cloudjs-projs.firebaseapp.com/users/interfacePage');
+                                        //window.open(authUrl); 
+                                        dbx = new Dropbox.Dropbox({ accessToken: getAccessTokenFromUrl() });
+                                        dbx.filesUpload({path: '/' + file.name, contents: file}).then(function(response){
+                                                  console.log(response);
+                                        }).catch(function(error){
+                                                  console.error(error);
+                                        });
+                              }else if(activeGoogle){
+                                        handleSignoutClick();
+                                        handleAuthClick();
+                              }
+                    }
+                    xhr.send();
+          }else{
+          var xhr = new XMLHttpRequest();
+          xhr.open("GET", "https://www.googleapis.com/drive/v3/files/"+identifaction+'/export?mimeType='+typeOFFile, true);
+          xhr.setRequestHeader('authorization','Bearer '+accessTokenDownload);
+          xhr.responseType = 'blob';
+          xhr.onload = function(){
+                    var blob = xhr.response;
+                    file = new Blob([blob],{type:"application/octet-stream"});
+                    file.name = DRIVE_FILES[i].name+typeToEnd;
+                    console.log(file);
+                    if(activeDropBox){
+                              dbx = new Dropbox.Dropbox({ clientId: CLIENT_ID });
+                              var authUrl = dbx.getAuthenticationUrl('https://cloudjs-projs.firebaseapp.com/users/interfacePage');
+                              //window.open(authUrl); 
+                              dbx = new Dropbox.Dropbox({ accessToken: getAccessTokenFromUrl() });
+                              dbx.filesUpload({path: '/' + file.name, contents: file}).then(function(response){
+                                        console.log(response);
+                              }).catch(function(error){
+                                        console.error(error);
+                              });
+                    }
+                   
+          }
+          xhr.send();
+          }
+
+}
+
+function deleteGoogleDriveFile(i){
+          var c = confirm("Are you sure that you want to delete this file?");
+          if(c){
+                    var identifaction = DRIVE_FILES[i].id;
+                    var accessTokenDel = gapi.auth.getToken().access_token;
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("DELETE", "https://www.googleapis.com/drive/v3/files/"+identifaction, true);
+                    xhr.setRequestHeader('authorization','Bearer '+accessTokenDel);
+                    xhr.onload = function(){
+                    }
+                    xhr.send();
+                    alert("File has been deleted");
+                    buildFiles();
+          }else{
+                    alert("Delete cancelled");
+          }
+}
 /*************************************************************************** */
+//                                            DropBox API                                                      //
 /*************************************************************************** */
 
  //Function to call parser for access token
@@ -252,6 +411,7 @@ function renderItems(items){
           var location = $('#files');
           location.empty();
           location.append($('<div class="fileTitle pt-3 pl-5 ml-2"> <p> View Dropbox items.. </p></div>'));
+          location.append($('<div class="greyFileSec" />').append($('<a href="javascript:;">...</a>').on('click',function(e){
                     dbx.filesListFolder({path: ''}).then(function(response){
                     renderItems(response.entries);
           }).catch(function(error){
@@ -267,24 +427,29 @@ function renderItems(items){
                               count = "greyFileSec";
                     }
                     if(item.hasOwnProperty('rev')){
+                              location.append($('<div class="'+count+'"/>').append($('<img class=" pl-5 iconImg" src="/images/imgIcon.png"/>')).append($('<span/>').text(item.name)).append(' | ').append($('<a href="javascript:;">Download</a>').on('click',function(e){
                                         downloadDBXSFile(item.path_lower);
                               })
+                              ).append(' | ').append($('<a href="javascript:;">Delete</a>').on('click',function(e){
                                         deleteDBXFile(item.path_lower);
                                         dbx.filesListFolder({path: ''}).then(function(response){
                                                   renderItems(response.entries);
                                         }).catch(function(error){
                                                   console.error(error);
                                         });
+                              })).append(" | ").append($('<a href="javascript:;">Rename</a>').on('click', function(e){
                                         renameDBXFile(item.path_lower);
                                         dbx.filesListFolder({path: ''}).then(function(response){
                                                   renderItems(response.entries);
                                         }).catch(function(error){
                                                   console.error(error);
                                         });
+                              })).append(" | ").append($('<a href="javascript:;">Transfer</a>').on('click',function(e){
                                         transferDBXFile(item.path_lower);
                               }))
                               );
                     }else{
+                              location.append($('<div class="'+count+'"/>').append($('<img class="pl-5 iconImg" src="/images/folderIcon.png"/>')).append($('<span/>').text(item.name)).append(' | ').append($('<a href="javascript:;">Enter Folder</a>').on('click',function(e){
                               dbx.filesListFolder({path: ''+item.path_lower}).then(function(response){
                                         renderItems(response.entries);
                               }).catch(function(error){
@@ -316,8 +481,14 @@ function renderItems(items){
 //Function to delete DB file that is at specified path
 function deleteDBXFile(path){ 
           dbx = new Dropbox.Dropbox({ accessToken: getAccessTokenFromUrl() });
-          dbx.filesDelete({path:""+path});
-          alert("File at: "+path +" has been deleted");
+          var c = confirm("Are you sure that you want to delete this file?");
+          if(c){
+                    dbx.filesDelete({path:""+path});
+                    alert("File at: "+path +" has been deleted");
+          }else{
+                    alert("Delete cancelled");
+          }
+          
 }
 
 //Function to rename DB file that is at specified path
