@@ -1,3 +1,4 @@
+
 var users;
 
 let uid;
@@ -12,18 +13,8 @@ $(document).ready(() => {
             //console.log("UID ", uid)
 
             //Make sure there's a valid token for user, signs out user if he/she has token and it has expired.
-            hasToken(uid).then((result) => {                              // Returns a promise
-                if (result === true) {
-                    //console.log("RESULT OF HASTOKEN : ", result);
-                    $("#oneDriveAuth").attr("onclick", "signoutUser('" + uid + "')");
-                    $("#oneDriveAuth").text("Sign-Out");
-                    hasTokenExpired(uid);
-                }
-                else {
-                    $("#oneDriveAuth").attr("onclick", "window.location.replace('/auth/signin')");
-                    $("#oneDriveAuth").text("Sign-In");
-                }
-            });
+            checkUserToken(uid)
+
             // If redirected back to interface page from oneDrive auth, get token
             let url = window.location.toString();
             let index = url.indexOf("#");
@@ -39,8 +30,8 @@ $(document).ready(() => {
                     success: function (response) {
                         if (response.value === true) {
                             console.log("Signed OneDrive user in...")
-                            $("#oneDriveAuth").attr("onclick", "signoutUser('" + uid + "')");
-                            $("#oneDriveAuth").text("Sign-Out");
+                            window.location.href = "/users/interfacePage";
+                            userLoggedIn();
                         }
                         else {
                             console.log("Failed to sign OneDrive user in...");
@@ -50,15 +41,12 @@ $(document).ready(() => {
 
                     }
                 });
-
             }
-
         }
         else console.log("NO USER SIGNED IN.");
     });
-
-
 });
+
 
 function parseToken(url, startIndex) {
     let trimmed = url.substr(startIndex + 1)
@@ -108,15 +96,23 @@ function hasTokenExpired(uid) {
                         type: "DELETE",
                         url: "/auth/onedrive/signout",
                         data: { uid: uid },
-                        dataType: "text",
+                        dataType: "json",
                         success: function (response) {
                             if (response.value === true) {
                                 console.log("Successfully deleted oneDrive user")
-                                // redirect to microsoft logout after deleting token
-                                window.location.replace("/auth/signout");
+                                swal({
+                                    title: "Session Expired",
+                                    text: "Your OneDrive session has expired.\nPlease sign-in again.",
+                                    icon: "info"
+                                });
+                                userLoggedOut();
+                                //alert("Your OneDrive session has expired.\nPlease log-in again.");
+
+                                //window.location.replace("/auth/signout");
                                 resolve(true);
                             }
                             else {
+                                console.log("RESPONSE TO DELETING EXPIRED TOKEN: ", response);
                                 console.log("Error. Did not delete oneDrive user.");
                                 resolve(false);
                             }
@@ -139,13 +135,11 @@ function hasToken(uid) {
             dataType: "json",
             success: function (response) {
                 if (response.value === true) {
-                    console.log("RESPONSE: ", response);
-                    console.log("Response.value: ", response.value);
-                    console.log("TRUE! USER HAS TOKEN");
+                    console.log("OneDrive user is currently signed in.");
                     resolve(true);
                 }
                 else {
-                    console.log("FALSE! USER HAS NO TOKEN");
+                    console.log("There is not a OneDrive user signed in.");
                     resolve(false);
                 }
             }
@@ -162,11 +156,35 @@ function signoutUser(uid) {
         data: { uid: uid },
         dataType: "json",
         success: function (response) {
-            if (response.value === true)
-                window.location.replace("/auth/signout");
+            if (response.value === true) {
+                userLoggedOut();
+                swal("Success!", "You have signed out of OneDrive", "success");
+                console.log("Signed OneDrive user out..");
+                //window.location.replace("/auth/signout");         // Takes you to microsoft sign out but has issues
+            }
             else {
                 console.log("Did not sign out user by deleting token properly.");
             }
+        }
+    });
+}
+function userLoggedOut() {
+    $("#oneDriveAuth").attr("onclick", "window.location.replace('/auth/signin')");
+    $("#oneDriveAuth").text("Sign-In");
+}
+function userLoggedIn() {
+    $("#oneDriveAuth").attr("onclick", "signoutUser('" + uid + "')");
+    $("#oneDriveAuth").text("Sign-Out");
+}
+function checkUserToken(uid) {
+    hasToken(uid).then((result) => {                              // Returns a promise
+        if (result === true) {
+            //console.log("RESULT OF HASTOKEN : ", result);
+            userLoggedIn();
+            hasTokenExpired(uid);
+        }
+        else {
+            userLoggedOut();
         }
     });
 }

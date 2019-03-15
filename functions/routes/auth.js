@@ -20,17 +20,16 @@ let login = encodeURI(base + appID + "&redirect_uri=" + redirectURI + "&response
 let logout = encodeURI("https://login.microsoftonline.com/common/oauth2/v2.0/logout?post_logout_redirect_uri="+ redirectURI) 
 
 router.get("/signin", (req, res, next) => {
-    res.redirect(login);
+    res.status(200).redirect(login);
 });
 
 router.get("/signout", (req, res, next) => {
-    res.redirect(logout);
+    res.status(200).redirect(logout);
 });
 
 router.get("/openid/return", (req, res, next) => {
     console.log("Returned to /OPENID/RETURN");
-    res.status(200);
-    return res.redirect("/users/interfacePage");
+    return res.status(200).redirect("/users/interfacePage");
 });
 
 router.post("/onedrive/sign-in", (req, res, next) => {
@@ -40,10 +39,10 @@ router.post("/onedrive/sign-in", (req, res, next) => {
         uid: req.body.uid
     }).then(() => {
         console.log("Signed OneDrive user!");
-        res.status(200).send({value: true});
+        return res.status(200).send({value: true});
     }).catch((err) => {
         console.log("Encountered error in /onedrive/sign-in", err);
-        res.status(302).send({value: false});
+        return res.status(302).send({value: false});
     });
 });
 
@@ -53,7 +52,7 @@ router.get("/onedrive/checkExpiry", (req, res, next) => {
         if (!doc.exists) return res.send(null);
         let obj = JSON.stringify(doc.data());
         let json = JSON.parse(obj);
-        res.send(json);
+        return res.status(200).send(json);
     }).catch((err) => console.log("Error in oneDrive/checkExpiry", err));
 });
 
@@ -67,7 +66,7 @@ router.get("/onedrive/token", (req, res, next) => {
         else return res.status(200).send({value: true});
     }).catch((err) => {
         console.log("Error encountered in /onedrive/token", err)
-        res.status(500).send("Error");
+        return res.status(500).send("Error");
     });
 });
 
