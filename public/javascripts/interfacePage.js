@@ -192,9 +192,8 @@ function buildFiles(){
 
           if(DRIVE_FILES[i].mimeType ==="application/vnd.google-apps.folder"){
           location.append($('<div class="'+count+'"/>').append($('<img class=" pl-5 iconImg" src="/images/imgIcon.png"/>')).append($('<span/>').text(DRIVE_FILES[i].name)).append(' | ').append($('<a href="javascript:;">Enter</a>').on('click',function(e){
-                    var FOLDER_ID = DRIVE_FILES[i].
-         
-           })));
+                    var FOLDER_ID = DRIVE_FILES[i].id;
+                  })));
 }else{
           location.append($('<div class="'+count+'"/>').append($('<img class=" pl-5 iconImg" src="/images/imgIcon.png"/>')).append($('<span/>').text(DRIVE_FILES[i].name)).append(' | ').append($('<a href="javascript:;">Download</a>').on('click',function(e){
                     

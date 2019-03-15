@@ -1,19 +1,27 @@
-
-
 /* ---------------------------------------------------
                 General Style
 ----------------------------------------------------- */
+body {
+    overflow: hidden;
+}
 .cloudBtn {
     padding: 10px 20px;
     margin:0;
-    color: white;
-    border: solid 2px white;
+    color: black;
+    border: solid 2px black;
     cursor: pointer;
     background-color: transparent;
-    border-radius: 2px;
+    border-radius: 10px;
+}
+.accBtn {
+    color: white;
+    border-color:white;
+    padding: 10px 20px;
+    margin: 0;
+
 }
 .cloudBtn a {
-    color: white;
+    color: black;
     text-decoration: none;
 }
 
@@ -22,6 +30,15 @@
 }
 .subtext {
     color: #7F7B82;
+}
+.bottomSidebarSec {
+    position: absolute;
+    bottom:0;
+    padding-left: 55px;
+    padding-bottom: 0;
+    margin-bottom:0;
+    color: white;
+    cursor: pointer;
 }
 
 .cloudBtnInPopup {
@@ -36,11 +53,17 @@
 /* ---------------------------------------------------
     SIDEBAR STYLE
 ----------------------------------------------------- */
+.profilePictureStyle {
+    min-height: 100px;
+    min-width: 100px;
+    max-height: 100px;
+    max-width: 100px;
+}
 
 .wrapper {
     display: flex;
     align-items: stretch;
-    overflow: hidden;
+    height: 100%;
 }
 
 #sidebar {
@@ -64,6 +87,10 @@
     min-width: 80px;
     max-width: 80px;
     text-align: center;
+}
+
+#sidebar.active .bottomSidebarSec {
+    display: none;
 }
 
 #sidebar.active .loginLinks p,
@@ -143,7 +170,6 @@ progress {
     padding:0;
     font-size: 100%;
     color: #2D2D35; 
-    overflow: scroll;
 }
 
 .fileTitle {

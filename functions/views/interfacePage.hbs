@@ -1,17 +1,54 @@
   <div class="wrapper">
     <!-- Sidebar  -->
-    <nav id="sidebar" class="pt-5 mt-5">
+    <nav id="sidebar" class="pt-5 mt-5 ">
         <div class="sidebar-header d-flex justify-content-center ">
             <img src="/images/profilePic.svg" id="sidebarCollapse" class="profilePictureStyle rounded-circle img-fluid" data-toggle="tooltip" title="Click Me"
                 data-placement="right">
         </div>
-          <div class="userDetailsSection d-flex justify-content-center">
+          <div class="userDetailsSection d-flex justify-content-center mt-2">
             <p id="userEmailDetails"></p>
           </div>
-
-
+        <hr>
         <div class="loginLinks mt-5">
-            <div class="google text-center ">
+            <div class="text-center">
+                <button class="cloudBtn accBtn" data-toggle="modal" data-target="#loginModal">Your Accounts</button>
+                <button  class="cloudBtn accBtn mt-3" data-toggle="modal" data-target="#myModal"><i class="fa fa-cloud-upload"></i> Upload Files</button>
+                <button class="cloudBtn accBtn mt-3" onclick="location.href='/users/profile'"> <i class="fa fa-user"></i> Profile Page</button>
+            </div>
+        </div>
+        <hr>
+        <div class="bottomSidebarSec">
+            <p onclick="location.href='/users/policy'"><i class="fa fa-gear"></i> Privacy Settings</p>
+        </div>
+    </nav>
+
+    <!-- Page Content  
+             NB ***  the class = fileSection  ***
+            Each of the drives will display their folders and files on this 
+            one pane
+            -->
+    <div id="content" class="pt-5 mt-4">
+        <div class="container-fluid fileSection mt-3">
+        <div id="files">
+            <!-- only one account at a time can display their folders/files-->  
+        </div>
+        </div>
+    </div>
+</div>
+
+<!-- The Modal  for login to accounts -->
+<div class="modal" id="loginModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Login To Account <i class="fa fa-user"></i></h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal Body -->
+            <div class="modal-body justify-content-center">
+                <div class="google text-center ">
                 <!-- Google Section -->
                 <p class="mb-0"> Google </p>
                 <button type="button" class=" mt-0 cloudBtn" id="sign-in-or-out-button">Login</button>
@@ -40,51 +77,7 @@
                 <button type="button" class=" mt-0 cloudBtn" onclick="pCloudLogin();">Login</button>
                 <button type="button" class="cloudBtn" onclick="pCloudLogout();">Logout</button>
             </div>
-            <hr>
-            <!-- link to upload files -->
-            <div class="uploadSec text-center">
-                <p data-toggle="modal" data-target="#myModal"><i class="fa fa-cloud-upload"></i> Upload Files</p>
-                <!-- <p id="toolbarBtn"><i class="fa fa-gear"></i> ToolBar</p> -->
-                <p onclick="location.href='/users/profile'"> <i class="fa fa-user"></i> Profile Page</p>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Page Content  
-             NB ***  the class = fileSection  ***
-            Each of the drives will display their folders and files on this 
-            one pane
-            -->
-    <div id="content" class="pt-5 mt-4">
-        <div class="container-fluid fileSection mt-3">
-        <div id="files">
-            <!-- only one account at a time can display their folders/files-->  
-
-        </div>
-        </div>
-    </div>
-</div>
-
-<!-- The Modal  for login to accounts -->
-<div class="modal" id="loginModal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h4 class="modal-title">Login To Account <i class="fa fa-user"></i></h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <!-- Modal Body -->
-            <div class="modal-body justify-content-center">
-                <p> Login to accounts</p>
-                <!-- Google Login --> 
-                <button type="button" class=" mt-3 cloudBtnInPopup" id="sign-in-or-out-button">Google Login</button>
-                <!-- Dropbox Login -->
-                <button type="button" class=" mt-3 cloudBtnInPopup"><a href="" id="authlink">Dropbox Login</a></button>
-                <!-- Onedrive Login -->
-                <button type="button" class=" mt-0 cloudBtnInPopup" id="pcloudtokken">Pcloud Login</button>
-
+            
             </div>
             <div class="modal-footer">
                  <button type="button" class="btn btn-dark" data-dismiss="modal">Let's Go</button>
@@ -92,6 +85,7 @@
         </div>
     </div>
 </div>
+
 
 <!-- THE MODAL   for upload -->
 
@@ -128,6 +122,34 @@
         </div>
     </div>
 </div>
+
+<!-- Modal for Transfer -->
+
+<div class="modal" id="transferModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Transfer Files <i class="fa fa-cloud-upload"></i></h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body justify-content-center">
+                
+                <p class="subtext mt-3 small"> Let's quickly get started by uploading a file to your drive. Have something to post? </p>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Finished</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
 
 <!-- *******************************************************************
                         SCRIPTS, SDK, STYLESHEETS

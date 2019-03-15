@@ -1,7 +1,7 @@
 body {
     height: 100%;
-    overflow: hidden;
     background-color: #74B9FF;
+    overflow:hidden;
 }
 .row {
     height:100%;
