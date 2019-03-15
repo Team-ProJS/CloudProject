@@ -133,9 +133,12 @@ function initClient() {
 
 function updateSigninStatus(isSignedIn) {
           if (isSignedIn) {
-            authorizeButton.style.display = 'none';
-            signoutButton.style.display = 'block';
-            makeApiCall();
+                    authorizeButton.style.display = 'block';
+                    signoutButton.style.display = 'none';
+                    if(currentClient == clientEnum.GOOGLEDRIVE){
+                              authorizeButton.style.display = 'none';
+                              signoutButton.style.display = 'block';
+                              makeApiCall();
           } else {
             authorizeButton.style.display = 'block';
             signoutButton.style.display = 'none';
