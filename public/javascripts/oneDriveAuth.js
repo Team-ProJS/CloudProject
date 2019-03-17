@@ -1,66 +1,117 @@
 
-var oneDriveUsers;
+var oneDriveUsers = "";
+let loggedIn = true;
+jQuery("#files").hide();
 
 let uid;
 $(document).ready(() => {
-    //jQuery(".loading").hide();
 
     // Check if user is logged in to OneDrive
     firebase.auth().onAuthStateChanged((user) => {
-        //jQuery(".loading").show();
         if (user) {
             uid = user.uid;
-
-            //Make sure there's a valid token for user, signs out user if he/she has token and it has expired.
-            //Welcome to callback hell.
-            hasToken(uid).then((result) => {                              // Returns a promise
-                if (result === true) {
-
-                    userLoggedIn();                                 // Sets OD button text and link to log out
-                    hasTokenExpired(uid).then((result) => {
-                        if (result === false) {             //Token was still valid
-                            loadPage();
-                            jQuery(".loading").hide();
-                        }
-                    }).catch((err) => console.error("Error in hasTokenExpired(uid) method.", err));
+            if (hasODToken()) {
+                if (hasODTokenExpired()) {
+                    sessionExpired();
                 }
                 else {
-                    //User does not have a token 
-                    userLoggedOut();
-                    // If redirected back to interface page from oneDrive auth, get token
-                    let url = window.location.toString();
-                    let index = url.indexOf("#");
+                    //Hasn't expired. Can make calls to OneDrive API with token 
+                    isLoggedIn();
+                    // Get Profile; 
+                    let oneDrive = JSON.parse(localStorage.getItem("OneDrive"));
+                    console.log(oneDrive.access_token);
+                    getRootFiles(oneDrive.access_token);
+                    //console.log(oneDrive.access_token);
+                    //getRootFiles(oneDrive.access_token).then((files) => {
+                    //  oneDriveUsers.files = files;
+                    //displayFiles(oneDrive.profile, files);
+                    //getClickedFileID(oneDrive.access_token);
+                    // getClickedFileID(oneDrive.access_token).then((idFiles) => {
+                    //     displayFiles(oneDrive.profile, idFiles);
+                    // }).catch((err) => console.log("Error in GetClickedFileID promise", err))    
 
-                    if (index >= 0) {
-                        let token = parseToken(url, index);
-                        console.log("UID : ", uid);
-                        $.ajax({
-                            type: "POST",
-                            url: "/auth/onedrive/sign-in",
-                            data: { token, uid },
-                            dataType: "json",
-                            success: function (response) {
-                                if (response.value === true) {
-                                    console.log("Signed OneDrive user in...")
-                                    //window.location = "/users/interfacePage";
-                                    userLoggedIn();
-                                    loadPage();
-                                }
-                                else {
-                                    console.log("Failed to sign OneDrive user in...");
-                                }
-                            },
-                            error: (err) => {
-
-                            }
-                        });
-                    }
+                    //}).catch((err) => console.log("Error getting root files.", err));
                 }
-            }).catch((err) => console.log("Error in hasToken(uid) method.", err));
-        }
-        else console.log("NO USER SIGNED IN.");
-    });
+            }
+            else {
+                // User is not signed in to OneDrive
+                isLoggedOut();
+                // If redirected back to interface page from oneDrive auth, get token
+                let url = window.location.toString();
+                let index = url.indexOf("#");
 
+                if (index >= 0) {
+                    let token = parseToken(url, index);
+                    oneDriveUsers = token;
+                    //console.log("UID : ", uid);
+                    //window.location = "/users/interfacePage";
+                    getProfile(token.access_token).then((profile) => {
+                        oneDriveUsers.profile = profile;
+                        localStorage.setItem("OneDrive", JSON.stringify(oneDriveUsers));
+                        getRootFiles(token.access_token);
+                        isLoggedIn();
+                        console.log("Signed OneDrive user in...")
+                        // getRootFiles(token.access_token).then((files) => {
+                        //     oneDriveUsers.files = files;
+                        //     //displayFiles(profile, files);
+                        //     isLoggedIn();
+                        //     console.log("Signed OneDrive user in...")
+                        // })
+                    });
+                    //loadPage();
+                }
+
+            }
+        }
+
+
+        //Make sure there's a valid token for user, signs out user if he/she has token and it has expired.
+        //Welcome to callback hell.
+        //     hasToken(uid).then((result) => {                              // Returns a promise
+        //         if (result === true) {
+        //             isLoggedIn();                                 // Sets OD button text and link to log out
+        //             hasTokenExpired(uid).then((result) => {
+        //                 if (result === false) {             //Token was still valid
+        //                     loadPage();
+        //                     jQuery(".loading").hide();
+        //                 }
+        //                 jQuery(".loading").hide();
+        //             }).catch((err) => console.error("Error in hasTokenExpired(uid) method.", err));
+        //         }
+        //         else {
+        //             //User does not have a token 
+        //             isLoggedOut();
+        //             // If redirected back to interface page from oneDrive auth, get token
+        //             let url = window.location.toString();
+        //             let index = url.indexOf("#");
+
+        //             if (index >= 0) {
+        //                 let token = parseToken(url, index);
+        //                 console.log("UID : ", uid);
+        //                 $.ajax({
+        //                     type: "POST",
+        //                     url: "/auth/onedrive/sign-in",
+        //                     data: { token, uid },
+        //                     dataType: "json",
+        //                     success: function (response) {
+        //                         if (response.value === true) {
+        //                             console.log("Signed OneDrive user in...")
+        //                             //window.location = "/users/interfacePage";
+        //                             isLoggedIn();
+        //                             loadPage();
+        //                         }
+        //                         else {
+        //                             console.log("Failed to sign OneDrive user in...");
+        //                         }
+        //                     },
+        //                     error: (err) => {
+
+        //                     }
+        //                 });
+        //             }
+        //         }
+        //     }).catch((err) => console.log("Error in hasToken(uid) method.", err));
+    });
 });
 
 
@@ -142,6 +193,54 @@ function hasToken(uid) {
 
     });
 }
+function hasODTokenExpired() {
+    // Check if it is valid.
+    let token = JSON.parse(localStorage.getItem("OneDrive"));
+    let expiryTime = token.expires;
+    let currentTime = Math.floor(new Date().getTime() / 1000);
+
+    if (currentTime > parseInt(expiryTime)) {
+        // TOKEN HAS EXPIRED
+        //signoutExpiredUser(uid);
+        return true;
+    }
+    else {
+        //Still valid 
+        return false;
+    }
+}
+function signOutOneDrive() {
+    localStorage.removeItem("OneDrive");
+    isLoggedOut();
+    swal("Success!", "You have signed out of OneDrive", "success");
+    console.log("Signed OneDrive user out..");
+    jQuery("#driveTitle").html("");
+    //document.getElementById("tableFiles").innerHTML = "";
+    jQuery("#files").hide();
+    //window.location.replace("/auth/signout");         // Takes you to microsoft sign out but has issues
+}
+function sessionExpired() {
+    localStorage.removeItem("OneDrive");
+    swal({
+        title: "Session Expired",
+        text: "Your OneDrive session has expired.\nPlease sign-in again.",
+        icon: "info"
+    });
+    isLoggedOut();
+    //document.getElementById("tableFiles").innerHTML = "";
+    jQuery("#files").hide();
+    //jQuery("#files").html("");
+}
+
+function hasODToken() {
+    // Check local storage for OneDrive entry, if it exists, try to retrieve accessToken
+    if (localStorage.getItem("OneDrive")) {
+        return true;
+    }
+    else { // Local storage empty, hasn't been signed in yet.
+        return false;
+    }
+}
 function signoutExpiredUser(uid) {
     // TOKEN HAS EXPIRED
     console.log("OneDrive Token has expired.")
@@ -158,7 +257,7 @@ function signoutExpiredUser(uid) {
                     text: "Your OneDrive session has expired.\nPlease sign-in again.",
                     icon: "info"
                 });
-                userLoggedOut();
+                isLoggedOut();
                 jQuery("#files").html("");
             }
             else {
@@ -177,7 +276,7 @@ function signoutUser(uid) {
         dataType: "json",
         success: function (response) {
             if (response.value === true) {
-                userLoggedOut();
+                isLoggedOut();
                 swal("Success!", "You have signed out of OneDrive", "success");
                 console.log("Signed OneDrive user out..");
                 jQuery("#files").html("");
@@ -190,13 +289,17 @@ function signoutUser(uid) {
         }
     });
 }
-function userLoggedOut() {
+function isLoggedOut() {
     $("#oneDriveAuth").attr("onclick", "window.location.replace('/auth/signin')");
     $("#oneDriveAuth").text("Sign-In");
-    jQuery("#files").html("");
+    jQuery(".loading").hide();
+    //jQuery("#files").hide();
+
+    //jQuery("#files").html("");
 }
-function userLoggedIn() {
-    $("#oneDriveAuth").attr("onclick", "signoutUser('" + uid + "')");
+function isLoggedIn() {
+    // $("#oneDriveAuth").attr("onclick", "signoutUser('" + uid + "')");
+    $("#oneDriveAuth").attr("onclick", "signOutOneDrive()")
     $("#oneDriveAuth").text("Sign-Out");
 }
 
@@ -247,18 +350,144 @@ function getProfile(token) {
         });
     });
 }
-function displayProfile() {
-    jQuery("#files").html("<h2>Logged in as: " + oneDriveUsers.profile.displayName || oneDriveUsers.profile.userPrincipalName + "</h2>");
+function displayFiles(profile, files) {
+    //jQuery("#files").html("<h2>" + (profile.displayName || profile.userPrincipalName) + "\'s files: </h2>" );
+    jQuery("#driveTitle").html("<h1>" + (profile.givenName || profile.userPrincipalName) + "\'s OneDrive: </h1>");
+    //jQuery("#files").load("/templates/fileTemplate.hbs");
+    jQuery(".loading").hide();
+    jQuery("#files").show();
+    console.log(files);
+
+
+    // Creating HTML for each file and calculating creation date and size
+    let html = "<tr id='" + files[0].parentReference.id + "' class='files'><td><a href='#'>../</td><td></td><td></td><td></td></tr>";
+    for (var file = 0; file < files.length; file++) {
+        let tempSize = Math.floor((files[file].size / 1024) / 1024);        // originally bytes, now in MB
+        let sizeSuffix = "";
+
+        if (tempSize < 1024) {
+            sizeSuffix = " MB"
+        }
+        else {
+            sizeSuffix = " GB"
+            tempSize /= 1024;
+            tempSize = Math.round(tempSize * 10) / 10
+        }
+        html += "<tr id='" + files[file].id + "' class='files'>" +
+            "<td>" + files[file].name + "</td>" +
+            "<td>" + files[file].createdDateTime + "</td>" +
+            "<td>" + tempSize + sizeSuffix + "</td>" +
+            "<td><a href='" + files[file].webUrl + "'>Link</td>" +
+            "</tr>"
+    }
+    try {
+        document.getElementById("tableFiles").innerHTML = html;
+        console.log(document.getElementById("tableFiles"))
+    }
+    catch (error) {
+        console.log("Error getting table ID", error)
+    }
+}
+function loadDetails() {
+
 }
 function loadPage() {
-    getToken(uid).then((result) => {
-        oneDriveUsers = result;
+    getToken(uid).then((token) => {
+        oneDriveUsers = token;
         getProfile(oneDriveUsers.token.access_token).then((profile) => {
             oneDriveUsers.profile = profile;
+            localStorage.setItem("OneDrive", JSON.stringify(oneDriveUsers));
             console.log(oneDriveUsers);
-            displayProfile();
+            displayFiles(profile);
             jQuery(".loading").hide();
-
         });
     });
+}
+function getRootFiles(token) {
+    $.ajax({
+        type: "POST",
+        url: "/auth/onedrive/files",
+        data: { token: token },
+        async:false,
+        success: function (response) {
+            if (response.value === false) {
+                // Could not get files
+                console.log(response)
+            }
+            else {
+                $(".loading").hide();
+
+                let responseTable = document.createElement("html")
+                responseTable.innerHTML = response;
+                let rawTable = responseTable.getElementsByClassName("table")[0].innerHTML;
+                document.getElementsByTagName("table")[0].innerHTML = rawTable;
+                jQuery("#files").show();
+                getClickedFileID(token);
+                //console.log(rawTable)
+            }
+        },
+        error: (err) => {
+            console.log("ERROR! Something went wrong in /auth/onedrive/files.", err);
+        }
+    });
+}
+
+
+// function getRootFiles(token) {
+//     return new Promise((resolve, reject) => {
+//         $.ajax({
+//             type: "POST",
+//             url: "/auth/onedrive/files",
+//             data: { token: token },
+//             dataType: "html",
+//             success: function (response) {
+//                 if (response.value === false) {
+//                     // Could not get files
+//                     resolve(null);
+//                 }
+//                 else {
+//                     resolve(response.files);
+//                 }
+//             },
+//             error: (err) => {
+//                 console.log("ERROR! Something went wrong in /auth/onedrive/files.", err);
+//             }
+//         });
+//     });
+// }
+function getClickedFileID(token) {
+        $(".files").click(function () {
+            let fileID = $(this).attr('id');
+            console.log(fileID);
+    
+            //window.location = "/users/interfacePage/files/" +fileID;
+    
+            $.ajax({
+                type: "POST",
+                url: "/auth/onedrive/files/" + fileID,
+                data: { token: token, id: fileID },
+                async: false,
+                //dataType: "html",
+                success: function (response) {
+                    if (response.value === false) {
+                        console.log("Could not get files by ID");
+                    }
+                    else {
+                        let responseTable = document.createElement("html")
+                        responseTable.innerHTML = response;
+                        let rawTable = responseTable.getElementsByClassName("table")[0].innerHTML;
+                        document.getElementsByTagName("table")[0].innerHTML = rawTable;
+                        jQuery("#files").show();
+                        getClickedFileID(token);
+                        // $("html").html(response);
+                        // window.location.replace("/auth/onedrive/files/" + fileID);
+                    }
+                },
+                error: (error) => {
+                    console.log("Error getting files by ID function ", error);
+                }
+            });
+    })
+        //implement some kind of stack that holds all previous parent ids 
+        // so that when you go up a level, the stack is popped and correct parent id is assigned.
 }

@@ -114,10 +114,78 @@ router.post("/onedrive/getUser", (req, res, next) => {
     if (token === undefined) return res.status(500).send("TOKEN WAS UNDEFINED");
     oneDrive.getUserDetails(token).then((profile) => {
         //console.log(profile);
-        return res.status(200).send({ value: true, profile : profile });
+        return res.status(200).send({ value: true, profile: profile });
     }).catch((err) => { return res.status(500).send("ERROR GETING USER DETAILS : /onedrive/getUser") });
 });
 
+// router.post("/onedrive/files", (req, res, next) => {
+//     let token = req.body.token; 
+//     if (token === null ) {
+//         res.status(500).send("Error in /onedrive/files. Token was undefined.");
+//     }
+//     oneDrive.getRootFiles(token).then((files) => {
+//         console.log(files);
+//         return res.status(200).send({value: true, files: files.value});
+//     }).catch((err) => res.status(500).send("Error encountered in getting root files.", err));
+// })
+
+router.post("/onedrive/files", (req, res, next) => {
+    let token = req.body.token;
+    if (token === null) {
+        res.status(500).send("Error in /onedrive/files. Token was undefined.");
+    }
+    oneDrive.getRootFiles(token).then((files) => {
+        console.log(files);
+        let params = { active: { interfacePage: true } };
+        params.odFiles = files.value;
+        return res.status(200).render("interfacePage", params);
+    }).catch((err) => res.status(500).send("Error encountered in getting root files.", err));
+})
+
+// router.post("/onedrive/files/:id", (req, res, next) => {
+//     let token = req.body.token;
+//     if (token === null ) {
+//         res.status(500).send("Error in /onedrive/files/:id. Token was undefined.");
+//     }
+//     oneDrive.getFilesByPath(token, req.params.id).then((files) => {
+//         return res.status(200).send({value: true, files: files.value});
+//     }).catch((err) => res.status(500).send("Error encountered in getting root files.", err));
+// });
+
+router.post("/onedrive/files/:id", (req, res, next) => {
+    let token = req.body.token;
+    if (token === null) {
+        res.send("Error in /onedrive/files/:id. Token was undefined.");
+    }
+    try {
+        oneDrive.getFilesByPath(token, req.params.id).then((files) => {
+            console.log(files);
+            params.odFiles = files.value;
+            return res.render("interfacePage", params);
+        },(rejected) => {
+            console.log("REJECTED ", rejected);
+
+        }).catch((err) => {
+
+            res.send("Error encountered in getting root files.", err)
+        });
+    } catch (err) {
+        console.log("Error encountered in /onedrive/files/:id", err);
+    }
+
+});
+
+router.get("/test/", (req, res, next) => {
+    let params = {
+        active: { onedrive: true }
+    };
+    let file = {
+        name: "Johnathan"
+    }
+    params.file = file;
+    console.log(params);
+    res.status(200).render("test", params);
+});
 
 
 module.exports = router;

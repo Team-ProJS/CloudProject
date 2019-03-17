@@ -1,13 +1,13 @@
-  <div class="wrapper">
+<div class="wrapper">
     <!-- Sidebar  -->
     <nav id="sidebar" class="pt-5 mt-5">
         <div class="sidebar-header d-flex justify-content-center ">
-            <img src="/images/profilePic.svg" id="sidebarCollapse" class="profilePictureStyle" data-toggle="tooltip" title="Click Me"
-                data-placement="right">
+            <img src="/images/profilePic.svg" id="sidebarCollapse" class="profilePictureStyle" data-toggle="tooltip"
+                title="Click Me" data-placement="right">
         </div>
-          <div class="userDetailsSection d-flex justify-content-center">
+        <div class="userDetailsSection d-flex justify-content-center">
             <p id="userEmailDetails"></p>
-          </div>
+        </div>
 
 
         <div class="loginLinks mt-5">
@@ -19,7 +19,7 @@
             <div id="auth-status" style="display: inline; padding-left: 25px"></div>
             <!-- end of Google Section -->
 
-            <!-- dropbox section --> 
+            <!-- dropbox section -->
 
             <div class="dropbox text-center mt-1">
                 <p class="mb-0"> Dropbox</p>
@@ -32,11 +32,12 @@
             <!-- OneDrive section -->
             <div class="onedrive text-center mt-1">
                 <p class="pb-0 mb-0 pt-3"> OneDrive</p>
-                <button type="button" class=" mt-0 cloudBtn" onclick="() => window.location.replace("/auth/signin")" id="oneDriveAuth">Sign-in</button>
+                <button type="button" class=" mt-0 cloudBtn" onclick="() => window.location.replace("/auth/signin")"
+                    id="oneDriveAuth">Sign-in</button>
 
             </div>
 
-            <!-- pcloud section --> 
+            <!-- pcloud section -->
 
             <div class="pcloud text-center mt-1">
                 <p class="pb-0 mb-0 pt-3">pCloud</p>
@@ -69,11 +70,41 @@
 
          <div class="header">CloudJS | Getting Organised</div>-->
         <div class="container-fluid fileSection mt-3 ">
-            <div class="container loading"><img class="mx-auto d-block img-fluid" id="loading" src="/images/transparent_loading.gif" style="padding-top:6%"> </div>
-        <div id="files">
-            <!-- only one account at a time can display their folders/files-->  
-            
-        </div>
+            <div class="container loading"><img class="mx-auto d-block img-fluid" id="loading"
+                    src="/images/transparent_loading.gif" style="padding-top:6%"> </div>
+            <div id="driveTitle"></div>
+            <div id="files">
+                <!-- only one account at a time can display their folders/files-->
+                <h2>OneDrive</h2>
+                <table class="table" id="shoot">
+                    <thead>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Created</th>
+                            <th scope="col">Size</th>
+                            <th scope="col">URL</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableFiles">
+                        <tr id="" class="parentID">
+                            <td><a href="#">../</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <!-- Files go here -->
+                        {{#each odFiles}}
+                        <tr id="{{this.id}}" class="files">
+                            <td>{{this.name}}</td>
+                            <td>{{ this.createdDateTime}}</td> <!-- eventDateTime this.createdDateTime -->
+                            <td>{{this.size}}</td>
+                            <td><a href="{{this.webUrl}}">Link</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+
+            </div>
         </div>
     </div>
 </div>
@@ -91,7 +122,7 @@
             <!-- Modal Body -->
             <div class="modal-body justify-content-center">
                 <p> Login to accounts</p>
-                <!-- Google Login --> 
+                <!-- Google Login -->
                 <button type="button" class=" mt-3 cloudBtnInPopup" id="sign-in-or-out-button">Google Login</button>
                 <!-- Dropbox Login -->
                 <button type="button" class=" mt-3 cloudBtnInPopup"><a href="" id="authlink">Dropbox Login</a></button>
@@ -100,7 +131,7 @@
 
             </div>
             <div class="modal-footer">
-                 <button type="button" class="btn btn-dark" data-dismiss="modal">Let's Go</button>
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Let's Go</button>
             </div>
         </div>
     </div>
@@ -126,12 +157,14 @@
                         <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
                     </div>
                     <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="fileUploadTransfer" aria-describedby="inputGroupFileAddon01" value ="upload">
+                        <input type="file" class="custom-file-input" id="fileUploadTransfer"
+                            aria-describedby="inputGroupFileAddon01" value="upload">
                         <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
                     </div>
-                    
+
                 </div>
-                <p class="subtext mt-3 small"> Let's quickly get started by uploading a file to your drive. Have something to post? <br> We'll do it for you</p>
+                <p class="subtext mt-3 small"> Let's quickly get started by uploading a file to your drive. Have
+                    something to post? <br> We'll do it for you</p>
             </div>
 
             <!-- Modal footer -->
@@ -145,37 +178,35 @@
 
 <!-- *******************************************************************
                         SCRIPTS, SDK, STYLESHEETS
-******************************************************************* --> 
+******************************************************************* -->
 <!-- fa fa icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <!--interfacePage stylesheet -->
 <link rel='stylesheet' href='/stylesheets/interfacePage.css' />
 <!-- script -->
-<!-- jquery --> 
-<script
-  src="https://code.jquery.com/jquery-3.3.1.js"
-  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
-  crossorigin="anonymous"></script>
-  <!-- promises --> 
+<!-- jquery -->
+<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+    crossorigin="anonymous"></script>
+<!-- promises -->
 <script src="https://cdn.jsdelivr.net/npm/promise-polyfill@7/dist/polyfill.min.js"></script>
 <!--DropBox API-->
-<script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="1qwuqul2z1v27e1"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/dropbox.js/4.0.16/Dropbox-sdk.js"></script> 
+<script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs"
+    data-app-key="1qwuqul2z1v27e1"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropbox.js/4.0.16/Dropbox-sdk.js"></script>
 <!-- fetches-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.js"></script>
-<!-- pcloud API--> 
+<!-- pcloud API-->
 <script type="text/javascript" src="https://unpkg.com/pcloud-sdk-js@latest/dist/pcloudsdk.js"></script>
-<!-- Google API --> 
-<script async defer src="https://apis.google.com/js/api.js" 
-        onload="this.onload=function(){};handleClientLoad()" 
-        onreadystatechange="if (this.readyState === 'complete') this.onload()">
-</script>
-<!-- url parser --> 
+<!-- Google API -->
+<script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};handleClientLoad()"
+    onreadystatechange="if (this.readyState === 'complete') this.onload()">
+    </script>
+<!-- url parser -->
 <script src="/javascripts/utils.js"></script>
-<!-- interface script--> 
-<script type="text/javascript" src="/javascripts/interfacePage.js"></script> 
-<!-- pcloud script --> 
-<script type="text/javascript" src="/javascripts/pcloud.js"></script> 
+<!-- interface script-->
+<script type="text/javascript" src="/javascripts/interfacePage.js"></script>
+<!-- pcloud script -->
+<script type="text/javascript" src="/javascripts/pcloud.js"></script>
 
 <!-- OneDrive script -->
 <script type="text/javascript" src="/javascripts/oneDriveAuth.js"></script>

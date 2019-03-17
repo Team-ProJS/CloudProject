@@ -10,6 +10,13 @@ admin.initializeApp({
 
 var db = admin.firestore();
 
+router.get("/interfacePage/files/:id", (req, res, next) => {
+    console.log("HOWDY PARTNER")
+
+    res.render("interfacePage");
+
+});
+
 
 function isAuthenticated(req, res, next) {
     try {
