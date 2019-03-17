@@ -32,7 +32,7 @@ function showPageSection(elementId){
     
 var locStor; //Cookie Storage
 var email;//User email, used for identifying the user
-var activeGoogle = true;//Boolean used to identify transfers for Google Drive
+var activeGoogle = false;//Boolean used to identify transfers for Google Drive
 var activeDropBox = false;//Boolean used to identify transfer for DropBox
 var activeOneDrive = false;//Boolean used to identify transfer
 var filename;//Variable used for checking name of file to transfer
@@ -52,7 +52,6 @@ var FOLDER_PERMISSION = true;
 var FOLDER_LEVEL = 0;
 var NO_OF_FILES = 1000;
 var DRIVE_FILES = [];
-var startTransfer = false;
 var mywindow;
 /*************************************************************************** */
 //                                            General Javascript                                             //
@@ -101,7 +100,8 @@ function activeService(client){
 
 function openWin(website){
           mywindow = window.open(website,"_blank","width=500, height=500");
-          setTimeout(function(){ mywindow.close() },3000);
+          setTimeout(function(){ mywindow.close() },2500);
+          
 }
 
 /*************************************************************************** */
@@ -171,6 +171,7 @@ function updateSigninStatus(isSignedIn) {
                     //signoutButton.style.display = 'block';
                     makeApiCall();
             }
+            
           } else {
             //authorizeButton.style.display = 'block';
             //signoutButton.style.display = 'none';
@@ -178,16 +179,20 @@ function updateSigninStatus(isSignedIn) {
 }
 
 function handleAuthClick(event) {
-          gapi.auth2.getAuthInstance().signIn();
           currentClient = clientEnum.GOOGLEDRIVE;
+          gapi.auth2.getAuthInstance().signIn();
+          
+          
  }
 function handleSignoutClick(event) {
           gapi.auth2.getAuthInstance().signOut();
           currentClient = null;
+          var location = $('#files');
+          location.empty();
  }
 
 function makeApiCall() {
-         //console.log("Got to API call");
+         console.log("Got to API call");
          gapi.client.load('drive', 'v2', function(){
           var query = "trashed=false and '" + FOLDER_ID + "' in parents";
           var request = gapi.client.drive.files.list({
@@ -333,8 +338,6 @@ function downloadGoogleDriveFileBinary(i){
 }
 
 function transferGoogleDriveFile(i){
-          transfer();
-
           var accessTokenDownload = gapi.auth.getToken().access_token;
           var identifaction = DRIVE_FILES[i].id;
           var typeOFFile ="";
@@ -369,19 +372,20 @@ function transferGoogleDriveFile(i){
                               file.name = DRIVE_FILES[i].name;
                               console.log(file);
                               if(activeDropBox){
-                                        dbx = new Dropbox.Dropbox({ clientId: CLIENT_ID });
-                                        var authUrl = dbx.getAuthenticationUrl('https://cloudjs-projs.firebaseapp.com/users/interfacePage');
-                                        //window.open(authUrl); 
-                                        dbx = new Dropbox.Dropbox({ accessToken: getAccessTokenFromUrl() });
-                                        dbx.filesUpload({path: '/' + file.name, contents: file}).then(function(response){
-                                                  console.log(response);
-                                        }).catch(function(error){
-                                                  console.error(error);
-                                        });
-                              }else if(activeGoogle){
-                                        handleSignoutClick();
-                                        handleAuthClick();
+                                        uploadToFirebaseGoogle(file,'dropbox');
+                                        openWin("https://accounts.google.com/logout");
+                                        alert("Login to your dropbox account to complete transfer");
+                                        currentClient = null;
+                                        var location = $('#files');
+                                        location.empty();
 
+                              }else if(activeGoogle){
+                                        uploadToFirebaseGoogle(file,'google');
+                                        openWin("https://accounts.google.com/logout");
+                                        handleSignoutClick();
+                                        alert("Login to your google account to complete transfer");
+                                        currentClient = null;
+                                        
                               }
                     }
                     xhr.send();
@@ -396,15 +400,16 @@ function transferGoogleDriveFile(i){
                     file.name = DRIVE_FILES[i].name+typeToEnd;
                     console.log(file);
                     if(activeDropBox){
-                              dbx = new Dropbox.Dropbox({ clientId: CLIENT_ID });
-                              var authUrl = dbx.getAuthenticationUrl('https://cloudjs-projs.firebaseapp.com/users/interfacePage');
-                              //window.open(authUrl); 
-                              dbx = new Dropbox.Dropbox({ accessToken: getAccessTokenFromUrl() });
-                              dbx.filesUpload({path: '/' + file.name, contents: file}).then(function(response){
-                                        console.log(response);
-                              }).catch(function(error){
-                                        console.error(error);
-                              });
+                              uploadToFirebaseGoogle(file,'dropbox');
+                                        openWin("https://accounts.google.com/logout");
+                                        alert("Login to your dropbox account to complete transfer");
+                                        currentClient = null;
+                    }else if(activeGoogle){
+                              uploadToFirebaseGoogle(file,'google');
+                              openWin("https://accounts.google.com/logout");
+                              handleSignoutClick();
+                              alert("Login to your google account to complete transfer");
+                              currentClient = null;
                     }
                    
           }
@@ -430,6 +435,8 @@ function deleteGoogleDriveFile(i){
                     alert("Delete cancelled");
           }
 }
+
+
 /*************************************************************************** */
 //                                            DropBox API                                                      //
 /*************************************************************************** */
@@ -683,12 +690,7 @@ function revokeDB(){
 
 //Function to bring user to logout screen in DB
 function logoutDB(){
-          let link = document.createElement('a');
-           link.href = "https://www.dropbox.com/logout";
-           link.target = "_blank";
-           document.body.appendChild(link);
-           link.dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true, view: window}));
-           link.remove();
+           openWin("https://www.dropbox.com/logout");
            revokeDB();
            currentClient = null;
 }
@@ -699,7 +701,7 @@ function transferDBXFile(path){
           dbx.filesDownload({path:""+path
           }).then(function(response){
                     if(activeDropBox){
-                              uploadToFirebase(response);
+                              uploadToFirebase(response,'dropbox');
                                         $.ajax({
                                                   type: 'POST',
                                                   url: '/users/dbT',
@@ -718,12 +720,17 @@ function transferDBXFile(path){
                               checkDetails();
                               activeDropBox = false;
                               logoutDB();
+                              alert("Please login to the Dropbox account that you wish to transfer to.");
                     }else if(activeGoogle){
                               console.log(response);
-                              //openWin("https://accounts.google.com/logout");
-                              openWin("https://www.dropbox.com/logout");
-                              uploadToFirebase(response);
+                              uploadToFirebase(response,'google');
+                              openWin("https://accounts.google.com/logout");
+                              mywindow = null;
                               activeGoogle = false;
+                              logoutDB();
+                              currentClient = null;
+                              handleSignoutClick();
+                              alert("Please login to the Google account that you wish to transfer to and then refresh");
                     }else if(activeOneDrive){
 
                               activeOneDrive= false;
@@ -736,35 +743,61 @@ function transferDBXFile(path){
         return false;
 }
 
-//Function to complete transfer of DBX 2 DBX
-function completeTransfer(service){
-                    var filename =  locStor.getItem(service);
-                    if(typeof filename != null){
+//Function to complete transfer of files
+function completeTransfer(){
+          var filename =  locStor.getItem('dropbox');
+          var filename2 = locStor.getItem('google');
+          if(filename != null){
                      var storageRef = firebase.storage().ref(email+'/' +filename).getDownloadURL().then(function(url){
-                               console.log(url);
-                              var xhr = new XMLHttpRequest();
-                              xhr.open("GET", url);
-                              xhr.responseType = 'blob';
-                              xhr.onload = function(event){
-                                         var blob = xhr.response;
-                                         console.log(blob);
-                                        var file = new Blob([blob],{type:"application/octet-stream"});
-                                        file.name = filename;
-                                         console.log(file);
-                                         uploadToDropBox(file);
-                                         delOldFile();
-                                         alert("Transfer has been Completed!");
-                                         dbx.filesListFolder({path: ''}).then(function(response){
-                                                   renderItems(response.entries);
-                                         }).catch(function(error){
-                                                   console.error(error);
-                                         });
-                               };
-                               xhr.send();
-                     }).catch(function(error){
-                               console.log(error);
-                     });
-                    }
+                    console.log(url);
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("GET", url);
+                    xhr.responseType = 'blob';
+                    xhr.onload = function(event){
+                              var blob = xhr.response;
+                              console.log(blob);
+                              var file = new Blob([blob],{type:"application/octet-stream"});
+                              file.name = filename;
+                              console.log(file);
+                              uploadToDropBox(file);
+                              delOldFile('dropbox');
+                              alert("Transfer has been Completed!");
+                              dbx.filesListFolder({path: ''}).then(function(response){
+                                        renderItems(response.entries);
+                               }).catch(function(error){
+                                        console.error(error);
+                               });
+                     };
+                    xhr.send();
+          }).catch(function(error){
+                    console.log(error);
+          });
+          }
+
+          if(filename2 != null){
+                    console.log("Got to filename2");
+                    console.log(filename2);
+                    var storageRef = firebase.storage().ref(email+'/' +filename2).getDownloadURL().then(function(url){
+                   console.log(url);
+                   var xhr = new XMLHttpRequest();
+                   xhr.open("GET", url);
+                   xhr.responseType = 'blob';
+                   xhr.onload = function(event){
+                             var blob = xhr.response;
+                             console.log(blob);
+                             var file = new Blob([blob],{type:"application/octet-stream"});
+                             file.name = filename2;
+                             console.log(file);
+                             uploadToGoogleDrive(file)
+                             delOldFile('google');
+                             alert("Transfer has been Completed!");
+                    };
+                   xhr.send();
+         }).catch(function(error){
+                   console.log(error);
+         });
+         }
+
                    
 }
 
@@ -773,14 +806,26 @@ function completeTransfer(service){
 /*************************************************************************** */
 
 //Function to upload file to firebase
-function uploadToFirebase(file){
+function uploadToFirebase(file,service){
           var storageRef = firebase.storage().ref(email+'/' +file.name);
-          localStorage.setItem('transfer', file.name);
+          localStorage.setItem(service, file.name);
           var task = storageRef.put(file.fileBlob);
           task.on('state_changed',
           function progress(snapshot){
-             /*var precentage = (snapshot.bytesTransferred/snapshot.totalBytes)*100;
-              uploader.value = precentage;*/
+          },
+          function error(err){
+          },
+          function complete(){
+          }
+          );
+}
+
+function uploadToFirebaseGoogle(file,service){
+          var storageRef = firebase.storage().ref(email+'/' +file.name);
+          localStorage.setItem(service, file.name);
+          var task = storageRef.put(file);
+          task.on('state_changed',
+          function progress(snapshot){
           },
           function error(err){
           },
@@ -790,13 +835,13 @@ function uploadToFirebase(file){
 }
 
 //Function to delete old file from firebase after transfer
-function delOldFile(){
+function delOldFile(service){
           var storage = firebase.storage();
           var storageRef = storage.ref();
-          var filename =  locStor.getItem('transfer');
+          var filename =  locStor.getItem(service);
           storageRef.child(email+'/'+filename).delete().then(function(){
                     console.log("Old File Removed Correctly");
-                    localStorage.removeItem('transfer');
+                    localStorage.removeItem(service);
           }).catch(function(error){
                     console.log("Failed to delete Old File, Reason: "+error);
           });
