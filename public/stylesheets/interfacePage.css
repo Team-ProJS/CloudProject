@@ -4,6 +4,7 @@
 body {
     overflow: hidden;
 }
+
 .cloudBtn {
     padding: 10px 20px;
     margin:0;
@@ -54,10 +55,8 @@ body {
     SIDEBAR STYLE
 ----------------------------------------------------- */
 .profilePictureStyle {
-    min-height: 100px;
-    min-width: 100px;
-    max-height: 100px;
-    max-width: 100px;
+    height: 100px;
+    width: 100px;
 }
 
 .wrapper {
@@ -102,6 +101,10 @@ body {
     width: 70%;
     height: 70%;
 }
+#sidebar.actve .profilePictureStyle { 
+    height: 50px;
+    width: 50px;
+}
 
 #sidebar.active .uploadSec {
     display: none;
@@ -130,6 +133,44 @@ progress {
 }
 
 
+/* ---------------------------------------------------
+    CONNECT ACCOUNT STYLE -- 
+----------------------------------------------------- */
+.accountTitle {
+    font-size: 150%;
+}
+
+
+/* ---------------------------------------------------
+    TOOLBAR STYLE
+----------------------------------------------------- */
+.toolSection{
+    width:100%;
+    height:50px;
+    background-color: #E2E2E2;
+    border: rgba(112, 112, 112, 0.096) 2px solid;
+    border-radius: 10px;
+}
+
+.toolBarBtn {
+    height: 100%;
+    border: none;
+    background-color: transparent;
+    font-family: 'circular';
+    padding: 0 2%;
+    cursor: pointer;
+}
+
+.toolSecCloseBtn{
+    height:100%;    
+}
+.toolBarBtn:hover {
+    border-bottom: solid 2.5px #74B9FF;
+    color: #74B9FF;
+}
+.toolSection.remove {
+    display: none;
+}
 /* ---------------------------------------------------
     CONTENT STYLE
 ----------------------------------------------------- */
@@ -165,11 +206,12 @@ progress {
     border: rgba(112, 112, 112, 0.096) 2px solid;
     border-radius: 10px;
     background-color: #E2E2E2;
-    min-height: 95%;
+    height: 86%;
     width: 100%;
     padding:0;
     font-size: 100%;
     color: #2D2D35; 
+    overflow: auto !important;
 }
 
 .fileTitle {
@@ -199,6 +241,13 @@ progress {
     background-color: lightblue;
     cursor: pointer;
 
+}
+::-webkit-scrollbar-track  {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb{
+    border-radius: 20px;
+    width: 5px;
 }
 
 /* ---------------------------------------------------
@@ -241,4 +290,6 @@ progress {
     #sidebar.active {
         margin-left: 0 !important;
     }
+
+
 }

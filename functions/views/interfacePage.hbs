@@ -14,6 +14,7 @@
                 <button class="cloudBtn accBtn" data-toggle="modal" data-target="#loginModal">Your Accounts</button>
                 <button  class="cloudBtn accBtn mt-3" data-toggle="modal" data-target="#myModal"><i class="fa fa-cloud-upload"></i> Upload Files</button>
                 <button class="cloudBtn accBtn mt-3" onclick="location.href='/users/profile'"> <i class="fa fa-user"></i> Profile Page</button>
+                <button class="cloudBtn accBtn mt-3" id="toolbarBtn"><i class="fa fa-gear"></i> Toolbar</button>
             </div>
         </div>
         <hr>
@@ -28,9 +29,22 @@
             one pane
             -->
     <div id="content" class="pt-5 mt-4">
+        <!-- tool section -->
+        <nav class="toolSection ">
+            <button type="button" class="toolBarBtn upload ml-2" data-toggle="modal" data-target="#myModal">Upload</button>
+            <button type="button" class="toolBarBtn transfer" data-toggle="modal" data-target="#transferModal">Select Service For Transfer</button>
+            <button type="button" class="toolBarBtn" onclick="location.href='/users/profile'">Profile Page</button>
+            <button type="button" class="toolBarBtn connectAccount"  data-toggle="modal" data-target="#loginModal">Connect Account</button>
+            <button type="button" class="close justify-content-end pr-3 toolSecCloseBtn" id="toolbarsBtn">&times;</button>
+
+        </nav>
+         <div class="header">CloudJS | Getting Organised</div>
+
+         <!-- file section --> 
         <div class="container-fluid fileSection mt-3">
-        <div id="files">
-            <!-- only one account at a time can display their folders/files-->  
+        <div id="files" style="font-size:5em;">
+            <!-- only one account at a time can display their folders/files--> 
+            
         </div>
         </div>
     </div>
@@ -46,34 +60,42 @@
                 <h4 class="modal-title">Login To Account <i class="fa fa-user"></i></h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
+
             <!-- Modal Body -->
-            <div class="modal-body justify-content-center">
-                <div class="google text-center ">
+            <div class="modal-body m-2"> 
+                    <h5>Login to One Service</h5>
+                    <small class="text-muted">Note:Only one account can be active at a time.</small>
+                <div class="google mt-3">
                 <!-- Google Section -->
-                <p class="mb-0"> Google </p>
-                <button id="authorize-button"class=" mt-0 cloudBtn">Authorize</button>
-                <button id="signout-button"class=" mt-0 cloudBtn" style="display: none;">Sign Out</button>
-                
+                <div class="row">
+                    <div class="col-sm"><p class="mb-0  accountTitle"> Google </p></div>
+                    <div class="col-sm"> <button id="authorize-button" class=" cloudBtn">Login</button></div>
+                    <div class="col-sm"><button id="signout-button" class=" cloudBtn">Logout</button></div>
+                </div>
             </div>
             <div id="auth-status" style="display: inline; padding-left: 25px"></div>
-            <!-- end of Google Section -->
-        
+            <!-- Google Section END -->
+            <hr>
             <!-- dropbox section --> 
-
-            <div class="dropbox text-center mt-1">
-                <p class="mb-0"> Dropbox</p>
-                <button type="button" class=" mt-0 cloudBtn dropboxSignIn"><a href="" id="authlink">Login</a></button>
-                <button type="button" class="cloudBtn dropboxLogout" onclick="logoutDB();"> Logout</button>
-                <!-- Here will be used to login and out of dropbox -->
-
+            <div class="dropbox mt-2 mb-2">
+                <div class="row">
+                    <div class="col-sm"><p class="mb-0 accountTitle"> Dropbox</p></div>
+                    <div class="col-sm"><button type="button" class=" cloudBtn dropboxSignIn"><a href="" id="authlink">Login</a></button></div>
+                    <!-- Here will be used to login and out of dropbox -->
+                    <div class="col-sm"><button type="button" class="cloudBtn dropboxLogout" onclick="logoutDB();"> Logout</button></div>
+                </div>     
             </div>
+            <!-- dropbox section  END-->
+            <hr>
             <!-- pcloud section --> 
-
-            <div class="pcloud text-center mt-1">
-                <p class="pb-0 mb-0 pt-3">pCloud</p>
-                <button type="button" class=" mt-0 cloudBtn" onclick="pCloudLogin();">Login</button>
-                <button type="button" class="cloudBtn" onclick="pCloudLogout();">Logout</button>
+            <div class="pcloud  mt-2 mb-2">
+                <div class="row">
+                    <div class="col-sm"><p class="pb-0 mb-0 accountTitle">pCloud</p></div>
+                    <div class="col-sm"><button type="button" class="cloudBtn" onclick="pCloudLogin();">Login</button></div>
+                    <div class="col-sm"><button type="button" class="cloudBtn" onclick="pCloudLogout();">Logout</button></div>
+                </div>            
             </div>
+            <!-- pcloud section END --> 
             
             </div>
             <div class="modal-footer">
@@ -137,16 +159,16 @@
                 <p class="subtext mt-3 small"> Select the desired cloud serivce that you wish to transfer to</p>
                 <div class="row">
                     <div class="col-sm">
-                        <button id="googleTransfer" onclick="activeService('googleTransfer');"> Google Account </button>
-                      <div class="logOutBeforeTransfer" id="googleLogoutTransferModal"> <p>Please make sure that you are not logged into a Google account already.</p> <a onclick="handleSignoutClick();"> Logout</a></div>
+                        <button id="googleTransfer"  class="cloudBtn" onclick="activeService('googleTransfer');"> Google Account </button>
+                      <div class="logOutBeforeTransfer" id="googleLogoutTransferModal"> <small class="text-muted">Please make sure that you are not logged into a Google account already.</small> <a onclick="handleSignoutClick();"> Logout</a></div>
                     </div>
                     <div class="col-sm">
-                        <button id="dropBoxTransfer" onclick="activeService('dropBoxTransfer');"> Dropbox Account</button>
-                      <div class="logOutBeforeTransfer" id="dropboxLogoutTransferModal"> <p>Please make sure that you are not logged into a dropbox account already.</p> <a href="https://www.dropbox.com/logout"> Logout</a></div>
+                        <button id="dropBoxTransfer" class="cloudBtn" onclick="activeService('dropBoxTransfer');"> Dropbox Account</button>
+                      <div class="logOutBeforeTransfer" id="dropboxLogoutTransferModal"> <small class="text-muted">Please make sure that you are not logged into a dropbox account already.</small> <a href="https://www.dropbox.com/logout"> Logout</a></div>
                     </div>
                     <div class="col-sm">
-                        <button id="oneDriveTransfer" onclick="activeService('oneDriveTransfer');"> Onedrive Transfer </button>
-                      <div class="logOutBeforeTransfer" id="oneDriveLogoutTransferModal"> <p>Please make sure that you are not logged into a OneDrive account already.</p> <a> Logout</a></div>
+                        <button id="oneDriveTransfer" class="cloudBtn" onclick="activeService('oneDriveTransfer');"> Onedrive Transfer </button>
+                      <div class="logOutBeforeTransfer" id="oneDriveLogoutTransferModal"> <small class="text-muted">Please make sure that you are not logged into a OneDrive account already.</small> <a> Logout</a></div>
                     </div>
                 </div>
             </div>
