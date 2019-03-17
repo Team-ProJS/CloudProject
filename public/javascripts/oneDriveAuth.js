@@ -19,7 +19,7 @@ $(document).ready(() => {
                     isLoggedIn();
                     // Get Profile; 
                     let oneDrive = JSON.parse(localStorage.getItem("OneDrive"));
-                    console.log(oneDrive.access_token);
+                    //console.log(oneDrive.access_token);
                     getRootFiles(oneDrive.access_token);
                     //console.log(oneDrive.access_token);
                     //getRootFiles(oneDrive.access_token).then((files) => {
@@ -404,90 +404,131 @@ function loadPage() {
     });
 }
 function getRootFiles(token) {
-    $.ajax({
-        type: "POST",
-        url: "/auth/onedrive/files",
-        data: { token: token },
-        async:false,
-        success: function (response) {
-            if (response.value === false) {
-                // Could not get files
-                console.log(response)
+    if (hasODTokenExpired(token)) {
+        sessionExpired();
+    }
+    else {
+        $.ajax({
+            type: "POST",
+            url: "/auth/onedrive/files",
+            data: { token: token },
+            async: false,
+            success: function (response) {
+                if (response.value === false) {
+                    // Could not get files
+                    console.log(response)
+                }
+                else {
+                    let responseTable = document.createElement("html");
+                    responseTable.innerHTML = response;
+                    let rawTable = responseTable.getElementsByClassName("table")[0].innerHTML;
+                    document.getElementsByTagName("table")[0].innerHTML = rawTable;
+                    $(".loading").hide();
+                    jQuery("#files").show();
+                    getClickedFileID(token);
+                }
+            },
+            error: (err) => {
+                console.log("ERROR! Something went wrong in /auth/onedrive/files.", err);
             }
-            else {
-                $(".loading").hide();
+        });
+    }
+}
 
-                let responseTable = document.createElement("html")
-                responseTable.innerHTML = response;
-                let rawTable = responseTable.getElementsByClassName("table")[0].innerHTML;
-                document.getElementsByTagName("table")[0].innerHTML = rawTable;
-                jQuery("#files").show();
-                getClickedFileID(token);
-                //console.log(rawTable)
-            }
-        },
-        error: (err) => {
-            console.log("ERROR! Something went wrong in /auth/onedrive/files.", err);
+function getParentFIle(token) {
+    //Make ajax call to get parentReference for selected file
+    $(".parentID").dblclick(() => {
+        let parentID = $(".parentID").attr('id');
+        if (parentID !== undefined) {
+            $.ajax({
+                type: "POST",
+                url: "/auth/onedrive/files/parent/" + parentID,
+                data: { token: token },
+                dataType: "json",
+                async: false,
+                success: function (response) {
+
+                    parentID = response.id;
+                    if (parentID === undefined) return console.log("ParentID is undefined.");
+                    console.log(response);
+                    getClickedFileID(token, parentID);
+
+                }
+            });
         }
     });
 }
 
-
-// function getRootFiles(token) {
-//     return new Promise((resolve, reject) => {
-//         $.ajax({
-//             type: "POST",
-//             url: "/auth/onedrive/files",
-//             data: { token: token },
-//             dataType: "html",
-//             success: function (response) {
-//                 if (response.value === false) {
-//                     // Could not get files
-//                     resolve(null);
-//                 }
-//                 else {
-//                     resolve(response.files);
-//                 }
-//             },
-//             error: (err) => {
-//                 console.log("ERROR! Something went wrong in /auth/onedrive/files.", err);
-//             }
-//         });
-//     });
-// }
-function getClickedFileID(token) {
-        $(".files").click(function () {
+function getClickedFileID(token, parentID) {
+    if(hasODTokenExpired(token)){
+        return sessionExpired();
+    }
+    $(".loading").show();
+    if (parentID === undefined) {
+        $(".files").dblclick(function () {
             let fileID = $(this).attr('id');
             console.log(fileID);
-    
-            //window.location = "/users/interfacePage/files/" +fileID;
-    
             $.ajax({
                 type: "POST",
                 url: "/auth/onedrive/files/" + fileID,
                 data: { token: token, id: fileID },
                 async: false,
-                //dataType: "html",
                 success: function (response) {
                     if (response.value === false) {
                         console.log("Could not get files by ID");
                     }
                     else {
+                        //creating new html element so that I can access properties
                         let responseTable = document.createElement("html")
+                        // Full HTML page that was return in AJAX call
                         responseTable.innerHTML = response;
+                        // Just getting the bit that was changed
                         let rawTable = responseTable.getElementsByClassName("table")[0].innerHTML;
+                        // Replacing existing HTML with new data 
                         document.getElementsByTagName("table")[0].innerHTML = rawTable;
+                        $(".loading").hide();
                         jQuery("#files").show();
                         getClickedFileID(token);
-                        // $("html").html(response);
-                        // window.location.replace("/auth/onedrive/files/" + fileID);
+                        getParentFIle(token);
                     }
                 },
                 error: (error) => {
                     console.log("Error getting files by ID function ", error);
                 }
             });
-    })
-        //implement some kind of stack that holds all previous parent ids 
-        // so that when you go up a level, the stack is popped and correct parent id is assigned.
+        })
+    }
+    else if (parentID) {
+        $.ajax({
+            type: "POST",
+            url: "/auth/onedrive/files/" + parentID,
+            data: { token: token, id: parentID },
+            async: false,
+            //dataType: "html",
+            success: function (response) {
+                if (response.value === false) {
+                    console.log("Could not get files by ID");
+                }
+                else {
+                    //creating new html element so that I can access properties
+                    let responseTable = document.createElement("html")
+                    // Full HTML page that was return in AJAX call
+                    responseTable.innerHTML = response;
+                    // Just getting the bit that was changed
+                    let rawTable = responseTable.getElementsByClassName("table")[0].innerHTML;
+                    // Replacing existing HTML with new data 
+                    document.getElementsByTagName("table")[0].innerHTML = rawTable;
+                    jQuery("#files").show();
+                    $(".loading").hide();
+                    getClickedFileID(token);
+                    getParentFIle(token);
+                }
+            },
+            error: (error) => {
+                console.log("Error getting files by ID function ", error);
+            }
+        });
+    }
+    $(".loading").hide();
+
 }

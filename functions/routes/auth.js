@@ -157,35 +157,27 @@ router.post("/onedrive/files/:id", (req, res, next) => {
     if (token === null) {
         res.send("Error in /onedrive/files/:id. Token was undefined.");
     }
-    try {
-        oneDrive.getFilesByPath(token, req.params.id).then((files) => {
-            console.log(files);
-            params.odFiles = files.value;
-            return res.render("interfacePage", params);
-        },(rejected) => {
-            console.log("REJECTED ", rejected);
-
-        }).catch((err) => {
-
-            res.send("Error encountered in getting root files.", err)
-        });
-    } catch (err) {
-        console.log("Error encountered in /onedrive/files/:id", err);
-    }
-
+    oneDrive.getFilesByPath(token, req.params.id).then((files) => {
+        params = { active: { interfacePage: true } };
+        params.odFiles = files.value;
+        return res.status(200).render("interfacePage", params);
+    }).catch((err) => {
+        res.status(500).send("Error encountered in getting root files.", err)
+    });
 });
 
-router.get("/test/", (req, res, next) => {
-    let params = {
-        active: { onedrive: true }
-    };
-    let file = {
-        name: "Johnathan"
+router.post("/onedrive/files/parent/:id", (req, res, next) => {
+    let token = req.body.token;
+    if (token === null) {
+        res.send("Error in /onedrive/files/:id. Token was undefined.");
     }
-    params.file = file;
-    console.log(params);
-    res.status(200).render("test", params);
+    oneDrive.getParentFolder(token, req.params.id).then((files) => {
+        console.log("Parent ID ",files.parentReference.id);
+        return res.status(200).send({id: files.parentReference.id});
+        //return res.status(200).render("interfacePage", params);
+    }).catch((err) => {
+        res.status(500).send("Error encountered in getting root files.", err)
+    });
 });
-
 
 module.exports = router;
