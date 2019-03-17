@@ -26,6 +26,7 @@ function showPageSection(elementId){
           document.getElementById(elementId).style.display ='block';
 }
 
+
 /*************************************************************************** */
 //                                            Global Variables                                                 //
 /*************************************************************************** */

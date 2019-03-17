@@ -10,7 +10,8 @@ $(document).ready(function () {
         
             if(password!=password_1)//check that password and confirm password are identical
                 {
-                    window.alert("Passwords dont macth!!!");
+                    //window.alert("Passwords dont macth!!!");
+                    swal("Failed to Register", "Passwords don't match","warning");
                 }
             else
                 {
@@ -18,7 +19,8 @@ $(document).ready(function () {
                         .catch(function(error) {//triggers if an error occurs
                             var errorCode = error.code;
                             var errorMessage = error.message;
-                            window.alert(errorMessage);//error is probably pre-existing email
+                            //window.alert(errorMessage);//error is probably pre-existing email
+                            swal("Failed ", errorMessage,"warning");
                         })
                         .then(function(value) {//triggers when a new user is created
                             firebase.auth().currentUser.getIdToken(true)//gets IdToken for creating session cookie
@@ -43,7 +45,8 @@ $(document).ready(function () {
                 .catch(function(error) {//triggers if there is an error in logging in
                         var errorCode = error.code;
                         var errorMessage = error.message;
-                        window.alert(errorMessage);
+                        //window.alert(errorMessage);
+                        swal("Failed to Login", errorMessage,"warning");
                         })
                 .then(function(value) {//triggers if user logs in successfuly
                         firebase.auth().currentUser.getIdToken(true)
@@ -70,7 +73,8 @@ $(document).ready(function () {
                         $(location).attr('href', '/' );
                     }else
                     {
-                        window.alert("Something went wrong,please try again later!");
+                       // window.alert("Something went wrong,please try again later!");
+                       swal("Failed to Logout", "Something went wrong, please try again later","warning");
                     }
                     
                 },
@@ -139,7 +143,8 @@ function sendTokenOnBack(token)
                         console.log("set cookie");
                     }else
                     {
-                        window.alert("Something went wrong,please try again later!");
+                        //window.alert("Something went wrong,please try again later!");
+                        swal("Something went wrong, Please try again later","warning");
                     }
                     
                 },
@@ -166,7 +171,8 @@ function sendTokenOnEntry(token)
                         $(location).attr('href', '/users/interfacePage' );
                     }else
                     {
-                        window.alert("Something went wrong,please try again later!");
+                        //window.alert("Something went wrong,please try again later!");
+                        swal("Something went wont, Please try again later","warning");
                     }
                     
                 },
