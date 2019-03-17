@@ -1,7 +1,7 @@
 /*************************************************************************** */
 //                                            Front-end Javascript                                         //
 /*************************************************************************** */
-
+//fake
 $(document).ready(function () {
           /* This on click the button, will expand navbar, and change the
           profile size */
@@ -32,7 +32,7 @@ function showPageSection(elementId){
     
 var locStor; //Cookie Storage
 var email;//User email, used for identifying the user
-var activeGoogle = false;//Boolean used to identify transfers for Google Drive
+var activeGoogle = true;//Boolean used to identify transfers for Google Drive
 var activeDropBox = false;//Boolean used to identify transfer for DropBox
 var activeOneDrive = false;//Boolean used to identify transfer
 var filename;//Variable used for checking name of file to transfer
@@ -52,8 +52,8 @@ var FOLDER_PERMISSION = true;
 var FOLDER_LEVEL = 0;
 var NO_OF_FILES = 1000;
 var DRIVE_FILES = [];
-var FILE_COUNTER = 0;
-var FOLDER_ARRAY = [];
+var startTransfer = false;
+var mywindow;
 /*************************************************************************** */
 //                                            General Javascript                                             //
 /*************************************************************************** */
@@ -72,6 +72,37 @@ fileUploadTransfer.addEventListener('change', function(e){
                     alert("Error: No Service Selected");
           }
  });
+
+// will display the box, on click of transfer button for specific file
+function transfer(){
+          $("#transferModal").modal();
+ }
+
+ // function sets booleans for which service is currently active.
+function activeService(client){
+          // checks which one was called. Then sets variable corresponding to true.
+          if(client == "googleTransfer"){
+            activeGoogle = true;
+          }else if(client == "dropBoxTransfer") {
+            activeDropBox = true;
+          }else if(client == "oneDriveTransfer") {
+            activeOneDrive = true;
+          }
+          
+          // cases for when the activated boolean is the same as the current client. This will activate the link to logout of the specific client
+          if(activeGoogle && currentClient == clientEnum.GOOGLEDRIVE){
+           document.getElementById('googleLogoutTransferModal').style.display ='block';
+          }else if(activeDropBox && currentClient == clientEnum.DROPBOX){
+            document.getElementById('dropboxLogoutTransferModal').style.display ='block';       
+          }else if(activeOneDrive && currentClient == clientEnum.ONEDRIVE){
+            document.getElementById('oneDriveLogoutTransferModal').style.display ='block';
+          }
+}
+
+function openWin(website){
+          mywindow = window.open(website,"_blank","width=500, height=500");
+          setTimeout(function(){ mywindow.close() },3000);
+}
 
 /*************************************************************************** */
 //                                            Ajax Javascript                                                   //
@@ -135,10 +166,11 @@ function updateSigninStatus(isSignedIn) {
           if (isSignedIn) {
                     authorizeButton.style.display = 'block';
                     signoutButton.style.display = 'none';
-                    if(currentClient == clientEnum.GOOGLEDRIVE){
-                              authorizeButton.style.display = 'none';
-                              signoutButton.style.display = 'block';
-                              makeApiCall();
+            if(currentClient == clientEnum.GOOGLEDRIVE){
+                    authorizeButton.style.display = 'none';
+                    signoutButton.style.display = 'block';
+                    makeApiCall();
+            }
           } else {
             authorizeButton.style.display = 'block';
             signoutButton.style.display = 'none';
@@ -277,9 +309,6 @@ function downloadGoogleDriveFile(i){
           xhr.send();
 }
 
-function revokeAccess(){
-          GoogleAuth.disconnect();
-}
 function downloadGoogleDriveFileBinary(i){
           var accessTokenDownload = gapi.auth.getToken().access_token;
           var identifaction = DRIVE_FILES[i].id;
@@ -304,6 +333,8 @@ function downloadGoogleDriveFileBinary(i){
 }
 
 function transferGoogleDriveFile(i){
+          transfer();
+
           var accessTokenDownload = gapi.auth.getToken().access_token;
           var identifaction = DRIVE_FILES[i].id;
           var typeOFFile ="";
@@ -350,6 +381,7 @@ function transferGoogleDriveFile(i){
                               }else if(activeGoogle){
                                         handleSignoutClick();
                                         handleAuthClick();
+
                               }
                     }
                     xhr.send();
@@ -491,6 +523,11 @@ function deleteDBXFile(path){
           if(c){
                     dbx.filesDelete({path:""+path});
                     alert("File at: "+path +" has been deleted");
+                    dbx.filesListFolder({path: ''}).then(function(response){
+                              renderItems(response.entries);
+                    }).catch(function(error){
+                              console.error(error);
+                    });
           }else{
                     alert("Delete cancelled");
           }
@@ -662,7 +699,6 @@ function transferDBXFile(path){
           dbx.filesDownload({path:""+path
           }).then(function(response){
                     if(activeDropBox){
-                              console.log(response);
                               uploadToFirebase(response);
                                         $.ajax({
                                                   type: 'POST',
@@ -683,7 +719,10 @@ function transferDBXFile(path){
                               activeDropBox = false;
                               logoutDB();
                     }else if(activeGoogle){
-
+                              console.log(response);
+                              //openWin("https://accounts.google.com/logout");
+                              openWin("https://www.dropbox.com/logout");
+                              uploadToFirebase(response);
                               activeGoogle = false;
                     }else if(activeOneDrive){
 
@@ -698,9 +737,9 @@ function transferDBXFile(path){
 }
 
 //Function to complete transfer of DBX 2 DBX
-function completeTransfer(){
-                    var filename =  locStor.getItem('transfer');
-                    if(typeof filename !== 'undefined'){
+function completeTransfer(service){
+                    var filename =  locStor.getItem(service);
+                    if(typeof filename != null){
                      var storageRef = firebase.storage().ref(email+'/' +filename).getDownloadURL().then(function(url){
                                console.log(url);
                               var xhr = new XMLHttpRequest();
@@ -714,12 +753,19 @@ function completeTransfer(){
                                          console.log(file);
                                          uploadToDropBox(file);
                                          delOldFile();
+                                         alert("Transfer has been Completed!");
+                                         dbx.filesListFolder({path: ''}).then(function(response){
+                                                   renderItems(response.entries);
+                                         }).catch(function(error){
+                                                   console.error(error);
+                                         });
                                };
                                xhr.send();
                      }).catch(function(error){
                                console.log(error);
                      });
                     }
+                   
 }
 
 /*************************************************************************** */

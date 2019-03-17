@@ -51,11 +51,8 @@
                 <div class="google text-center ">
                 <!-- Google Section -->
                 <p class="mb-0"> Google </p>
-                <button type="button" class=" mt-0 cloudBtn" id="sign-in-or-out-button">Login</button>
-
-
-                <button id="authorize-button" style="display: none;">Authorize</button>
-                <button id="signout-button" style="display: none;">Sign Out</button>
+                <button id="authorize-button"class=" mt-0 cloudBtn">Authorize</button>
+                <button id="signout-button"class=" mt-0 cloudBtn" style="display: none;">Sign Out</button>
                 
             </div>
             <div id="auth-status" style="display: inline; padding-left: 25px"></div>
@@ -134,22 +131,35 @@
                 <h4 class="modal-title">Transfer Files <i class="fa fa-cloud-upload"></i></h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
-
+										
             <!-- Modal body -->
             <div class="modal-body justify-content-center">
-                
-                <p class="subtext mt-3 small"> Let's quickly get started by uploading a file to your drive. Have something to post? </p>
+                <p class="subtext mt-3 small"> Select the desired cloud serivce that you wish to transfer to</p>
+                <div class="row">
+                    <div class="col-sm">
+                        <button id="googleTransfer" onclick="activeService('googleTransfer');"> Google Account </button>
+                      <div class="logOutBeforeTransfer" id="googleLogoutTransferModal"> <p>Please make sure that you are not logged into a Google account already.</p> <a onclick="handleSignoutClick();"> Logout</a></div>
+                    </div>
+                    <div class="col-sm">
+                        <button id="dropBoxTransfer" onclick="activeService('dropBoxTransfer');"> Dropbox Account</button>
+                      <div class="logOutBeforeTransfer" id="dropboxLogoutTransferModal"> <p>Please make sure that you are not logged into a dropbox account already.</p> <a href="https://www.dropbox.com/logout"> Logout</a></div>
+                    </div>
+                    <div class="col-sm">
+                        <button id="oneDriveTransfer" onclick="activeService('oneDriveTransfer');"> Onedrive Transfer </button>
+                      <div class="logOutBeforeTransfer" id="oneDriveLogoutTransferModal"> <p>Please make sure that you are not logged into a OneDrive account already.</p> <a> Logout</a></div>
+                    </div>
+                </div>
             </div>
-
+						
             <!-- Modal footer -->
             <div class="modal-footer">
-                <button type="button" class="btn btn-dark" data-dismiss="modal">Finished</button>
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Ok</button>
             </div>
 
         </div>
     </div>
 </div>
-
+<!-- Modal for Transfer  END -->
 
 <!-- *******************************************************************
                         SCRIPTS, SDK, STYLESHEETS
