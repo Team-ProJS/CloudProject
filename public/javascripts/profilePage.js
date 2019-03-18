@@ -22,15 +22,16 @@ $(document).ready(function(){
                                         'email':email
                               },
                     success: function(data){
-                              console.log(data);
                               //Init Transfer PIe Chart
+                              /*
                               myChart ={
                                         type: 'pie',
                                         data: {
                                                   datasets: [{
                                                             data: [
-                                                                      data.oneDriveTransfer,
                                                                       data.gDriveTransfer,
+                                                                      data.oneDriveTransfer,
+                                                                      data.oneDriveTransfer,
                                                                       data.dBoxTransfer
                                                             ],
                                                             backgroundColor: [
@@ -42,13 +43,16 @@ $(document).ready(function(){
                                                   }],
                                                   labels: [
                                                             'OneDrive',
-                                                            'Google Drive',
+                                                            'GoogleDrive',
                                                             'DropBox'
                                                   ]
                                         },
                                         options: {
                                                   responsive: true,
-                                                  maintainAspectRatio: false
+                                                  maintainAspectRatio: false,
+                                                  tooltips: {
+                                                            enabled: false
+                                                  }
                                          }
                               }
                               //Init Upload Pie Chart
@@ -56,11 +60,7 @@ $(document).ready(function(){
                                         type: 'pie',
                                         data: {
                                                   datasets: [{
-                                                            data: [
-                                                                      data.oneDriveUpload,
-                                                                      data.gDriveUpload,
-                                                                      data.dBoxUpload
-                                                            ],
+                                                            data: [data.gDriveUpload,data.oneDriveUpload,data.dBoxUpload],
                                                             backgroundColor: [
                                                                       'rgba(65, 68, 242,  0.5)',
                                                                       'rgba(242, 171, 65,  0.5)',
@@ -76,13 +76,66 @@ $(document).ready(function(){
                                         },
                                         options: {
                                                   responsive: true,
-                                                  maintainAspectRatio: false
+                                                  maintainAspectRatio: false,
+                                                  tooltips: {
+                                                            enabled: false
+                                                  }
                                         }
                                }
                               var chart1 = document.getElementById('chartTransfer').getContext('2d');
                               var chert = new Chart(chart1, myChart);//Display Chart
                               var chart2 = document.getElementById('chartDownload').getContext('2d');
-                              var chert2 = new Chart(chart2, myChart2);//Display Chart
+                              var chert2 = new Chart(chart2, myChart2);//Display Chart*/
+                              //var ctx = document.getElementById('cTransfer').getContext('2d');
+                    var chart = new Chart(document.getElementById('cTransfer'),{
+                                        type:'pie',
+                                        data:{
+                                        labels:["OneDrive","GoogleDrive","DropBox"],
+                                        datasets:[
+                                                  {
+                                                            label: "Service Transfers",
+                                                            backgroundColor: ["#4460cf", "#cf8e44","#44cf93"],
+                                                            data:[(data.oneDriveTransfer/1000000),(data.gDriveTransfer/1000000),(data.dBoxTransfer/1000000)]
+                                                  }
+                                        ]
+                                        },
+                                        options:{
+                                                  responsive: true,
+                                                  maintainAspectRatio: false,
+                                                  scaleShowValues: true,
+                                                  ticks: {
+                                                            autoSkip: false
+                                                        }
+                                        }
+                              });
+
+                              var chart1 = new Chart(document.getElementById('cDownload'),{
+                                        type:'pie',
+                                        data:{
+                                        labels:["OneDrive","GoogleDrive","DropBox"],
+                                        datasets:[
+                                                  {
+                                                            label: "Service Transfers",
+                                                            backgroundColor: ["#4460cf", "#cf8e44","#44cf93"],
+                                                            data:[(data.oneDriveDownload/1000000),(data.gDriveDownload/1000000),(data.dBoxDownload/1000000)]
+                                                  }
+                                        ]
+                                        },
+                                        options:{
+                                                  responsive: true,
+                                                  maintainAspectRatio: false,
+                                                  scaleShowValues: true,
+                                                  ticks: {
+                                                            autoSkip: false
+                                                        }
+                                        }
+                              });
+                              var tableString = "<table class='table table-condensed'><h3 class='header'> Some Statistics..</h3><thead class='pt-2'><tr><th>Cloud Service</th><th>Downloads</th><th>Uploads</th><th>Transfer</th><th>Total</th></tr></thead><tbody>";
+                              tableString += "<tr><td>Google Drive</td><td>"+(data.gDriveDownload/1000000)+"MB<td>"+(data.gDriveUpload/1000000)+"MB</td><td>"+(data.gDriveTransfer/1000000)+"MB</td><td>"+((data.gDriveDownload+data.gDriveTransfer+data.gDriveUpload)/1000000)+"MB</td></tr>";
+                              tableString += "<tr><td>OneDrive</td><td>"+(data.oneDriveDownload/1000000)+"MB<td>"+(data.oneDriveUpload/1000000)+"MB</td><td>"+(data.oneDriveTransfer/1000000)+"MB</td><td>"+((data.oneDriveDownload+data.oneDriveTransfer+data.oneDriveUpload)/1000000)+"MB</td></tr>";
+                              tableString += "<tr><td>DropBox</td><td>"+(data.dBoxDownload/1000000)+"MB<td>"+(data.dBoxUpload/1000000)+"MB</td><td>"+(data.dBoxTransfer/1000000)+"MB</td><td>"+((data.dBoxDownload+data.dBoxTransfer+data.dBoxUpload)/1000000)+"MB</td></tr>";
+                              tableString +="</tbody></table>";
+                              document.getElementById('table').innerHTML = tableString;
                     },
                     error: function(errMsg)
                     {
@@ -122,6 +175,7 @@ function uploadToFirebase(file){
           },
           function complete(){
                     console.log("Complete Upload to Firebase");
+                    setProfilePicture();
           }
           );
 }
@@ -130,8 +184,6 @@ function uploadToFirebase(file){
 profilePictureUpload.addEventListener('change', function(e){ 
           var file = e.target.files[0];
           uploadToFirebase(file);
-          window.setTimeout(setProfilePicture(), 1000);
-          
  });
 
 //Gets image from databse and sets it as profile picture
@@ -152,6 +204,8 @@ profilePictureUpload.addEventListener('change', function(e){
                     }else{
                               storageRef.child('users/'+email+'/'+data.pCloudTransfer).getDownloadURL().then(function(url) {
                                         var img = document.getElementById('profilepic');
+                                        img.src = url;
+                                        img = document.getElementById('profilepic2');
                                         img.src = url;
                                         console.log("Saved picture loaded");
                                       }).catch(function(error) {

@@ -19,34 +19,8 @@
 
                         <!-- Word information goes here :: Table of contents -->
                         <!-- ******************************************* THIS IS SAMPLE TABLE ********************************-->
-                        <div class="container pt-4 mt-2">
-                            <table class="table table-condensed">
-                                <h3 class="header"> Some Statistics..</h3>
-                                <thead class="pt-2">
-                                    <tr>
-                                        <th>Firstname</th>
-                                        <th>Lastname</th>
-                                        <th>Email</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>John</td>
-                                        <td>Doe</td>
-                                        <td>john@example.com</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Mary</td>
-                                        <td>Moe</td>
-                                        <td>mary@example.com</td>
-                                    </tr>
-                                    <tr>
-                                        <td>July</td>
-                                        <td>Dooley</td>
-                                        <td>july@example.com</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div class="container pt-4 mt-2" id="table">
+                          
                         </div>
                     </div>
                     <div class="col-sm-6 pt-4 mt-2">
@@ -54,11 +28,11 @@
                         <h3 class="header"> Chart Details..</h3>
                         <h6 class="subtitle">Transfer Overview..</h6>
                         <div style="height: 100px width: 100px" class="mt-2">
-                            <canvas id="chartTransfer"></canvas>
+                            <canvas id="cTransfer"></canvas>
                         </div>
                         <h6 class="subtitle">Download Overview..</h6>
                         <div style="height: 100px width: 100px" class="mt-2">
-                            <canvas id="chartDownload"></canvas>
+                            <canvas id="cDownload"></canvas>
                         </div>
                     </div>
                 </div>
@@ -90,7 +64,7 @@
                         <label for="file">Choose a File</label>
                     </div>
                     <div class="col-6">
-                        <img id="profilepic" src="/images/profilePic.svg" class="rounded-circle" width="100%" />
+                        <img id="profilepic2" src="/images/profilePic.svg" class="rounded-circle" width="100%" />
                     </div>
                 </div>
             </div>
@@ -128,5 +102,5 @@
   src="https://code.jquery.com/jquery-3.3.1.js"
   integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
   crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
   <script src="/javascripts/profilePage.js"></script>
