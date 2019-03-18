@@ -21,7 +21,8 @@
     "firebase-functions": "^2.2.0",
     "grpc": "^1.19.0",
     "handlebars": "^4.1.0",
-    "jsonwebtoken": "^8.5.0"
+    "jsonwebtoken": "^8.5.0",
+    "sweetalert": "^2.1.2"
   },
   "private": true
 }

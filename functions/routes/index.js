@@ -26,9 +26,14 @@ router.get('/', function (req, res, next) {
 router.get('/aboutUs', function (req, res, next) {
     
     res.render('aboutUs', {
-        title: 'About Us'
+        title: 'Cloud | About Us'
     });
 });
+router.get('/cookiePolicy',function(req,res,next) {
+    res.render('cookiePage',{
+        title: 'Cloud | Cookies'
+    })
+})
 /*Renders a verification page to google that tells it that we are the owners of this site DO NOT REMOVE*/
 router.get('/googlee5811be4d44f6a39.html',function(req,res,next){
 	res.render('googlee5811be4d44f6a39', {

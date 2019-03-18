@@ -26,6 +26,7 @@ function showPageSection(elementId){
           document.getElementById(elementId).style.display ='block';
 }
 
+
 /*************************************************************************** */
 //                                            Global Variables                                                 //
 /*************************************************************************** */
@@ -164,17 +165,17 @@ function initClient() {
 
 function updateSigninStatus(isSignedIn) {
           if (isSignedIn) {
-                    authorizeButton.style.display = 'block';
-                    signoutButton.style.display = 'none';
+                    //authorizeButton.style.display = 'block';
+                    //signoutButton.style.display = 'none';
             if(currentClient == clientEnum.GOOGLEDRIVE){
-                    authorizeButton.style.display = 'none';
-                    signoutButton.style.display = 'block';
+                    //authorizeButton.style.display = 'none';
+                    //signoutButton.style.display = 'block';
                     makeApiCall();
             }
             
           } else {
-            authorizeButton.style.display = 'block';
-            signoutButton.style.display = 'none';
+            //authorizeButton.style.display = 'block';
+            //signoutButton.style.display = 'none';
           }
 }
 
