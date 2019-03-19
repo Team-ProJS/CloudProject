@@ -69,7 +69,11 @@ fileUploadTransfer.addEventListener('change', function(e){
 
           
           }else{
-                    alert("Error: No Service Selected");
+                   swal({
+                    title: "No Cloud Service Selected!",
+                    text: "Please login to a cloud service before you attempt to upload!",
+                    icon: "error",
+                  });
           }
  });
 
@@ -82,13 +86,24 @@ function transfer(){
 function activeService(client){
           // checks which one was called. Then sets variable corresponding to true.
           if(client == "googleTransfer"){
-            activeGoogle = true;
+                    if(activeGoogle){
+                              activeGoogle = false;
+                    }else{
+                              activeGoogle = true;
+                    }
           }else if(client == "dropBoxTransfer") {
-            activeDropBox = true;
+                    if(activeDropBox){
+                              activeDropBox = false;
+                    }else{
+                              activeDropBox = true;
+                    }
           }else if(client == "oneDriveTransfer") {
-            activeOneDrive = true;
+                    if(activeOneDrive){
+                              activeOneDrive = false;
+                    }else{
+                              activeOneDrive = true;
+                    }
           }
-          
           // cases for when the activated boolean is the same as the current client. This will activate the link to logout of the specific client
           if(activeGoogle && currentClient == clientEnum.GOOGLEDRIVE){
            document.getElementById('googleLogoutTransferModal').style.display ='block';
@@ -97,6 +112,7 @@ function activeService(client){
           }else if(activeOneDrive && currentClient == clientEnum.ONEDRIVE){
             document.getElementById('oneDriveLogoutTransferModal').style.display ='block';
           }
+          $("#transferModal").modal("hide");
 }
 
 function openWin(website){
@@ -193,7 +209,6 @@ function handleSignoutClick(event) {
  }
 
 function makeApiCall() {
-         console.log("Got to API call");
          gapi.client.load('drive', 'v2', function(){
           var query = "trashed=false and '" + FOLDER_ID + "' in parents";
           var request = gapi.client.drive.files.list({
@@ -216,6 +231,7 @@ function setFolder(i){
 }
 function buildFiles(){
           if(DRIVE_FILES.length > 0){
+          $("#myModal").modal("hide");
           var location = $('#files');
           location.empty();
           location.append($('<div class="fileTitle pt-3 pl-5 ml-2"> <p> View Google Drive items.. </p></div>'));
@@ -271,6 +287,25 @@ function uploadToGoogleDrive(file){
           xhr.responseType = 'json';
           xhr.onload = () => {
                     console.log(xhr.response.id); // Retrieve uploaded file ID.
+                    swal({
+                              title: "File Upload!",
+                              text:"File has been uploaded to Google Drive",
+                              icon: "success",
+                            });
+                            $.ajax({
+                              type: 'POST',
+                              url: '/users/gdU',
+                              credentials: 'same-origin',
+                              data: {
+                                        'email':email,
+                                        'value':xhr.response.size
+                            },
+                            success: function(data){
+                            },
+                            error: function(errMsg){
+                                        console.log(errMsg);
+                              }
+                    });
           };
           xhr.send(form);
 }
@@ -302,6 +337,25 @@ function downloadGoogleDriveFile(i){
                     var blob = xhr.response;
                     var file = new Blob([blob],{type:"application/octet-stream"});
                     file.name = DRIVE_FILES[i].name+typeToEnd;
+                    swal({
+                              title: "Download Started",
+                              text: DRIVE_FILES[i].name +" is starting to download!",
+                              icon: "success",
+                            });
+                            $.ajax({
+                              type: 'POST',
+                              url: '/users/gdD',
+                              credentials: 'same-origin',
+                              data: {
+                                        'email':email,
+                                        'value':xhr.response.size
+                            },
+                            success: function(data){
+                            },
+                            error: function(errMsg){
+                                        console.log(errMsg);
+                              }
+                    });
                     console.log(file);
                               let link = document.createElement('a');
                               link.href = window.URL.createObjectURL(file);
@@ -327,6 +381,25 @@ function downloadGoogleDriveFileBinary(i){
                     var file = new Blob([blob],{type:"application/octet-stream"});
                     file.name = DRIVE_FILES[i].name;
                     console.log(file);
+                    swal({
+                              title: "Download Started",
+                              text: DRIVE_FILES[i].name +" is starting to download!",
+                              icon: "success",
+                            });
+                            $.ajax({
+                              type: 'POST',
+                              url: '/users/gdD',
+                              credentials: 'same-origin',
+                              data: {
+                                        'email':email,
+                                        'value':xhr.response.size
+                            },
+                            success: function(data){
+                            },
+                            error: function(errMsg){
+                                        console.log(errMsg);
+                              }
+                    });
                               let link = document.createElement('a');
                               link.href = window.URL.createObjectURL(file);
                               link.download = file.name;
@@ -375,7 +448,26 @@ function transferGoogleDriveFile(i){
                               if(activeDropBox){
                                         uploadToFirebaseGoogle(file,'dropbox');
                                         openWin("https://accounts.google.com/logout");
-                                        alert("Login to your dropbox account to complete transfer");
+                                        //alert("Login to your dropbox account to complete transfer");
+                                        $.ajax({
+                                                  type: 'POST',
+                                                  url: '/users/gdT',
+                                                  credentials: 'same-origin',
+                                                  data: {
+                                                            'email':email,
+                                                            'value':xhr.response.size
+                                                },
+                                                success: function(data){
+                                                },
+                                                error: function(errMsg){
+                                                            console.log(errMsg);
+                                                  }
+                                        });
+                                        swal({
+                                                  title: "Waiting to complete transfer",
+                                                  text: "Login to your dropbox account and then press the complete transfer button to complete",
+                                                  icon: "info",
+                                                });
                                         currentClient = null;
                                         var location = $('#files');
                                         location.empty();
@@ -384,7 +476,12 @@ function transferGoogleDriveFile(i){
                                         uploadToFirebaseGoogle(file,'google');
                                         openWin("https://accounts.google.com/logout");
                                         handleSignoutClick();
-                                        alert("Login to your google account to complete transfer");
+                                        //alert("Login to your google account to complete transfer");
+                                        swal({
+                                                  title: "Waiting to complete transfer",
+                                                  text: "Login to your google account and then press the complete transfer button to complete",
+                                                  icon: "info",
+                                                });
                                         currentClient = null;
                                         
                               }
@@ -400,23 +497,47 @@ function transferGoogleDriveFile(i){
                     file = new Blob([blob],{type:"application/octet-stream"});
                     file.name = DRIVE_FILES[i].name+typeToEnd;
                     console.log(file);
+                    $.ajax({
+                              type: 'POST',
+                              url: '/users/gdT',
+                              credentials: 'same-origin',
+                              data: {
+                                        'email':email,
+                                        'value':xhr.response.size
+                            },
+                            success: function(data){
+                            },
+                            error: function(errMsg){
+                                        console.log(errMsg);
+                              }
+                    });
                     if(activeDropBox){
                               uploadToFirebaseGoogle(file,'dropbox');
                                         openWin("https://accounts.google.com/logout");
-                                        alert("Login to your dropbox account to complete transfer");
+                                       // alert("Login to your dropbox account to complete transfer");
+                                       swal({
+                                        title: "Waiting to complete transfer",
+                                        text: "Login to your dropbox account and then press the complete transfer button to complete",
+                                        icon: "info",
+                                      });
                                         currentClient = null;
                     }else if(activeGoogle){
                               uploadToFirebaseGoogle(file,'google');
                               openWin("https://accounts.google.com/logout");
                               handleSignoutClick();
-                              alert("Login to your google account to complete transfer");
+                              //alert("Login to your google account to complete transfer");
+                              swal({
+                                        title: "Waiting to complete transfer",
+                                        text: "Login to your google account and then press the complete transfer button to complete",
+                                        icon: "info",
+                                      });
                               currentClient = null;
                     }
                    
           }
           xhr.send();
           }
-
+          $("#transferModal").modal("show");
 }
 
 function deleteGoogleDriveFile(i){
@@ -430,10 +551,20 @@ function deleteGoogleDriveFile(i){
                     xhr.onload = function(){
                     }
                     xhr.send();
-                    alert("File has been deleted");
+                    //alert("File has been deleted");
+                    swal({
+                              title: "File Deleted",
+                              text: "",
+                              icon: "info",
+                            });
                     buildFiles();
           }else{
-                    alert("Delete cancelled");
+                    //alert("Delete cancelled");
+                    swal({
+                              title: "Delete Cancelled",
+                              text: "",
+                              icon: "warning",
+                            });
           }
 }
 
@@ -454,6 +585,7 @@ function deleteGoogleDriveFile(i){
 
 //Function for rendering files in DB
 function renderItems(items){ 
+          $("#myModal").modal("hide");
           var location = $('#files');
           location.empty();
           location.append($('<div class="fileTitle pt-3 pl-5 ml-2"> <p> View Dropbox items.. </p></div>'));
@@ -530,14 +662,24 @@ function deleteDBXFile(path){
           var c = confirm("Are you sure that you want to delete this file?");
           if(c){
                     dbx.filesDelete({path:""+path});
-                    alert("File at: "+path +" has been deleted");
+                    //alert("File at: "+path +" has been deleted");
+                    swal({
+                              title: "Delete Complete",
+                              text: "",
+                              icon: "success",
+                            });
                     dbx.filesListFolder({path: ''}).then(function(response){
                               renderItems(response.entries);
                     }).catch(function(error){
                               console.error(error);
                     });
           }else{
-                    alert("Delete cancelled");
+                   // alert("Delete cancelled");
+                   swal({
+                    title: "Delete Cancelled",
+                    text: "",
+                    icon: "warning",
+                  });
           }
           
 }
@@ -578,6 +720,11 @@ function renameDBXFile(path){
           if(navigator.msSaveBlob){
                     return navigator.msSaveBlob(response.content, response.name);
           }else{
+                    swal({
+                              title: "Download Started",
+                              text: response.name+" has begun downloading",
+                              icon: "success",
+                            });
                     let link = document.createElement('a');
                     link.href = window.URL.createObjectURL(response.fileBlob);
                     link.download = response.name;
@@ -618,6 +765,11 @@ function uploadToDropBox(file){
           dbx.filesUpload({path: '/' + file.name, contents: file}).then(function(response){
                     uploadbar.value = 100;
                     console.log('File Uploaded');
+                    swal({
+                              title: "File Uploaded",
+                              text: file.name+" has been uploaded",
+                              icon: "success",
+                            });
                     console.log(response);
           }).catch(function(error){
                     console.error(error);
@@ -671,6 +823,11 @@ function uploadToDropBox(file){
           }, Promise.resolve());
           task.then(function(result) {
                     uploadbar.value = 100;
+                    swal({
+                              title: "File Uploaded",
+                              text: "file has been uploaded",
+                              icon: "success",
+                            });
           }).catch(function(error) {
                     console.error(error);
           });  
@@ -721,7 +878,12 @@ function transferDBXFile(path){
                               checkDetails();
                               activeDropBox = false;
                               logoutDB();
-                              alert("Please login to the Dropbox account that you wish to transfer to.");
+                              //alert("Please login to the Dropbox account that you wish to transfer to.");
+                              swal({
+                                        title: "Waiting to complete transfer",
+                                        text: "Please login to your dropbox account and then click complete transfer button to complete transfer",
+                                        icon: "info",
+                                      });
                     }else if(activeGoogle){
                               console.log(response);
                               uploadToFirebase(response,'google');
@@ -731,16 +893,27 @@ function transferDBXFile(path){
                               logoutDB();
                               currentClient = null;
                               handleSignoutClick();
-                              alert("Please login to the Google account that you wish to transfer to and then refresh");
+                              //alert("Please login to the Google account that you wish to transfer to and then refresh");
+                              swal({
+                                        title: "Waiting to complete transfer",
+                                        text: "Please login to your google account and then click complete transfer button to complete transfer",
+                                        icon: "info",
+                                      });
                     }else if(activeOneDrive){
 
                               activeOneDrive= false;
                     }else{
-                              alert("Error: No Service Selected");
+                              //alert("Error: No Service Selected");
+                              swal({
+                                        title: "Error",
+                                        text: "No Cloud Service selected",
+                                        icon: "error",
+                                      });
                     }
                     }).catch(function(error){
                               console.error(error);
         });
+        $("#transferModal").modal("show");
         return false;
 }
 
@@ -762,7 +935,12 @@ function completeTransfer(){
                               console.log(file);
                               uploadToDropBox(file);
                               delOldFile('dropbox');
-                              alert("Transfer has been Completed!");
+                              //alert("Transfer has been Completed!");
+                              swal({
+                                        title: "Transfer Complete!",
+                                        text: "File has been correctly transferred to this dropbox account",
+                                        icon: "success",
+                                      });
                               dbx.filesListFolder({path: ''}).then(function(response){
                                         renderItems(response.entries);
                                }).catch(function(error){
@@ -791,7 +969,12 @@ function completeTransfer(){
                              console.log(file);
                              uploadToGoogleDrive(file)
                              delOldFile('google');
-                             alert("Transfer has been Completed!");
+                             //alert("Transfer has been Completed!");
+                             swal({
+                              title: "Transfer Complete!",
+                              text: "File has been correctly transferred to this google account",
+                              icon: "success",
+                            });
                     };
                    xhr.send();
          }).catch(function(error){
