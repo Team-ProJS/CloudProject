@@ -1,7 +1,7 @@
 /*************************************************************************** */
-//                                            Front-end Javascript                                         //
+//                         Front-end Javascript                              //
 /*************************************************************************** */
-//fake
+
 $(document).ready(function () {
           /* This on click the button, will expand navbar, and change the
           profile size */

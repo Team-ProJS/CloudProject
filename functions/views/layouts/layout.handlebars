@@ -25,37 +25,37 @@
 <body>
     <!----------- NAVBAR ----------------->
 
-     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top shadow" style="background-color:#2D2D35;">
+     <nav id="navbar" class="navbar navbar-expand-lg navbar-dark navbar-custom fixed-top shadow" style="background-color:#2D2D35;">
         <a class="navbar-brand" href="/"><img class="logoIMG" src="/images/logo.png" width="50%"></a>
 
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <button id="NavbarTogglingBtn" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item active">
-                    <a class="nav-link " href="/">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" id="navBtn" href="/">Home<span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
 
                     <!-- about us link --->
 
-                    <a class="nav-link" href="/aboutUs">About Us</a>
+                    <a class="nav-link" id="navBtn" href="/aboutUs">About Us</a>
                 </li>
                 <li id="btnSI" class="nav-item">
-                    <a class="nav-link" href="/users/login">Sign In</a>
+                    <a class="nav-link" id="navBtn" href="/users/login">Sign In</a>
                 </li>
                 <li id="btnRG" class="nav-item">
                     <!-- Contavt Section Jump -->
-                    <a class="nav-link" href="/users/register">Register</a>
+                    <a class="nav-link" id="navBtn" href="/users/register">Register</a>
                 </li>
                 <li id="btnIF" class="nav-item d-none">
                     <!-- Contavt Section Jump -->
-                    <a class="nav-link" href="/users/interfacePage">Interface</a>
+                    <a class="nav-link" id="navBtn" href="/users/interfacePage">Interface</a>
                 </li>
                 <li id="btnSO" class="nav-item d-none">
                     <!-- Contavt Section Jump -->
-                    <a class="nav-link" href="/">Sign Out</a>
+                    <a class="nav-link" id="navBtn" href="/">Sign Out</a>
                 </li>
             </ul>
         </div>
@@ -84,7 +84,7 @@
                         </li>
                         <li class="nav-item">
                             <!--- Link to SIGN UP page --->
-                            <a href="/users/register" id="signingInBtn"> Sign Up</a>
+                            <a href="/users/register" id="signingInBtn4"> Sign Up</a>
                         </li>
                         <li class="nav-item">
                             <!--- Link to GITHUB page --->
@@ -93,6 +93,9 @@
                         <li class="nav-item">
                             <!--- Link to ABOUT US page --->
                             <a href="/users/policy"> Our Policy</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/cookiePolicy"> Our Cookie Policy</a>
                         </li>
                     </ul>
                 </div>
@@ -107,7 +110,8 @@
 
 
     <!---------------------- LINKS ---------------------------------->
-
+    <!-- Script for mobile detect .js --> 
+    <script src="https://cdn.jsdelivr.net/npm/mobile-detect@1.4.3/mobile-detect.min.js"></script>
     <!-- jQuery library -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 

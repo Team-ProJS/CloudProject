@@ -6,7 +6,6 @@ html {
     margin: 0;
     height: 100%;
     font-family: 'circular' !important;
-    /*overflow-x: hidden;*/
 }
 
 a {
@@ -258,6 +257,8 @@ header {
 }
 /*------------------------ Resource Section END ------------------------*/
 
+
+
 /* ------------ Fonts ------------*/
 
 @font-face {
@@ -334,6 +335,10 @@ header {
     
     #pt2 .introTxt {
         text-align: center;
+    }
+    /* Grey section */
+    .greySec {
+        font-size: 80%;
     }
 
 }

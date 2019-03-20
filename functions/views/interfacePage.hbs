@@ -1,25 +1,37 @@
-  <div class="wrapper">
+<div class="wrapper">
     <!-- Sidebar  -->
     <nav id="sidebar" class="pt-5 mt-5 ">
         <div class="sidebar-header d-flex justify-content-center ">
-            <img src="/images/profilePic.svg" id="sidebarCollapse" class="profilePictureStyle rounded-circle img-fluid" data-toggle="tooltip" title="Click Me"
-                data-placement="right">
+            <img src="/images/profilePic.svg" id="sidebarCollapse" class="profilePictureStyle rounded-circle img-fluid"
+                data-toggle="tooltip" title="Click Me" data-placement="right">
         </div>
-          <div class="userDetailsSection d-flex justify-content-center mt-2">
+        <div class="userDetailsSection d-flex justify-content-center mt-2">
             <p id="userEmailDetails"></p>
-          </div>
+        </div>
         <hr>
         <div class="loginLinks mt-5">
             <div class="text-center">
-                <button class="cloudBtn accBtn" data-toggle="modal" data-target="#loginModal">Your Accounts</button>
-                <button  class="cloudBtn accBtn mt-3" data-toggle="modal" data-target="#myModal"><i class="fa fa-cloud-upload"></i> Upload Files</button>
-                <button class="cloudBtn accBtn mt-3" onclick="location.href='/users/profile'"> <i class="fa fa-user"></i> Profile Page</button>
-                <button class="cloudBtn accBtn mt-3" id="toolbarBtn"><i class="fa fa-gear"></i> Toolbar</button>
+                <button class="cloudBtn accBtn" data-toggle="modal" data-target="#loginModal">
+                    <span id="smallerSidebarIcon"><i class="fa fa-group"></i></span>
+                    <span class="regularBtn">Your Accounts</span></button>
+                <button class="cloudBtn accBtn mt-3" data-toggle="modal" data-target="#myModal">
+                    <span id="smallerSidebarIcon"></span><i class="fa fa-cloud-upload"></i></span>
+                    <span class="regularBtn">Upload Files</span>
+                </button>
+                <button class="cloudBtn accBtn mt-3" onclick="location.href='/users/profile'">
+                    <span id="smallerSidebarIcon"><i class="fa fa-user"></i></span>
+                    <span class="regularBtn"> Profile Page</span>
+                </button><br>
+                <button class="cloudBtn accBtn mt-3" id="toolbarBtn">
+                    <span id="smallerSidebarIcon"><i class="fa fa-gear"></i></span>
+                    <span class="regularBtn"> Toolbar</span>
+                </button>
             </div>
         </div>
         <hr>
         <div class="bottomSidebarSec">
-            <p onclick="location.href='/users/policy'"><i class="fa fa-gear"></i> Privacy Settings</p>
+            <span id="smallerSidebarIcon" onclick="location.href='/users/policy'"><i class="fa fa-gear"></i></span>
+            <span class="regularBtn" onclick="location.href='/users/policy'">Privacy Settings</span>
         </div>
     </nav>
 
@@ -30,22 +42,22 @@
             -->
     <div id="content" class="pt-5 mt-4">
         <!-- tool section -->
-        <nav class="toolSection ">
-            <button type="button" class="toolBarBtn upload ml-2" data-toggle="modal" data-target="#myModal">Upload</button>
-            <button type="button" class="toolBarBtn transfer" data-toggle="modal" data-target="#transferModal">Select Service For Transfer</button>
-            <button type="button" class="toolBarBtn" onclick="location.href='/users/profile'">Profile Page</button>
-            <button type="button" class="toolBarBtn connectAccount"  data-toggle="modal" data-target="#loginModal">Connect Account</button>
-            <button type="button" class="close justify-content-end pr-3 toolSecCloseBtn" id="toolbarsBtn">&times;</button>
-
+        <nav class="toolSection">
+                <button type="button" class="toolBarBtn upload ml-2" data-toggle="modal" data-target="#myModal">Upload</button>
+                <button type="button" class="toolBarBtn connectAccount" data-toggle="modal" data-target="#loginModal">Connect Account</button>
+                <button type="button" class="toolBarBtn" data-toggle="modal" data-target="#transferModal">Service for Transfer</button>              
+                <button type="button" class=" toolBarBtn">Complete Transfer</button>                
+                <button type="button" class="close justify-content-end pr-3 toolSecCloseBtn" id="toolbarsBtn">&times;</button>
         </nav>
-         <div class="header">CloudJS | Getting Organised</div>
 
-         <!-- file section --> 
+        <div class="header">CloudJS | Getting Organised</div>
+
+        <!-- file section -->
         <div class="container-fluid fileSection mt-3">
-        <div id="files" style="font-size:5em;">
-            <!-- only one account at a time can display their folders/files--> 
-            
-        </div>
+            <div id="files">
+                <!-- only one account at a time can display their folders/files-->
+
+            </div>
         </div>
     </div>
 </div>
@@ -62,44 +74,51 @@
             </div>
 
             <!-- Modal Body -->
-            <div class="modal-body m-2"> 
-                    <h5>Login to One Service</h5>
-                    <small class="text-muted">Note:Only one account can be active at a time.</small>
+            <div class="modal-body m-2">
+                <h5>Login to One Service</h5>
+                <small class="text-muted">Note:Only one account can be active at a time.</small>
                 <div class="google mt-3">
-                <!-- Google Section -->
-                <div class="row">
-                    <div class="col-sm"><p class="mb-0  accountTitle"> Google </p></div>
-                    <div class="col-sm"> <button id="authorize-button" class=" cloudBtn">Login</button></div>
-                    <div class="col-sm"><button id="signout-button" class=" cloudBtn">Logout</button></div>
+                    <!-- Google Section -->
+                    <div class="row">
+                        <div class="col-sm">
+                            <p class="mb-0  accountTitle"> Google </p>
+                        </div>
+                        <div class="col-sm"> <button id="authorize-button" class=" cloudBtn">Login</button></div>
+                        <div class="col-sm"><button id="signout-button" class=" cloudBtn">Logout</button></div>
+                    </div>
                 </div>
-            </div>
-            <div id="auth-status" style="display: inline; padding-left: 25px"></div>
-            <!-- Google Section END -->
-            <hr>
-            <!-- dropbox section --> 
-            <div class="dropbox mt-2 mb-2">
-                <div class="row">
-                    <div class="col-sm"><p class="mb-0 accountTitle"> Dropbox</p></div>
-                    <div class="col-sm"><button type="button" class=" cloudBtn dropboxSignIn"><a href="" id="authlink">Login</a></button></div>
-                    <!-- Here will be used to login and out of dropbox -->
-                    <div class="col-sm"><button type="button" class="cloudBtn dropboxLogout" onclick="logoutDB();"> Logout</button></div>
-                </div>     
-            </div>
-            <!-- dropbox section  END-->
-            <hr>
-            <!-- pcloud section --> 
-            <div class="pcloud  mt-2 mb-2">
-                <div class="row">
-                    <div class="col-sm"><p class="pb-0 mb-0 accountTitle">pCloud</p></div>
-                    <div class="col-sm"><button type="button" class="cloudBtn" onclick="pCloudLogin();">Login</button></div>
-                    <div class="col-sm"><button type="button" class="cloudBtn" onclick="pCloudLogout();">Logout</button></div>
-                </div>            
-            </div>
-            <!-- pcloud section END --> 
-            
+                <div id="auth-status" style="display: inline; padding-left: 25px"></div>
+                <!-- Google Section END -->
+                <hr>
+                <!-- dropbox section -->
+                <div class="dropbox mt-2 mb-2">
+                    <div class="row">
+                        <div class="col-sm">
+                            <p class="mb-0 accountTitle"> Dropbox</p>
+                        </div>
+                        <div class="col-sm"><button type="button" class=" cloudBtn dropboxSignIn"><a href="" id="authlink">Login</a></button></div>
+                        <!-- Here will be used to login and out of dropbox -->
+                        <div class="col-sm"><button type="button" class="cloudBtn dropboxLogout" onclick="logoutDB();">
+                                Logout</button></div>
+                    </div>
+                </div>
+                <!-- dropbox section  END-->
+                <hr>
+                <!-- pcloud section -->
+                <div class="pcloud  mt-2 mb-2">
+                    <div class="row">
+                        <div class="col-sm">
+                            <p class="pb-0 mb-0 accountTitle">pCloud</p>
+                        </div>
+                        <div class="col-sm"><button type="button" class="cloudBtn" onclick="pCloudLogin();">Login</button></div>
+                        <div class="col-sm"><button type="button" class="cloudBtn" onclick="pCloudLogout();">Logout</button></div>
+                    </div>
+                </div>
+                <!-- pcloud section END -->
+
             </div>
             <div class="modal-footer">
-                 <button type="button" class="btn btn-dark" data-dismiss="modal">Let's Go</button>
+                <button type="button" class="btn btn-dark" data-dismiss="modal">Let's Go</button>
             </div>
         </div>
     </div>
@@ -126,11 +145,13 @@
                         <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
                     </div>
                     <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="fileUploadTransfer" aria-describedby="inputGroupFileAddon01" value ="upload">
+                        <input type="file" class="custom-file-input" id="fileUploadTransfer" aria-describedby="inputGroupFileAddon01"
+                            value="upload">
                         <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
                     </div>
                 </div>
-                <p class="subtext mt-3 small"> Let's quickly get started by uploading a file to your drive. Have something to post? <br> We'll do it for you</p>
+                <p class="subtext mt-3 small"> Let's quickly get started by uploading a file to your drive. Have
+                    something to post? <br> We'll do it for you</p>
             </div>
 
             <!-- Modal footer -->
@@ -153,26 +174,34 @@
                 <h4 class="modal-title">Transfer Files <i class="fa fa-cloud-upload"></i></h4>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
-										
+
             <!-- Modal body -->
             <div class="modal-body justify-content-center">
                 <p class="subtext mt-3 small"> Select the desired cloud serivce that you wish to transfer to</p>
                 <div class="row">
                     <div class="col-sm">
-                        <button id="googleTransfer"  class="cloudBtn" onclick="activeService('googleTransfer');"> Google Account </button>
-                      <div class="logOutBeforeTransfer" id="googleLogoutTransferModal"> <small class="text-muted">Please make sure that you are not logged into a Google account already.</small> <a onclick="handleSignoutClick();"> Logout</a></div>
+                        <button id="googleTransfer" class="cloudBtn" onclick="activeService('googleTransfer');"> Google
+                            Account </button>
+                        <div class="logOutBeforeTransfer" id="googleLogoutTransferModal"> <small class="text-muted">Please
+                                make sure that you are not logged into a Google account already.</small> <a onclick="handleSignoutClick();">
+                                Logout</a></div>
                     </div>
                     <div class="col-sm">
-                        <button id="dropBoxTransfer" class="cloudBtn" onclick="activeService('dropBoxTransfer');"> Dropbox Account</button>
-                      <div class="logOutBeforeTransfer" id="dropboxLogoutTransferModal"> <small class="text-muted">Please make sure that you are not logged into a dropbox account already.</small> <a href="https://www.dropbox.com/logout"> Logout</a></div>
+                        <button id="dropBoxTransfer" class="cloudBtn" onclick="activeService('dropBoxTransfer');">
+                            Dropbox Account</button>
+                        <div class="logOutBeforeTransfer" id="dropboxLogoutTransferModal"> <small class="text-muted">Please
+                                make sure that you are not logged into a dropbox account already.</small> <a href="https://www.dropbox.com/logout">
+                                Logout</a></div>
                     </div>
                     <div class="col-sm">
-                        <button id="oneDriveTransfer" class="cloudBtn" onclick="activeService('oneDriveTransfer');"> Onedrive Transfer </button>
-                      <div class="logOutBeforeTransfer" id="oneDriveLogoutTransferModal"> <small class="text-muted">Please make sure that you are not logged into a OneDrive account already.</small> <a> Logout</a></div>
+                        <button id="oneDriveTransfer" class="cloudBtn" onclick="activeService('oneDriveTransfer');">
+                            Onedrive Transfer </button>
+                        <div class="logOutBeforeTransfer" id="oneDriveLogoutTransferModal"> <small class="text-muted">Please
+                                make sure that you are not logged into a OneDrive account already.</small> <a> Logout</a></div>
                     </div>
                 </div>
             </div>
-						
+
             <!-- Modal footer -->
             <div class="modal-footer">
                 <button type="button" class="btn btn-dark" data-dismiss="modal">Ok</button>
@@ -185,34 +214,31 @@
 
 <!-- *******************************************************************
                         SCRIPTS, SDK, STYLESHEETS
-******************************************************************* --> 
+******************************************************************* -->
 <!-- fa fa icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <!--interfacePage stylesheet -->
 <link rel='stylesheet' href='/stylesheets/interfacePage.css' />
 <!-- script -->
-<!-- jquery --> 
-<script
-  src="https://code.jquery.com/jquery-3.3.1.js"
-  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
-  crossorigin="anonymous"></script>
-  <!-- promises --> 
+<!-- jquery -->
+<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+    crossorigin="anonymous"></script>
+<!-- promises -->
 <script src="https://cdn.jsdelivr.net/npm/promise-polyfill@7/dist/polyfill.min.js"></script>
 <!--DropBox API-->
 <script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="1qwuqul2z1v27e1"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/dropbox.js/4.0.16/Dropbox-sdk.js"></script> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropbox.js/4.0.16/Dropbox-sdk.js"></script>
 <!-- fetches-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fetch/2.0.3/fetch.js"></script>
-<!-- pcloud API--> 
+<!-- pcloud API-->
 <script type="text/javascript" src="https://unpkg.com/pcloud-sdk-js@latest/dist/pcloudsdk.js"></script>
-<!-- Google API --> 
-<script async defer src="https://apis.google.com/js/api.js" 
-        onload="this.onload=function(){};handleClientLoad()" 
-        onreadystatechange="if (this.readyState === 'complete') this.onload()">
+<!-- Google API -->
+<script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};handleClientLoad()"
+    onreadystatechange="if (this.readyState === 'complete') this.onload()">
 </script>
-<!-- url parser --> 
+<!-- url parser -->
 <script src="/javascripts/utils.js"></script>
-<!-- interface script--> 
-<script type="text/javascript" src="/javascripts/interfacePage.js"></script> 
-<!-- pcloud script --> 
-<script type="text/javascript" src="/javascripts/pcloud.js"></script> 
+<!-- interface script-->
+<script type="text/javascript" src="/javascripts/interfacePage.js"></script>
+<!-- pcloud script -->
+<script type="text/javascript" src="/javascripts/pcloud.js"></script>

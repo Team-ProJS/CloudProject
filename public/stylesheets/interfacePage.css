@@ -19,7 +19,6 @@ body {
     border-color:white;
     padding: 10px 20px;
     margin: 0;
-
 }
 .cloudBtn a {
     color: black;
@@ -32,15 +31,7 @@ body {
 .subtext {
     color: #7F7B82;
 }
-.bottomSidebarSec {
-    position: absolute;
-    bottom:0;
-    padding-left: 55px;
-    padding-bottom: 0;
-    margin-bottom:0;
-    color: white;
-    cursor: pointer;
-}
+
 
 .cloudBtnInPopup {
     padding: 10px 20px;
@@ -58,6 +49,21 @@ body {
     height: 100px;
     width: 100px;
 }
+
+ #smallerSidebarIcon {
+    display: none;
+}
+.bottomSidebarSec {
+    position: absolute;
+    bottom:0;
+    padding-left: 5%;
+    padding-bottom: 0;
+    margin-bottom:0;
+    color: white;
+    cursor: pointer;
+}
+
+/* --------- */
 
 .wrapper {
     display: flex;
@@ -160,7 +166,6 @@ progress {
     padding: 0 2%;
     cursor: pointer;
 }
-
 .toolSecCloseBtn{
     height:100%;    
 }
@@ -209,7 +214,6 @@ progress {
     height: 86%;
     width: 100%;
     padding:0;
-    font-size: 100%;
     color: #2D2D35; 
     overflow: auto !important;
 }
@@ -271,11 +275,13 @@ progress {
 ----------------------------------------------------- */
 
 @media (max-width: 768px) {
+
+    /* --------------  SIDEBAR STYLE ----------- */ 
     #sidebar {
         min-width: 80px;
         max-width: 80px;
         text-align: center;
-        margin-left: -80px !important;
+        margin-left: 0px !important;
     }
 
     .dropdown-toggle::after {
@@ -288,8 +294,33 @@ progress {
     }
 
     #sidebar.active {
-        margin-left: 0 !important;
+        margin-left: 20 !important;
+    }
+    /* ------ Sidebar buttons --- */
+    .cloudBtn.accBtn .regularBtn {
+        display: none;
+    }
+     #smallerSidebarIcon {
+        display: block;
+    }
+    .regularBtn {
+        display: none;
+    }
+    .userDetailsSection p {
+        display:none;
     }
 
+    .cloudBtn.accBtn {
+        border:none;
+        border-radius: 0;
+    }
+    .cloudBtn.accBtn:hover {
+        border-bottom: solid 1px #FF6B81;
+    }
+
+     /* --------------  TOOLBAR STYLE ----------- */ 
+    .toolBarBtn {
+        font-size: 80%;
+    }
 
 }

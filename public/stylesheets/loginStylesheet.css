@@ -1,14 +1,12 @@
-/* Style sheet for register/login page */
+/* ---------------------------------------------------
+    STYLING FOR REGISTER AND LOGIN PAGE
+----------------------------------------------------- */
 
 .formRegister {
-    margin-top: 5%;
-    padding: 0;
-}
-.formRegister #log-form {
-    margin-top: 10%;
+    padding-top: 10%;
 }
 header {
-    font-size: 500%;
+    font-size: 470%;
 }
 
 input {
@@ -22,5 +20,20 @@ body {
 ----------------------------------------------------- */
 .page-footer {
     display: none;
+}
+
+/* ---------------------------------------------------
+    MEDIA QUERIES
+----------------------------------------------------- */
+@media only screen and (max-width:600px) {
+   header {
+        font-size: 400%;
+    }
+    #reg-form {
+        margin-top:5%;
+    }
+    #log-form {
+        padding-top: 20% !important;
+    }
 }
 
