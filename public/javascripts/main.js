@@ -12,8 +12,13 @@ $(document).ready(function(){
     console.log("successfully in mobile version");
     document.getElementById('btnSI').style.display = "none";
     document.getElementById('btnRG').style.display = "none";
+<<<<<<< HEAD
   }
 
 
 });
 
+=======
+    document.getElementById('signingInBtn').innerHTML = "Learn More";
+} 
+>>>>>>> 1998822dfac728ce334c169943aff27fbff6a373

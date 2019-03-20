@@ -12,6 +12,7 @@ var client = false;//pCloud Client
 //Function to list files
 function listfiles() {
           var counter = 0;
+          $("#myModal").modal("hide");
           var place = $('#files');
           place.append($('<div class="fileTitle pt-3 pl-5 ml-2"> <p> View pCloud items.. </p></div>'))
           client.listfolder(0).then(function(metadata) {
@@ -56,5 +57,10 @@ function pCloudLogin(){
                     receiveToken: receiveTokenCb,
                     onError: err => console.log(err)
           });
+          swal({
+                    title: "Warning",
+                    text: "pCloud is currently depreciated and so only viewing of files is currently possible, we apologise for any inconveniences",
+                    icon: "info",
+                  });
 }
 

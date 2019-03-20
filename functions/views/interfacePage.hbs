@@ -35,9 +35,9 @@
         </div>
     </nav>
 
-    <!-- Page Content  
+    <!-- Page Content
              NB ***  the class = fileSection  ***
-            Each of the drives will display their folders and files on this 
+            Each of the drives will display their folders and files on this
             one pane
             -->
     <div id="content" class="pt-5 mt-4">
@@ -50,6 +50,7 @@
                 <button type="button" class="close justify-content-end pr-3 toolSecCloseBtn" id="toolbarsBtn">&times;</button>
         </nav>
 
+<<<<<<< HEAD
         <div class="header">CloudJS | Getting Organised</div>
 
         <!-- file section -->
@@ -58,6 +59,14 @@
                 <!-- only one account at a time can display their folders/files-->
 
             </div>
+=======
+         <!-- file section -->
+        <div class="container-fluid fileSection mt-3">
+        <div id="files">
+            <!-- only one account at a time can display their folders/files-->
+
+        </div>
+>>>>>>> 1998822dfac728ce334c169943aff27fbff6a373
         </div>
     </div>
 </div>
@@ -75,8 +84,13 @@
 
             <!-- Modal Body -->
             <div class="modal-body m-2">
+<<<<<<< HEAD
                 <h5>Login to One Service</h5>
                 <small class="text-muted">Note:Only one account can be active at a time.</small>
+=======
+                    <h5>Login to One Service</h5>
+                    <small class="text-muted">Note:Only one account can be active at a time.</small>
+>>>>>>> 1998822dfac728ce334c169943aff27fbff6a373
                 <div class="google mt-3">
                     <!-- Google Section -->
                     <div class="row">
@@ -87,6 +101,7 @@
                         <div class="col-sm"><button id="signout-button" class=" cloudBtn">Logout</button></div>
                     </div>
                 </div>
+<<<<<<< HEAD
                 <div id="auth-status" style="display: inline; padding-left: 25px"></div>
                 <!-- Google Section END -->
                 <hr>
@@ -115,6 +130,32 @@
                     </div>
                 </div>
                 <!-- pcloud section END -->
+=======
+            </div>
+            <div id="auth-status" style="display: inline; padding-left: 25px"></div>
+            <!-- Google Section END -->
+            <hr>
+            <!-- dropbox section -->
+            <div class="dropbox mt-2 mb-2">
+                <div class="row">
+                    <div class="col-sm"><p class="mb-0 accountTitle"> Dropbox</p></div>
+                    <div class="col-sm"><button type="button" class=" cloudBtn dropboxSignIn"><a href="" id="authlink">Login</a></button></div>
+                    <!-- Here will be used to login and out of dropbox -->
+                    <div class="col-sm"><button type="button" class="cloudBtn dropboxLogout" onclick="logoutDB();"> Logout</button></div>
+                </div>
+            </div>
+            <!-- dropbox section  END-->
+            <hr>
+            <!-- pcloud section -->
+            <div class="pcloud  mt-2 mb-2">
+                <div class="row">
+                    <div class="col-sm"><p class="pb-0 mb-0 accountTitle">pCloud</p></div>
+                    <div class="col-sm"><button type="button" class="cloudBtn" onclick="pCloudLogin();">Login</button></div>
+                    <div class="col-sm"><button type="button" class="cloudBtn" onclick="pCloudLogout();">Logout</button></div>
+                </div>
+            </div>
+            <!-- pcloud section END -->
+>>>>>>> 1998822dfac728ce334c169943aff27fbff6a373
 
             </div>
             <div class="modal-footer">
@@ -221,9 +262,17 @@
 <link rel='stylesheet' href='/stylesheets/interfacePage.css' />
 <!-- script -->
 <!-- jquery -->
+<<<<<<< HEAD
 <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
     crossorigin="anonymous"></script>
 <!-- promises -->
+=======
+<script
+  src="https://code.jquery.com/jquery-3.3.1.js"
+  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+  crossorigin="anonymous"></script>
+  <!-- promises -->
+>>>>>>> 1998822dfac728ce334c169943aff27fbff6a373
 <script src="https://cdn.jsdelivr.net/npm/promise-polyfill@7/dist/polyfill.min.js"></script>
 <!--DropBox API-->
 <script type="text/javascript" src="https://www.dropbox.com/static/api/2/dropins.js" id="dropboxjs" data-app-key="1qwuqul2z1v27e1"></script>
@@ -233,12 +282,22 @@
 <!-- pcloud API-->
 <script type="text/javascript" src="https://unpkg.com/pcloud-sdk-js@latest/dist/pcloudsdk.js"></script>
 <!-- Google API -->
+<<<<<<< HEAD
 <script async defer src="https://apis.google.com/js/api.js" onload="this.onload=function(){};handleClientLoad()"
     onreadystatechange="if (this.readyState === 'complete') this.onload()">
+=======
+<script async defer src="https://apis.google.com/js/api.js"
+        onload="this.onload=function(){};handleClientLoad()"
+        onreadystatechange="if (this.readyState === 'complete') this.onload()">
+>>>>>>> 1998822dfac728ce334c169943aff27fbff6a373
 </script>
 <!-- url parser -->
 <script src="/javascripts/utils.js"></script>
 <!-- interface script-->
 <script type="text/javascript" src="/javascripts/interfacePage.js"></script>
 <!-- pcloud script -->
+<<<<<<< HEAD
 <script type="text/javascript" src="/javascripts/pcloud.js"></script>
+=======
+<script type="text/javascript" src="/javascripts/pcloud.js"></script>
+>>>>>>> 1998822dfac728ce334c169943aff27fbff6a373
