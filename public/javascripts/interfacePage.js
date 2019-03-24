@@ -16,7 +16,7 @@ $(document).ready(function () {
           $('[data-toggle="tooltip"]').tooltip();
            getEmailInfo();//Get Ajax Information About User
            setProfilePicture();
-           completeTransfer();
+           //completeTransfer();
            var emailStuff = document.getElementById('userEmailDetails');
            emailStuff.innerHTML=email;
  });
@@ -198,6 +198,9 @@ function updateSigninStatus(isSignedIn) {
 function handleAuthClick(event) {
           currentClient = clientEnum.GOOGLEDRIVE;
           gapi.auth2.getAuthInstance().signIn();
+          setTimeout(function(){ 
+                    makeApiCall();
+                    console.log("Got to wait"); },9000);
           
           
  }
@@ -209,6 +212,7 @@ function handleSignoutClick(event) {
  }
 
 function makeApiCall() {
+          console.log("Makin google api call");
          gapi.client.load('drive', 'v2', function(){
           var query = "trashed=false and '" + FOLDER_ID + "' in parents";
           var request = gapi.client.drive.files.list({
@@ -909,11 +913,12 @@ function transferDBXFile(path){
                                         text: "No Cloud Service selected",
                                         icon: "error",
                                       });
+                                      $("#transferModal").modal("show");
                     }
                     }).catch(function(error){
                               console.error(error);
         });
-        $("#transferModal").modal("show");
+        
         return false;
 }
 
@@ -935,7 +940,6 @@ function completeTransfer(){
                               console.log(file);
                               uploadToDropBox(file);
                               delOldFile('dropbox');
-                              //alert("Transfer has been Completed!");
                               swal({
                                         title: "Transfer Complete!",
                                         text: "File has been correctly transferred to this dropbox account",
@@ -953,7 +957,7 @@ function completeTransfer(){
           });
           }
 
-          if(filename2 != null){
+         else if(filename2 != null){
                     console.log("Got to filename2");
                     console.log(filename2);
                     var storageRef = firebase.storage().ref(email+'/' +filename2).getDownloadURL().then(function(url){
@@ -980,6 +984,12 @@ function completeTransfer(){
          }).catch(function(error){
                    console.log(error);
          });
+         }else{
+          swal({
+                    title: "File Not Found",
+                    text: "No transfer in progress, to begin transfer please select a service or login to a service first",
+                    icon: "error",
+                  });   
          }
 
                    
