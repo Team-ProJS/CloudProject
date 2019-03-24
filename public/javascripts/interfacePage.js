@@ -536,12 +536,14 @@ function transferGoogleDriveFile(i){
                                         icon: "info",
                                       });
                               currentClient = null;
+                    }else{
+                              $("#transferModal").modal("show");
                     }
                    
           }
           xhr.send();
           }
-          $("#transferModal").modal("show");
+         
 }
 
 function deleteGoogleDriveFile(i){
