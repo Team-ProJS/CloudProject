@@ -23,7 +23,7 @@ function listfiles() {
                                         count = "greyFileSec";
                               }
                               if (!item.isfolder) {
-                                        console.log(item);
+                                        //console.log(item);
                                         place.append(
                                         $('<div class="'+count+'"/>')
                                         .append($('<img class=" pl-5 iconImg" src="/images/imgIcon.png"/>'))

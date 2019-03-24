@@ -24,71 +24,7 @@ $(document).ready(function(){
                                         'email':email
                               },
                     success: function(data){
-                              //Init Transfer PIe Chart
-                              /*
-                              myChart ={
-                                        type: 'pie',
-                                        data: {
-                                                  datasets: [{
-                                                            data: [
-                                                                      data.gDriveTransfer,
-                                                                      data.oneDriveTransfer,
-                                                                      data.oneDriveTransfer,
-                                                                      data.dBoxTransfer
-                                                            ],
-                                                            backgroundColor: [
-                                                                      'rgba(65, 68, 242,  0.5)',
-                                                                      'rgba(242, 171, 65,  0.5)',
-                                                                      'rgba(89, 204, 249,  0.5)'
-                                                            ],
-                                                            label: 'Current Set'
-                                                  }],
-                                                  labels: [
-                                                            'OneDrive',
-                                                            'GoogleDrive',
-                                                            'DropBox'
-                                                  ]
-                                        },
-                                        options: {
-                                                  responsive: true,
-                                                  maintainAspectRatio: false,
-                                                  tooltips: {
-                                                            enabled: false
-                                                  }
-                                         }
-                              }
-                              //Init Upload Pie Chart
-                              myChart2 ={
-                                        type: 'pie',
-                                        data: {
-                                                  datasets: [{
-                                                            data: [data.gDriveUpload,data.oneDriveUpload,data.dBoxUpload],
-                                                            backgroundColor: [
-                                                                      'rgba(65, 68, 242,  0.5)',
-                                                                      'rgba(242, 171, 65,  0.5)',
-                                                                      'rgba(89, 204, 249,  0.5)'
-                                                            ],
-                                                            label: 'Current Set'
-                                                  }],
-                                                  labels: [
-                                                            'OneDrive',
-                                                            'Google Drive',
-                                                            'DropBox'
-                                                  ]
-                                        },
-                                        options: {
-                                                  responsive: true,
-                                                  maintainAspectRatio: false,
-                                                  tooltips: {
-                                                            enabled: false
-                                                  }
-                                        }
-                               }
-                              var chart1 = document.getElementById('chartTransfer').getContext('2d');
-                              var chert = new Chart(chart1, myChart);//Display Chart
-                              var chart2 = document.getElementById('chartDownload').getContext('2d');
-                              var chert2 = new Chart(chart2, myChart2);//Display Chart*/
-                              //var ctx = document.getElementById('cTransfer').getContext('2d');
+                            
                     var chart = new Chart(document.getElementById('cTransfer'),{
                                         type:'pie',
                                         data:{
