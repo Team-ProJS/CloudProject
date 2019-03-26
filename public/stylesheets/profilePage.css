@@ -8,8 +8,9 @@ body {
 }
 
 .navbar{
-    background-color: transparent !important;
-    box-shadow: none !important;
+    /* background-color: transparent !important;
+    box-shadow: none !important; */
+    display:none;
 }
 .page-footer {
     display: none;
@@ -89,54 +90,44 @@ body {
 .backToInterface:hover {
     color:rgb(255, 255, 255);
 }
-/* *****************************************
-//            Upload Modal
-***************************************** */
-
-#profilePictureUpload {
-    width: 0.1px;
-	height: 0.1px;
-	opacity: 0;
-	overflow: hidden;
-	position: absolute;
-	z-index: -1;
-}
-
-#profilePictureUpload + label {
-    font-size: 1.25em;
-    font-weight: 700;
-    color: white;
-    background-color: rgba(240, 128, 128, 0.418);
-    display: inline-block;
-    padding: 2px 5px;
-    border-radius: 10px;
-}
-
-#profilePictureUpload:focus + label,
-#profilePictureUpload + label:hover {
-    background-color: rgba(255, 0, 0, 0.308);
-}
-
-#profilePictureUpload + label {
-	cursor: pointer; /* "hand" cursor */
-}
 
 /* *****************************************
 //             Main Content 
 ***************************************** */
+.navigationBtn {
+    text-decoration:none;
+    color: white; 
+    font-size : 200%;
+}
+.navigationBtn:hover{
+    color: grey;
+}
+
+header {
+    color: white;
+}
 .contentSection {
     background-image: url('/images/cloud.png');
     background-size: cover; 
     height: 100%;
 }
 
-
 .displayBox {
     background-color: rgba(255, 255, 255, 0.397);
     border-radius: 20px;
     height: 100%;
     width: 100%;
+    overflow: auto;
 }
 .subtitle {
     color: #E3E3E3;
 }
+
+::-webkit-scrollbar-track  {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb{
+    border-radius: 20px;
+    width: 5px;
+}
+

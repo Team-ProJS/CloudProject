@@ -114,6 +114,7 @@ function uploadToFirebase(file){
           function complete(){
                     console.log("Complete Upload to Firebase");
                     setProfilePicture();
+                    setTimeout(function(){setProfilePicture();},1000);
           }
           );
 }

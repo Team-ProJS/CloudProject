@@ -189,6 +189,13 @@ progress {
     color: rgb(73, 73, 73);
     margin: 2px;
     font-family: 'circular';
+    display:none;
+}
+.actionBtn:hover {
+    color: rgb(48, 47, 47);
+}
+.whiteFileSec:hover .actionBtn, .greyFileSec:hover .actionBtn{
+        display:block;
 }
 
 .header {
@@ -206,8 +213,6 @@ progress {
 }
 
 .fileSection {
-    background-image: url('/images/cloudsIcons.png');
-    background-size:cover;
     border: rgba(112, 112, 112, 0.096) 2px solid;
     border-radius: 10px;
     background-color: #E2E2E2;

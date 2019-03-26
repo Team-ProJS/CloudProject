@@ -239,7 +239,7 @@ function buildFiles(){
           var location = $('#files');
           location.empty();
           location.append($('<div class="fileTitle pt-3 pl-5 ml-2"> <p> View Google Drive items.. </p></div>'));
-          location.append($('<div class="greyFileSec" />').append($('<a href="javascript:;" class="pl-5">...</a>').on('click',function(e){
+          location.append($('<div class="greyFileSec" />').append($('<a href="javascript:;" class="pl-3">...</a>').on('click',function(e){
                     FOLDER_ID ="root";
                     makeApiCall();
           })
@@ -253,17 +253,17 @@ function buildFiles(){
                     }
                     
           if(DRIVE_FILES[i].mimeType ==="application/vnd.google-apps.folder"){
-          location.append($('<div class="'+count+'"/>').append($('<img class="pl-5 iconImg" src="/images/folderIcon.png"/>')).append($('<span/>').text(DRIVE_FILES[i].name)).append(' | ').append($('<a href="javascript:;" name="'+i+'" onclick="setFolder('+i+')">Enter</a>').on('click',function(e){
+          location.append($('<div class="'+count+'"/>').append($('<img class="pl-5 iconImg" src="/images/folderIcon.png"/>')).append($('<span/>').text(DRIVE_FILES[i].name)).append($('<a href="javascript:;" name="'+i+'" onclick="setFolder('+i+')" class="actionBtn float-right">Enter</a>').on('click',function(e){
                     
            })));
 }else{
-          location.append($('<div class="'+count+'"/>').append($('<img class=" pl-5 iconImg" src="/images/imgIcon.png"/>')).append($('<span/>').text(DRIVE_FILES[i].name)).append(' | ').append($('<a href="javascript:;"onclick="downloadGoogleDriveFile('+i+')">Download</a>').on('click',function(e){
+          location.append($('<div class="'+count+'"/>').append($('<img class=" pl-5 iconImg" src="/images/imgIcon.png"/>')).append($('<span/>').text(DRIVE_FILES[i].name)).append($('<a href="javascript:;"onclick="downloadGoogleDriveFile('+i+')" class="actionBtn float-right">Download</a>').on('click',function(e){
                     
-          })).append(' | ').append($('<a href="javascript:;" onclick="deleteGoogleDriveFile('+i+');">Delete</a>').on('click',function(e){
+          })).append($('<a href="javascript:;" onclick="deleteGoogleDriveFile('+i+');" class="actionBtn float-right">Delete</a>').on('click',function(e){
                     
-          })).append(" | ").append($('<a href="javascript:;">Rename</a>').on('click', function(e){
+          })).append($('<a href="javascript:;" class="actionBtn float-right">Rename</a>').on('click', function(e){
                    
-          })).append(" | ").append($('<a href="javascript:;" onclick="transferGoogleDriveFile('+i+');">Transfer</a>').on('click',function(e){
+          })).append($('<a href="javascript:;" onclick="transferGoogleDriveFile('+i+');" class="actionBtn float-right">Transfer</a>').on('click',function(e){
                     
           }))
           );
@@ -611,29 +611,29 @@ function renderItems(items){
                               count = "greyFileSec";
                     }
                     if(item.hasOwnProperty('rev')){
-                              location.append($('<div class="'+count+'"/>').append($('<img class=" pl-5 iconImg" src="/images/imgIcon.png"/>')).append($('<span/>').text(item.name)).append(' | ').append($('<a href="javascript:;">Download</a>').on('click',function(e){
+                              location.append($('<div class="'+count+'"/>').append($('<img class=" pl-5 iconImg" src="/images/imgIcon.png"/>')).append($('<span/>').text(item.name)).append($('<a href="javascript:;" class="actionBtn float-right">Download</a>').on('click',function(e){
                                         downloadDBXSFile(item.path_lower);
                               })
-                              ).append(' | ').append($('<a href="javascript:;">Delete</a>').on('click',function(e){
+                              ).append($('<a href="javascript:;" class="actionBtn float-right">Delete</a>').on('click',function(e){
                                         deleteDBXFile(item.path_lower);
                                         dbx.filesListFolder({path: ''}).then(function(response){
                                                   renderItems(response.entries);
                                         }).catch(function(error){
                                                   console.error(error);
                                         });
-                              })).append(" | ").append($('<a href="javascript:;">Rename</a>').on('click', function(e){
+                              })).append($('<a href="javascript:;" class="actionBtn float-right">Rename</a>').on('click', function(e){
                                         renameDBXFile(item.path_lower);
                                         dbx.filesListFolder({path: ''}).then(function(response){
                                                   renderItems(response.entries);
                                         }).catch(function(error){
                                                   console.error(error);
                                         });
-                              })).append(" | ").append($('<a href="javascript:;">Transfer</a>').on('click',function(e){
+                              })).append($('<a href="javascript:;" class="actionBtn float-right">Transfer</a>').on('click',function(e){
                                         transferDBXFile(item.path_lower);
                               }))
                               );
                     }else{
-                              location.append($('<div class="'+count+'"/>').append($('<img class="pl-5 iconImg" src="/images/folderIcon.png"/>')).append($('<span/>').text(item.name)).append(' | ').append($('<a href="javascript:;">Enter Folder</a>').on('click',function(e){
+                              location.append($('<div class="'+count+'"/>').append($('<img class="pl-5 iconImg" src="/images/folderIcon.png"/>')).append($('<span/>').text(item.name)).append($('<a href="javascript:;" class="actionBtn float-right">Enter Folder</a>').on('click',function(e){
                               dbx.filesListFolder({path: ''+item.path_lower}).then(function(response){
                                         renderItems(response.entries);
                               }).catch(function(error){
