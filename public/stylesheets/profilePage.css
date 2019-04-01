@@ -8,15 +8,13 @@ body {
 }
 
 .navbar{
-    /* background-color: transparent !important;
-    box-shadow: none !important; */
     display:none;
 }
 .page-footer {
     display: none;
 }
-.logoIMG {
-    padding-left: 5px;
+.sidebarLogo {
+    cursor: pointer;
 }
 
 
