@@ -11,6 +11,8 @@ var client = false;//pCloud Client
 
 //Function to list files
 function listfiles() {
+          var location = $('#files');
+          location.empty();
           var counter = 0;
           $("#myModal").modal("hide");
           var place = $('#files');

@@ -302,7 +302,7 @@ function uploadToGoogleDrive(file){
                               credentials: 'same-origin',
                               data: {
                                         'email':email,
-                                        'value':xhr.response.size
+                                        'value':file.size
                             },
                             success: function(data){
                             },
@@ -352,7 +352,7 @@ function downloadGoogleDriveFile(i){
                               credentials: 'same-origin',
                               data: {
                                         'email':email,
-                                        'value':xhr.response.size
+                                        'value':file.size
                             },
                             success: function(data){
                             },
@@ -396,7 +396,7 @@ function downloadGoogleDriveFileBinary(i){
                               credentials: 'same-origin',
                               data: {
                                         'email':email,
-                                        'value':xhr.response.size
+                                        'value':file.size
                             },
                             success: function(data){
                             },
@@ -507,7 +507,7 @@ function transferGoogleDriveFile(i){
                               credentials: 'same-origin',
                               data: {
                                         'email':email,
-                                        'value':xhr.response.size
+                                        'value':file.size
                             },
                             success: function(data){
                             },
