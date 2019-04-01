@@ -1,7 +1,7 @@
 body {
     height: 100%;
     background-color: #74B9FF;
-    overflow:hidden;
+    overflow: hidden;
 }
 .row {
     height:100%;
@@ -29,9 +29,11 @@ body {
     height: 100%;
     padding: 5%;
     text-align: center;
+    overflow: hidden;
 }
 #profilepic {
     cursor: pointer;
+    width : 50% !important; 
 }
 #profilepic:hover {
     border: dashed 1px #74B9FF;
@@ -129,5 +131,6 @@ header {
 ::-webkit-scrollbar-thumb{
     border-radius: 20px;
     width: 5px;
+    height: 10px;
 }
 

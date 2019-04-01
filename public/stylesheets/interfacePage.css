@@ -46,8 +46,8 @@ body {
     SIDEBAR STYLE
 ----------------------------------------------------- */
 .profilePictureStyle {
-    height: 100px;
-    width: 100px;
+    min-height: 100px;
+    min-width: 100px;
 }
 
  #smallerSidebarIcon {
@@ -88,6 +88,10 @@ body {
 
 /* Sidebar active */
 
+#sidebar.active .profilePictureStyle {
+    min-height: 50px;
+    min-width: 50px;
+}
 #sidebar.active {
     min-width: 80px;
     max-width: 80px;
@@ -282,6 +286,11 @@ progress {
 @media (max-width: 768px) {
 
     /* --------------  SIDEBAR STYLE ----------- */ 
+    .profilePictureStyle {
+        min-height: 20px ;
+        min-width: 20px ;
+    }
+
     #sidebar {
         min-width: 80px;
         max-width: 80px;

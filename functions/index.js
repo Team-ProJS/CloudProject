@@ -33,13 +33,5 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
-// Leave this here for now please. - sofia.
-/*
-app.get('/', (request, response) => {
-    response.set('Cache-Control', 'public, max-age=300, s-maxage=600');
-    response.render('home');
-});*/
-
-
 
 exports.app = functions.https.onRequest(app);
