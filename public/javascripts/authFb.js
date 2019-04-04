@@ -10,7 +10,8 @@ $(document).ready(function () {
         
             if(password!=password_1)//check that password and confirm password are identical
                 {
-                    window.alert("Passwords dont macth!!!");
+                    //window.alert("Passwords dont macth!!!");
+                    swal("Failed to Register", "Passwords don't match","warning");
                 }
             else
                 {
@@ -18,12 +19,13 @@ $(document).ready(function () {
                         .catch(function(error) {//triggers if an error occurs
                             var errorCode = error.code;
                             var errorMessage = error.message;
-                            window.alert(errorMessage);//error is probably pre-existing email
+                            //window.alert(errorMessage);//error is probably pre-existing email
+                            swal("Failed ", errorMessage,"warning");
                         })
                         .then(function(value) {//triggers when a new user is created
                             firebase.auth().currentUser.getIdToken(true)//gets IdToken for creating session cookie
                                 .then(function(idToken) {//triggers if token retrieved successfuly
-                                    sendToken(idToken);//passes token as parameter to sendToken function (below)
+                                    sendTokenOnEntry(idToken);//passes token as parameter to sendToken function (below)
                                     })
                                 .catch(function(error) {//triggers if token not retrieved
                                     console.log(error.message);
@@ -43,12 +45,13 @@ $(document).ready(function () {
                 .catch(function(error) {//triggers if there is an error in logging in
                         var errorCode = error.code;
                         var errorMessage = error.message;
-                        window.alert(errorMessage);
+                        //window.alert(errorMessage);
+                        swal("Failed to Login", errorMessage,"warning");
                         })
                 .then(function(value) {//triggers if user logs in successfuly
                         firebase.auth().currentUser.getIdToken(true)
                                 .then(function(idToken) {//triggers if token retrieved successfuly
-                                    sendToken(idToken);//passes token as parameter to sendToken function (below)
+                                    sendTokenOnEntry(idToken);//passes token as parameter to sendToken function (below)
                                     })
                                 .catch(function(error) {//triggers if token not retrieved
                                     console.log(error.message);
@@ -70,7 +73,8 @@ $(document).ready(function () {
                         $(location).attr('href', '/' );
                     }else
                     {
-                        window.alert("Something went wrong,please try again later!");
+                       // window.alert("Something went wrong,please try again later!");
+                       swal("Failed to Logout", "Something went wrong, please try again later","warning");
                     }
                     
                 },
@@ -85,6 +89,14 @@ $(document).ready(function () {
             if(firebaseUser!=null){
                     user = 1;
                     localStorage.setItem('email', firebase.auth().currentUser.email);
+                    firebase.auth().currentUser.getIdToken(true)
+                                .then(function(idToken) {//triggers if token retrieved successfuly
+                                    sendTokenOnBack(idToken);//passes token as parameter to sendToken function (below)
+                                    console.log("sent token");
+                                    })
+                                .catch(function(error) {//triggers if token not retrieved
+                                    console.log(error.message);
+                                    });
                     createInfo(firebase.auth().currentUser.email);
             }else
                 {
@@ -116,7 +128,35 @@ $(document).ready(function () {
       
 });
 
-function sendToken(token)
+function sendTokenOnBack(token)
+    {
+        $.ajax({//sends token to server for cookie generating
+                type: 'POST',
+                url: '/users/authIn',
+                credentials: 'same-origin',
+                data: {
+                    'token' : token
+                },
+                success: function(data){
+                    if(data=="response")
+                    {
+                        console.log("set cookie");
+                    }else
+                    {
+                        //window.alert("Something went wrong,please try again later!");
+                        swal("Something went wrong, Please try again later","warning");
+                    }
+                    
+                },
+                error: function(errMsg)
+                    {
+                        console.log(errMsg);
+                    }
+            });
+        
+    }
+
+function sendTokenOnEntry(token)
     {
         $.ajax({//sends token to server for cookie generating
                 type: 'POST',
@@ -131,7 +171,8 @@ function sendToken(token)
                         $(location).attr('href', '/users/interfacePage' );
                     }else
                     {
-                        window.alert("Something went wrong,please try again later!");
+                        //window.alert("Something went wrong,please try again later!");
+                        swal("Something went wont, Please try again later","warning");
                     }
                     
                 },
@@ -142,7 +183,6 @@ function sendToken(token)
             });
         
     }
-
 function createInfo(email)
     {
         $.ajax({

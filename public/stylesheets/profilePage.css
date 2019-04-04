@@ -1,0 +1,135 @@
+body {
+    height: 100%;
+    background-color: #74B9FF;
+    overflow: hidden;
+}
+.row {
+    height:100%;
+}
+
+.navbar{
+    display:none;
+}
+.page-footer {
+    display: none;
+}
+.sidebarLogo {
+    cursor: pointer;
+}
+
+
+/* *****************************************
+//          Side content section
+***************************************** */
+.sideContentSection {
+    background-color:#2D2D35;
+    width: 80px;
+    height: 100%;
+    padding: 5%;
+    text-align: center;
+    overflow: hidden;
+}
+#profilepic {
+    cursor: pointer;
+    width : 50% !important; 
+}
+#profilepic:hover {
+    border: dashed 1px #74B9FF;
+    width: 100%;
+}
+.uploadBtn {
+    border: none;
+    background-color: transparent;
+    font-size: 100%;
+    text-align: center;
+    color:  rgba(180, 180, 180, 0.76);
+    cursor: pointer;
+    width: 100%;
+    transition: 0.3s;
+    font-weight: bold;
+}
+.uploadBtn::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 2px;
+    background: white;
+    transition: width .3s;
+    font-weight: bold;
+}
+
+.uploadBtn:hover::after {
+    width: 100%;
+}
+.uploadBtn:hover {
+    color: rgb(255, 255, 255);
+}
+
+.backToInterface {
+    cursor: pointer;
+    text-align: center;
+    border: none;
+    background-color: transparent;
+    font-size: 100%;
+    text-align: center;
+    color: rgba(180, 180, 180, 0.76);;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.backToInterface::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 2px;
+    background: rgb(255, 255, 255);
+    transition: width .3s;
+}
+.backToInterface:hover::after {
+    width: 100%;
+}
+.backToInterface:hover {
+    color:rgb(255, 255, 255);
+}
+
+/* *****************************************
+//             Main Content 
+***************************************** */
+.navigationBtn {
+    text-decoration:none;
+    color: white; 
+    font-size : 200%;
+}
+.navigationBtn:hover{
+    color: grey;
+}
+
+header {
+    color: white;
+}
+.contentSection {
+    background-image: url('/images/cloud.png');
+    background-size: cover; 
+    height: 100%;
+}
+
+.displayBox {
+    background-color: rgba(255, 255, 255, 0.397);
+    border-radius: 20px;
+    height: 85%;
+    width: 100%;
+    overflow: auto;
+    overflow-x: hidden; 
+}
+.subtitle {
+    color: #E3E3E3;
+}
+
+::-webkit-scrollbar-track  {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb{
+    border-radius: 20px;
+    width: 5px;
+    height: 10px;
+}
+

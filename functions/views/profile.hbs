@@ -1,0 +1,100 @@
+<div class="row">
+    <div class="col-auto pr-0 mr-0">
+        <div class="sideContentSection justify-content-center">
+            <img src="/images/logo.png" class="sidebarLogo mt-3" onclick="location.href='/'" width="50%;">
+            <!-- Back button to interface page -->
+            <p class=" backToInterface pt-5" onclick="location.href='/users/interfacePage';" style="cursor: pointer;">
+                Back</p>
+            <!-- profile picture section  && allowing to change profile picture.-->
+            <img id="profilepic" src="/images/profilePic.svg" class="rounded-circle" width="100%" data-toggle="modal"
+                data-target="#uploadModal" />
+            <button type="button" class="uploadBtn pt-4" data-toggle="modal" data-target="#uploadModal">Edit</button>
+        </div>
+    </div>
+    <div class="col pl-0 ml-0">
+        <div class="contentSection justify-content-center">
+            <div class="navigationSection float-right pr-5 mt-3">
+                <div class="row">
+                    <div class="col-xs" id="btnSO">
+                        <!-- Sign out Section Jump -->
+                        <a class=" nav-link navigationBtn" href="/users/interfacePage"><i class="fa fa-sign-out"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- files and charts display section -->
+            <header class="pl-5" data-aos="fade-in" data-aos-delay="100">Profile</header>
+            <div class=" container displayBox">
+                <div class="row">
+                    <div class="col-lg-6">
+
+                        <!-- Word information goes here :: Table of contents -->
+                        <div class="container pt-4 mt-2" id="table">
+
+                        </div>
+                    </div>
+                    <div class="col-lg-6 pt-4 mt-2">
+                        <!-- Chart details go here :: Visuals-->
+                        <h3 class="header"> Chart Details..</h3>
+                        <h6 class="subtitle">Transfer Overview..</h6>
+                        <div style="height: 100px width: 100px" class="mt-2">
+                            <canvas id="cTransfer"></canvas>
+                        </div>
+                        <h6 class="subtitle">Download Overview..</h6>
+                        <div style="height: 100px width: 100px" class="mt-2">
+                            <canvas id="cDownload"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--- modal popup for uploading profile picture -->
+
+<div class="modal" id="uploadModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!--Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title"> Upload A Picture</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal Body -->
+            <div class="modal-body justify-content-center">
+                <!-- displays photo and section allowing for uploading photo-->
+                <div class="row">
+                    <div class="col-6">
+                        <h5> Add Your Own Picture</h5>
+                        <small class="pt-0 mt-0 text-muted">Best to use square photos</small>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="profilePictureUpload"
+                                aria-describedby="profilePicture01" accept="images/*" value="upload">
+                            <label class="custom-file-label" for="profilePicture01">Choose file</label>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <img id="profilepic2" src="/images/profilePic.svg" class="rounded-circle" width="100%" />
+                    </div>
+                </div>
+            </div>
+
+            <!--Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" data-dismiss="modal">Let's Go</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<!-- - - - - Scripts - - - - - -->
+
+<link rel='stylesheet' href="/stylesheets/profilePage.css" />
+<script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<script src="/javascripts/profilePage.js"></script>

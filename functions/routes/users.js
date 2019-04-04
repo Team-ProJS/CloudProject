@@ -36,24 +36,36 @@ router.get('/', function (req, res, next) {
 /*Renders register page*/
 router.get('/register', function (req, res, next) {
     
-    res.render('register');
+    res.render('register', {
+        title: 'Cloud | Register'
+    });
 });
 /*Renders login page*/
 router.get('/login', function (req, res, next) {
     
-    res.render('login');
+    res.render('login', {
+        title: 'Cloud | Login'
+    });
 });
 /*Renders privacy policy page*/
 router.get('/policy', function (req, res, next) {
     
-    res.render('policy');
+    res.render('policy', {
+        title: 'Cloud | Policy'
+    });
 });
 
 router.get('/interfacePage', isAuthenticated,function (req, res, next) {
     //isAuthenticated is called when this get is called. If next() is called from isAuthenticated, then function (req, res, next) is called which renders page
-    res.render('interfacePage');
+    res.render('interfacePage', {
+        title: 'Cloud | Main'
+    });
 });
-
+router.get('/profile',isAuthenticated, function(req,res,next){
+          res.render('profile',{
+            title: 'Cloud | Profile'
+        });
+          });
 
 router.post('/authIn', function (req, res, next) {
     var token = req.body.token.toString();
@@ -94,7 +106,7 @@ documentRef.get().then(function(documentSnapshot){
   if (!documentSnapshot.exists) {
                     var docRef = db.collection('UserInfo').doc(req.body.email);
                     var setUser = docRef.set({
-                    pCloudTransfer:0,
+                    pCloudTransfer:"default",
                     pCloudUpload:0,
                     oneDriveTransfer:0,
                     oneDriveUpload:0,
@@ -137,7 +149,7 @@ router.post('/pcT', function (req, res, next) {
     var transaction = db.runTransaction(function(t) {
             return t.get(ref)
         .then(function(doc) {
-            var curr = doc.data().pCloudTransfer + value;
+            var curr = doc.data().pCloudTransfer = value;
             t.update(ref, {pCloudTransfer: curr});
             });
     }).then(function(result) {
@@ -154,7 +166,7 @@ router.post('/pcU', function (req, res, next) {
     var transaction = db.runTransaction(function(t) {
             return t.get(ref)
         .then(function(doc) {
-            var curr = doc.data().pCloudUpload + value;
+            var curr = doc.data().pCloudUpload + parseFloat(value);
             t.update(ref, {pCloudUpload: curr});
             });
     }).then(function(result) {
@@ -172,7 +184,7 @@ router.post('/odT', function (req, res, next) {
     var transaction = db.runTransaction(function(t) {
             return t.get(ref)
         .then(function(doc) {
-            var curr = doc.data().oneDriveTransfer + value;
+            var curr = doc.data().oneDriveTransfer + parseFloat(value);
             t.update(ref, {oneDriveTransfer: curr});
             });
     }).then(function(result) {
@@ -189,7 +201,7 @@ router.post('/odU', function (req, res, next) {
     var transaction = db.runTransaction(function(t) {
             return t.get(ref)
         .then(function(doc) {
-            var curr = doc.data().oneDriveUpload + value;
+            var curr = doc.data().oneDriveUpload+ parseFloat(value);
             t.update(ref, {oneDriveUpload: curr});
             });
     }).then(function(result) {
@@ -206,7 +218,7 @@ router.post('/odD', function (req, res, next) {
     var transaction = db.runTransaction(function(t) {
             return t.get(ref)
         .then(function(doc) {
-            var curr = doc.data().oneDriveDownload + value;
+            var curr = doc.data().oneDriveDownload + parseFloat(value);
             t.update(ref, {oneDriveDownload: curr});
             });
     }).then(function(result) {
@@ -224,7 +236,7 @@ router.post('/gdT', function (req, res, next) {
     var transaction = db.runTransaction(function(t) {
             return t.get(ref)
         .then(function(doc) {
-            var curr = doc.data().gDriveTransfer + value;
+            var curr = doc.data().gDriveTransfer + parseFloat(value);
             t.update(ref, {gDriveTransfer: curr});
             });
     }).then(function(result) {
@@ -241,7 +253,7 @@ router.post('/gdU', function (req, res, next) {
     var transaction = db.runTransaction(function(t) {
             return t.get(ref)
         .then(function(doc) {
-            var curr = doc.data().gDriveUpload + value;
+            var curr = doc.data().gDriveUpload + parseFloat(value);
             t.update(ref, {gDriveUpload: curr});
             });
     }).then(function(result) {
@@ -258,7 +270,7 @@ router.post('/gdD', function (req, res, next) {
     var transaction = db.runTransaction(function(t) {
             return t.get(ref)
         .then(function(doc) {
-            var curr = doc.data().gDriveDownload + value;
+            var curr = doc.data().gDriveDownload + parseFloat(value);
             t.update(ref, {gDriveDownload: curr});
             });
     }).then(function(result) {
@@ -276,7 +288,7 @@ router.post('/dbT', function (req, res, next) {
     var transaction = db.runTransaction(function(t) {
             return t.get(ref)
         .then(function(doc) {
-            var curr = doc.data().dBoxTransfer + value;
+            var curr = doc.data().dBoxTransfer + parseFloat(value);
             t.update(ref, {dBoxTransfer: curr});
             });
     }).then(function(result) {
@@ -293,7 +305,7 @@ router.post('/dbU', function (req, res, next) {
     var transaction = db.runTransaction(function(t) {
             return t.get(ref)
         .then(function(doc) {
-            var curr = doc.data().dBoxUpload + value;
+            var curr = doc.data().dBoxUpload + parseFloat(value);
             t.update(ref, {dBoxUpload: curr});
             });
     }).then(function(result) {
@@ -310,7 +322,7 @@ router.post('/dbD', function (req, res, next) {
     var transaction = db.runTransaction(function(t) {
             return t.get(ref)
         .then(function(doc) {
-            var curr = doc.data().dBoxDownload + value;
+            var curr = doc.data().dBoxDownload + parseFloat(value);
             t.update(ref, {dBoxDownload: curr});
             });
     }).then(function(result) {
