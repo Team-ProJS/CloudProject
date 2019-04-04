@@ -261,8 +261,6 @@ function buildFiles(){
                     
           })).append($('<a href="javascript:;" onclick="deleteGoogleDriveFile('+i+');" class="actionBtn float-right">Delete</a>').on('click',function(e){
                     
-          })).append($('<a href="javascript:;" class="actionBtn float-right">Rename</a>').on('click', function(e){
-                   
           })).append($('<a href="javascript:;" onclick="transferGoogleDriveFile('+i+');" class="actionBtn float-right">Transfer</a>').on('click',function(e){
                     
           }))

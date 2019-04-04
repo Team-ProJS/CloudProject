@@ -115,9 +115,10 @@ header {
 .displayBox {
     background-color: rgba(255, 255, 255, 0.397);
     border-radius: 20px;
-    height: 100%;
+    height: 85%;
     width: 100%;
     overflow: auto;
+    overflow-x: hidden; 
 }
 .subtitle {
     color: #E3E3E3;
