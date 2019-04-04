@@ -1,4 +1,4 @@
-# FireBase Secondary
+# Master Firebase
 This project branch contains the firebase code required to deploy our website to their server. 
 Below will be listed the important things to keep in mind when dealing with firebase. Any further questions
 message the group. 
