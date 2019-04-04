@@ -1,0 +1,27 @@
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Created</th>
+      <th scope="col">Size</th>
+      <th scope="col">URL</th>
+    </tr>
+  </thead>
+  <tbody id="tableFiles">
+      <tr id="" class="parentID">
+          <td><a href="#">../</td>
+          <td></td>
+          <td></td>
+          <td></td>
+      </tr>
+    {{#each oneDriveUsers.files}}
+      <tr id="{{this.id}}" class="items">
+        <td>{{this.name}}</td>
+        <td>{{eventDateTime this.createdDateTime}}</td>
+        <td>{{this.size}}</td>
+        <td><a href="{{this.webUrl}}">Link</td>
+      </tr>
+    {{/each}}
+  </tbody>
+</table>

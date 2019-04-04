@@ -404,7 +404,7 @@ function loadPage() {
     });
 }
 function getRootFiles(token) {
-    if (hasODTokenExpired(token)) {
+    if (hasODTokenExpired()) {
         sessionExpired();
     }
     else {
@@ -460,7 +460,9 @@ function getParentFIle(token) {
 }
 
 function getClickedFileID(token, parentID) {
-    if(hasODTokenExpired(token)){
+    console.log("Before expiry check")
+    if(hasODTokenExpired()){
+        console.log("Inside expiry check")
         return sessionExpired();
     }
     $(".loading").show();
