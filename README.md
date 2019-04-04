@@ -28,4 +28,24 @@ and the .hbs files.
  * _Instead_ use the routes for any page requests, but don't forget to link it in the index.js that has the engine. 
  * If you have _any_ linking issues, that cannot be resolved, message the group.
  
- 
+# Note to the User:
+When downloading the branch, you may come across issues.
+
+* firebase module not found, _solution_ uninstall and install firebase
+```
+cd functions
+npm uninstall firebase
+npm install firebase
+```
+* Adminsdk.json, _solution_ there is a special json file ask in group chat for that file. Otherwise application won't work. This is required in the routes folder
+* cookie-parser
+```
+cd functions
+npm install cookie-parser
+```
+* Another error is that if gRPC module isnt found. solution this could be due to the fact that firebase isn't updated to the version that is deployed. Simply install grpc
+```
+cd functions
+npm install grpc
+```
+> If all else fails cry in a corner and ask group chat for help :)
